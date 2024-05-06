@@ -1,0 +1,7 @@
+<!--users_authentication/templates/users_authentication/dashboard.html-->
+
+{% extends 'base.html' %}
+
+{% block content %}
+Hello, {{ user.username|default:'Guest' }}!
+{% endblock %}
