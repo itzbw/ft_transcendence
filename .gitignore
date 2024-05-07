@@ -1,1 +1,3 @@
 __pycache__/
+
+user_authentication/db.sqlite3
