@@ -73,6 +73,9 @@ WSGI_APPLICATION = 'user_authentication.wsgi.application'
 # Change the default redirect URL after login
 LOGIN_REDIRECT_URL = "dashboard"
 
+# Change the default redirect URL after logout
+LOGOUT_REDIRECT_URL = "dashboard"
+
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
