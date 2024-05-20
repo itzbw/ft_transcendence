@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+  <head>
+		<link rel="stylesheet" href="./style.css">
+		<title>3D PONG</title>
+
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "https://cdn.jsdelivr.net/npm/three@v0.149.0/build/three.module.js",
+					"three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.149.0/examples/jsm/",
+
+				}
+			}
+		</script>
+
+	</head>
+	<body>
+
+
+		<div id="container">
+			<div id="main-title">3D PONG</div>
+			<div id='scoreboard'>
+				<h2 id='winnerBoard'>First to 5 wins!</h2>
+				<h3>A - move left | D - move right</h3>
+				<h1 id='scores'>0-0</h1>
+				<br>
+				<br>
+			</div>
+			</div>
+
+			<!-- <div id="threeContainer">
+				<script src="./src/frontpage.js" type="module"></script>
+
+			</div> -->
+			
+			<div id="gameCanvas"></div>
+
+
+			
+				<script src="./src/game.js" type="module"></script>
+
+
+
+	</div>
+
+	
+
+
+	<script src="./src/game.js"></script>
+	</body>
+</html>
