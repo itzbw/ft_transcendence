@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import "./frontpage.js"
 
 // ------------------------------------- //
 // ------- GLOBAL VARIABLES ------------ //
@@ -59,10 +60,21 @@ var Key = {
 };
 
 
+var ball1 = document.getElementById("ball1");
+var ball2 = document.getElementById("ball2");
+
 // ------------------------------------- //
 // ------- GAME FUNCTIONS -------------- //
 // ------------------------------------- //
 
+ball1.onclick = function () {
+
+        setupVsHuman();
+}
+
+ball2.onclick = function () {
+        setupVsBot();
+}
 
 function setupVsHuman() {
         // update the board to reflect the max score for match win
@@ -79,6 +91,7 @@ function setupVsHuman() {
         drawVsHuman();
 
 }
+
 
 function setupVsBot() {
         // update the board to reflect the max score for match win
@@ -165,7 +178,7 @@ function createScene() {
         var planeMaterialViolet =
                 new THREE.MeshLambertMaterial(
                         {
-            
+
                                 color: 0xA020F0, // purple
                                 wireframe: true // the gridline
                         });
@@ -180,6 +193,8 @@ function createScene() {
                 new THREE.MeshLambertMaterial(
                         {
                                 color: 0x111111
+                                // transparent: true,
+                                // opacity: 0
                         });
 
         var groundMaterial =
@@ -202,13 +217,13 @@ function createScene() {
                 planeMaterialBlue);
         var planeViolet = new THREE.Mesh(
 
-                        new THREE.PlaneGeometry(
-                                planeWidth * 0.95,	// 95% of table width, since we want to show where the ball goes out-of-bounds
-                                planeHeight,
-                                planeQuality,
-                                planeQuality),
-        
-                        planeMaterialViolet);
+                new THREE.PlaneGeometry(
+                        planeWidth * 0.95,	// 95% of table width, since we want to show where the ball goes out-of-bounds
+                        planeHeight,
+                        planeQuality,
+                        planeQuality),
+
+                planeMaterialViolet);
         var planeGreen = new THREE.Mesh(
 
                 new THREE.PlaneGeometry(
@@ -708,8 +723,8 @@ function matchScoreCheck() {
 }
 
 
-window.onload = function () {
-        setupVsBot(); // loading vsbot by default
-        // setupVsHuman(); 
-}
+// window.onload = function () {
+//         setupVsBot(); // loading vsbot by default
+//         // setupVsHuman(); 
+// }
 
