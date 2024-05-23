@@ -152,16 +152,30 @@ function createScene() {
                                 color: 0xFF4045, // red
                         });
 
-        // create the table's material	
-        var planeMaterial =
+        // create the plane's material	
+
+        var planeMaterialBlue =
                 new THREE.MeshLambertMaterial(
                         {
                                 // color: 0x4BD121, //green
-                                //color: 0x00BFFF, // blue
+                                color: 0x00BFFF, // blue
+                                //color: 0xA020F0, // purple
+                                wireframe: true // the gridline
+                        });
+        var planeMaterialViolet =
+                new THREE.MeshLambertMaterial(
+                        {
+            
                                 color: 0xA020F0, // purple
                                 wireframe: true // the gridline
                         });
-        // create the plane's material
+        var planeMaterialGreen =
+                new THREE.MeshLambertMaterial(
+                        {
+                                color: 0x4BD121, //green
+                                wireframe: true // the gridline
+                        });
+        // create the table's material (below the grid)
         var tableMaterial =
                 new THREE.MeshLambertMaterial(
                         {
@@ -177,7 +191,7 @@ function createScene() {
                         });
 
         // create the playing surface plane
-        var plane = new THREE.Mesh(
+        var planeBlue = new THREE.Mesh(
 
                 new THREE.PlaneGeometry(
                         planeWidth * 0.95,	// 95% of table width, since we want to show where the ball goes out-of-bounds
@@ -185,10 +199,33 @@ function createScene() {
                         planeQuality,
                         planeQuality),
 
-                planeMaterial);
+                planeMaterialBlue);
+        var planeViolet = new THREE.Mesh(
 
-        scene.add(plane);
-        plane.receiveShadow = true;
+                        new THREE.PlaneGeometry(
+                                planeWidth * 0.95,	// 95% of table width, since we want to show where the ball goes out-of-bounds
+                                planeHeight,
+                                planeQuality,
+                                planeQuality),
+        
+                        planeMaterialViolet);
+        var planeGreen = new THREE.Mesh(
+
+                new THREE.PlaneGeometry(
+                        planeWidth * 0.95,	// 95% of table width, since we want to show where the ball goes out-of-bounds
+                        planeHeight,
+                        planeQuality,
+                        planeQuality),
+
+                planeMaterialGreen);
+
+        // choose differnt plane color
+
+        //scene.add(planeBlue); 
+        //scene.add(planeViolet);
+        scene.add(planeGreen);
+
+        //planeBlue.receiveShadow = true;
 
         var table = new THREE.Mesh(
 
