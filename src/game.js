@@ -265,6 +265,10 @@ function createScene() {
 
         // // create the sphere's material
         var sphereMaterial =
+                // new THREE.MeshNormalMaterial({
+                //         transparent: true,
+                //         opacity: 0.75
+                // });
                 new THREE.MeshBasicMaterial(
                         {
                                 map: new THREE.TextureLoader().load('./assets/moon.jpg'),
