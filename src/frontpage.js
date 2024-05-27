@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { VerticalBlurShader } from 'three/examples/jsm/Addons.js';
-import "./game.js"
+import "./gameVsBot.js"
+import "./gameVsHuman.js"
 
 
 // ------------------------------------- //

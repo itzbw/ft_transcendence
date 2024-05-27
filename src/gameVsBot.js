@@ -1,12 +1,13 @@
 import * as THREE from 'three';
 import "./frontpage.js"
+import { remove } from 'three/examples/jsm/libs/tween.module.js';
 
 // ------------------------------------- //
 // ------- GLOBAL VARIABLES ------------ //
 // ------------------------------------- //
 
 // scene object variables
-var renderer, scene, camera, pointLight, spotLight, ambiLight;
+var renderer, scene, camera, pointLight, spotLight, ambiLight, object3D;
 
 // field variables
 var fieldWidth = 400, fieldHeight = 200;
@@ -60,40 +61,13 @@ var Key = {
 };
 
 
-var ball1 = document.getElementById("ball1");
-var ball2 = document.getElementById("ball2");
-
 // ------------------------------------- //
 // ------- GAME FUNCTIONS -------------- //
 // ------------------------------------- //
 
-ball1.onclick = function () {
 
-        setupVsHuman();
-}
+export function setupVsBot() {
 
-ball2.onclick = function () {
-        setupVsBot();
-}
-
-function setupVsHuman() {
-        // update the board to reflect the max score for match win
-        document.getElementById("winnerBoard").innerHTML = "First to " + maxScore + " wins!";
-
-        // now reset player and opponent scores
-        score1 = 0;
-        score2 = 0;
-
-        // set up all the 3D objects in the scene	
-        createScene();
-
-        // and let's get cracking!
-        drawVsHuman();
-
-}
-
-
-function setupVsBot() {
         // update the board to reflect the max score for match win
         document.getElementById("winnerBoard").innerHTML = "First to " + maxScore + " wins!";
 
@@ -107,6 +81,25 @@ function setupVsBot() {
         // and let's get cracking!
         drawVsBot();
 
+}
+
+
+
+
+function removeObject(Object3D) {
+        if (!(object3D instanceof THREE.Object3D)) return false;
+        if (object3D.geometry) object3D.geometry.dispose();
+        if (object3D.material) {
+                if (object3D.material instanceof Array) {
+                        // for better memory management and performance
+                        object3D.material.forEach(material => material.dispose());
+                } else {
+                        // for better memory management and performance
+                        object3D.material.dispose();
+                }
+        }
+        object3D.removeFromParent(); // the parent might be the scene or another Object3D, but it is sure to be removed this way
+        return true;
 }
 
 function createScene() {
@@ -395,21 +388,9 @@ function createScene() {
 
 }
 
-function drawVsHuman() {
-        // draw THREE.JS scene
-        renderer.render(scene, camera);
-        // loop draw function call
-        requestAnimationFrame(drawVsHuman);
-
-        ballPhysics();
-        paddlePhysics();
-        cameraPhysics();
-        playerPaddleMovement();
-        player2PaddleMovement(); // Vs Human
-
-}
 
 function drawVsBot() {
+        //removeObject(scene);
         // draw THREE.JS scene
         renderer.render(scene, camera);
         // loop draw function call
@@ -534,49 +515,6 @@ function playerPaddleMovement() {
         paddle1.scale.z += (1 - paddle1.scale.z) * 0.2;
         paddle1.position.y += paddle1DirY;
 }
-
-
-// Handles player's paddle movement
-function player2PaddleMovement() {
-        // move left
-        if (Key.isDown(Key.Left)) {
-                // if paddle is not touching the side of table
-                // we move
-                if (paddle2.position.y < fieldHeight * 0.45) {
-                        paddle2DirY = paddleSpeed * 0.5;
-                }
-                // else we don't move and stretch the paddle
-                // to indicate we can't move
-                else {
-                        paddle2DirY = 0;
-                        paddle2.scale.z += (10 - paddle2.scale.z) * 0.2;
-                }
-        }
-        // move right
-        else if (Key.isDown(Key.Right)) {
-                // if paddle is not touching the side of table
-                // we move
-                if (paddle2.position.y > -fieldHeight * 0.45) {
-                        paddle2DirY = -paddleSpeed * 0.5;
-                }
-                // else we don't move and stretch the paddle
-                // to indicate we can't move
-                else {
-                        paddle2DirY = 0;
-                        paddle2.scale.z += (10 - paddle1.scale.z) * 0.2;
-                }
-        }
-        // else don't move paddle
-        else {
-                // stop the paddle
-                paddle2DirY = 0;
-        }
-
-        paddle2.scale.y += (1 - paddle2.scale.y) * 0.2;
-        paddle2.scale.z += (1 - paddle2.scale.z) * 0.2;
-        paddle2.position.y += paddle2DirY;
-}
-
 
 
 // Handles camera and lighting logic
@@ -725,10 +663,3 @@ function matchScoreCheck() {
                 paddle2.scale.y = 2 + Math.abs(Math.sin(bounceTime * 0.05)) * 10;
         }
 }
-
-
-// window.onload = function () {
-//         setupVsBot(); // loading vsbot by default
-//         // setupVsHuman(); 
-// }
-
