@@ -1,13 +1,12 @@
 import * as THREE from 'three';
-import "./frontpage.js"
-import { remove } from 'three/examples/jsm/libs/tween.module.js';
+// import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 // ------------------------------------- //
 // ------- GLOBAL VARIABLES ------------ //
 // ------------------------------------- //
 
 // scene object variables
-var renderer, scene2, camera, pointLight, spotLight, ambiLight, object3D;
+var renderer, scene, camera, pointLight, spotLight, ambiLight;
 
 // field variables
 var fieldWidth = 400, fieldHeight = 200;
@@ -65,9 +64,19 @@ var Key = {
 // ------- GAME FUNCTIONS -------------- //
 // ------------------------------------- //
 
+var ball1 = document.getElementById("ball1");
+var ball2 = document.getElementById("ball2");
 
-export function setupVsHuman() {
+ball1.onclick = function () {
+  setupVsHuman();
+}
 
+ball2.onclick = function () {
+  setupVsBot();
+}
+
+
+function setupVsHuman() {
   // update the board to reflect the max score for match win
   document.getElementById("winnerBoard").innerHTML = "First to " + maxScore + " wins!";
 
@@ -80,24 +89,24 @@ export function setupVsHuman() {
 
   // and let's get cracking!
   drawVsHuman();
+
 }
 
+function setupVsBot() {
+  // update the board to reflect the max score for match win
+  document.getElementById("winnerBoard").innerHTML = "First to " + maxScore + " wins!";
 
-// function removeObject(Object3D) {
-//   if (!(object3D instanceof THREE.Object3D)) return false;
-//   if (object3D.geometry) object3D.geometry.dispose();
-//   if (object3D.material) {
-//     if (object3D.material instanceof Array) {
-//       // for better memory management and performance
-//       object3D.material.forEach(material => material.dispose());
-//     } else {
-//       // for better memory management and performance
-//       object3D.material.dispose();
-//     }
-//   }
-//   object3D.removeFromParent(); // the parent might be the scene or another Object3D, but it is sure to be removed this way
-//   return true;
-// }
+  // now reset player and opponent scores
+  score1 = 0;
+  score2 = 0;
+
+  // set up all the 3D objects in the scene	
+  createScene();
+
+  // and let's get cracking!
+  drawVsBot();
+
+}
 
 function createScene() {
   // set the scene size
@@ -105,7 +114,7 @@ function createScene() {
     HEIGHT = 400;
 
   // set some camera attributes
-  var VIEW_ANGLE = 60,
+  var VIEW_ANGLE = 90,
     ASPECT = WIDTH / HEIGHT,
     NEAR = 0.1,
     FAR = 1000;
@@ -121,13 +130,16 @@ function createScene() {
       NEAR,
       FAR);
 
-  scene2 = new THREE.Scene();
+  scene = new THREE.Scene();
 
   // add the camera to the scene
-  scene2.add(camera);
+  scene.add(camera);
 
   // set a default position for the camera
   camera.position.z = 320;
+
+
+
 
   // start the renderer
   renderer.setSize(WIDTH, HEIGHT);
@@ -155,36 +167,20 @@ function createScene() {
         color: 0xFF4045, // red
       });
 
-  // create the plane's material	
-
-  var planeMaterialBlue =
+  // create the table's material	
+  var planeMaterial =
     new THREE.MeshLambertMaterial(
       {
         // color: 0x4BD121, //green
-        color: 0x00BFFF, // blue
-        //color: 0xA020F0, // purple
-        wireframe: true // the gridline
-      });
-  var planeMaterialViolet =
-    new THREE.MeshLambertMaterial(
-      {
-
+        //color: 0x00BFFF, // blue
         color: 0xA020F0, // purple
         wireframe: true // the gridline
       });
-  var planeMaterialGreen =
-    new THREE.MeshLambertMaterial(
-      {
-        color: 0x4BD121, //green
-        wireframe: true // the gridline
-      });
-  // create the table's material (below the grid)
+  // create the plane's material
   var tableMaterial =
     new THREE.MeshLambertMaterial(
       {
         color: 0x111111
-        // transparent: true,
-        // opacity: 0
       });
 
   var groundMaterial =
@@ -196,7 +192,7 @@ function createScene() {
       });
 
   // create the playing surface plane
-  var planeBlue = new THREE.Mesh(
+  var plane = new THREE.Mesh(
 
     new THREE.PlaneGeometry(
       planeWidth * 0.95,	// 95% of table width, since we want to show where the ball goes out-of-bounds
@@ -204,33 +200,10 @@ function createScene() {
       planeQuality,
       planeQuality),
 
-    planeMaterialBlue);
-  var planeViolet = new THREE.Mesh(
+    planeMaterial);
 
-    new THREE.PlaneGeometry(
-      planeWidth * 0.95,	// 95% of table width, since we want to show where the ball goes out-of-bounds
-      planeHeight,
-      planeQuality,
-      planeQuality),
-
-    planeMaterialViolet);
-  var planeGreen = new THREE.Mesh(
-
-    new THREE.PlaneGeometry(
-      planeWidth * 0.95,	// 95% of table width, since we want to show where the ball goes out-of-bounds
-      planeHeight,
-      planeQuality,
-      planeQuality),
-
-    planeMaterialGreen);
-
-  // choose differnt plane color
-
-  //scene.add(planeBlue); 
-  //scene.add(planeViolet);
-  scene2.add(planeGreen);
-
-  //planeBlue.receiveShadow = true;
+  scene.add(plane);
+  plane.receiveShadow = true;
 
   var table = new THREE.Mesh(
 
@@ -244,7 +217,7 @@ function createScene() {
 
     tableMaterial);
   table.position.z = -51;	// we sink the table into the ground by 50 units. The extra 1 is so the plane can be seen
-  scene2.add(table);
+  scene.add(table);
   table.receiveShadow = true;
 
   // // set up the sphere vars
@@ -255,10 +228,6 @@ function createScene() {
 
   // // create the sphere's material
   var sphereMaterial =
-    // new THREE.MeshNormalMaterial({
-    //         transparent: true,
-    //         opacity: 0.75
-    // });
     new THREE.MeshBasicMaterial(
       {
         map: new THREE.TextureLoader().load('./assets/moon.jpg'),
@@ -277,7 +246,7 @@ function createScene() {
     sphereMaterial);
 
   // // add the sphere to the scene
-  scene2.add(ball);
+  scene.add(ball);
 
   ball.position.x = 0;
   ball.position.y = 0;
@@ -307,7 +276,7 @@ function createScene() {
   // add the paddle to the scene
 
 
-  scene2.add(paddle1);
+  scene.add(paddle1);
   paddle1.receiveShadow = true;
   paddle1.castShadow = true;
 
@@ -324,7 +293,7 @@ function createScene() {
     paddle2Material);
 
   // // add the sphere to the scene
-  scene2.add(paddle2);
+  scene.add(paddle2);
   paddle2.receiveShadow = true;
   paddle2.castShadow = true;
 
@@ -351,8 +320,9 @@ function createScene() {
     groundMaterial);
   // set ground to arbitrary z position to best show off shadowing
   ground.position.z = -132;
+
   ground.receiveShadow = true;
-  scene2.add(ground);
+  scene.add(ground);
 
   // create a point light
   pointLight =
@@ -365,10 +335,10 @@ function createScene() {
   pointLight.intensity = 2.9;
   pointLight.distance = 10000;
   // add to the scene
-  scene2.add(pointLight);
+  scene.add(pointLight);
 
   ambiLight = new THREE.AmbientLight(0xffffff, 4);
-  scene2.add(ambiLight);
+  scene.add(ambiLight);
 
 
   // add a spot light
@@ -377,18 +347,20 @@ function createScene() {
   spotLight.position.set(0, 0, 460);
   spotLight.intensity = 1.5;
   spotLight.castShadow = true;
-  scene2.add(spotLight);
+  scene.add(spotLight);
 
   // MAGIC SHADOW CREATOR DELUXE EDITION with Lights PackTM DLC
   renderer.shadowMap.enabled = true;
+
+  // const controls = new OrbitControls(camera, renderer.domElement);
+  // controls.update();
 
 
 }
 
 function drawVsHuman() {
-
   // draw THREE.JS scene
-  renderer.render(scene2, camera);
+  renderer.render(scene, camera);
   // loop draw function call
   requestAnimationFrame(drawVsHuman);
 
@@ -400,6 +372,19 @@ function drawVsHuman() {
 
 }
 
+function drawVsBot() {
+  // draw THREE.JS scene
+  renderer.render(scene, camera);
+  // loop draw function call
+  requestAnimationFrame(drawVsBot);
+
+  ballPhysics();
+  paddlePhysics();
+  cameraPhysics();
+  playerPaddleMovement();
+  opponentPaddleMovement(); // vs Bot
+
+}
 
 function ballPhysics() {
   // if ball goes off the 'left' side (Player's side)
@@ -447,6 +432,29 @@ function ballPhysics() {
     ballDirY = -ballSpeed * 2;
   }
 }
+
+// Handles CPU paddle movement and logic
+function opponentPaddleMovement() {
+  // Lerp towards the ball on the y plane
+  paddle2DirY = (ball.position.y - paddle2.position.y) * difficulty;
+
+  // in case the Lerp function produces a value above max paddle speed, we clamp it
+  if (Math.abs(paddle2DirY) <= paddleSpeed) {
+    paddle2.position.y += paddle2DirY;
+  }
+  // if the lerp value is too high, we have to limit speed to paddleSpeed
+  else {
+    // if paddle is lerping in +ve direction
+    if (paddle2DirY > paddleSpeed) {
+      paddle2.position.y += paddleSpeed;
+    }
+    // if paddle is lerping in -ve direction
+    else if (paddle2DirY < -paddleSpeed) {
+      paddle2.position.y -= paddleSpeed;
+    }
+  }
+}
+
 
 
 // Handles player's paddle movement
@@ -541,14 +549,18 @@ function cameraPhysics() {
   //spotLight.position.y = ball.position.y * 2;
 
   // move to behind the player's paddle
-  camera.position.x = paddle1.position.x - 100;
-  camera.position.y += (paddle1.position.y - camera.position.y) * 0.05;
-  camera.position.z = paddle1.position.z + 100 + 0.04 * (-ball.position.x + paddle1.position.x);
-
+  //camera.position.x = paddle1.position.x - 100;
+  // camera.position.y += (paddle1.position.y - camera.position.y) * 0.05;
+  // camera.position.z = paddle1.position.z + 100 + 0.04 * (-ball.position.x + paddle1.position.x);
+  camera.position.x = paddle2.position.x - 500;
+  camera.position.y += (paddle2.position.y - camera.position.y) * 0.05;
+  camera.position.z = paddle2.position.z + 100 + 0.04 * (-ball.position.x + paddle2.position.x);
 
   // rotate to face towards the opponent
   camera.rotation.x = -0.01 * (ball.position.y) * Math.PI / 180;
   camera.rotation.y = -60 * Math.PI / 180;
+
+
   // perpenticulr or horizontal
   camera.rotation.z = -90 * Math.PI / 180;
 
@@ -680,3 +692,10 @@ function matchScoreCheck() {
     paddle2.scale.y = 2 + Math.abs(Math.sin(bounceTime * 0.05)) * 10;
   }
 }
+
+
+window.onload = function () {
+  setupVsBot(); // loading vsbot by default
+  // setupVsHuman(); 
+}
+

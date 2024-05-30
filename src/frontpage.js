@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { VerticalBlurShader } from 'three/examples/jsm/Addons.js';
-import "./gameVsBot.js"
-import "./gameVsHuman.js"
+import "./game.js"
+// import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 
 // ------------------------------------- //
@@ -23,10 +23,15 @@ function init() {
   camera.rotation.x = 0.2;
 
 
+
   //setup renderer
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
+
+  // orbit controls
+  // const controls = new OrbitControls(camera, renderer.domElement);
+  // controls.update();
 
 
   starGeo = new THREE.BufferGeometry(); // Geometry is decrypted
@@ -117,7 +122,6 @@ function animate() {
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 }
-
 
 
 window.onload = function () {
