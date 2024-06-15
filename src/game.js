@@ -64,16 +64,16 @@ var Key = {
 // ------- GAME FUNCTIONS -------------- //
 // ------------------------------------- //
 
-var ball1 = document.getElementById("ball1");
-var ball2 = document.getElementById("ball2");
+// var ball1 = document.getElementById("ball1");
+// var ball2 = document.getElementById("ball2");
 
-ball1.onclick = function () {
-  setupVsHuman();
-}
+// ball1.onclick = function () {
+//   setupVsHuman();
+// }
 
-ball2.onclick = function () {
-  setupVsBot();
-}
+// ball2.onclick = function () {
+//   setupVsBot();
+// }
 
 
 function setupVsHuman() {
@@ -92,9 +92,12 @@ function setupVsHuman() {
 
 }
 
-function setupVsBot() {
+window.setupVsHuman = setupVsHuman;
+
+window.setupVsBot = () => {
   // update the board to reflect the max score for match win
-  document.getElementById("winnerBoard").innerHTML = "First to " + maxScore + " wins!";
+  // document.getElementById("winnerBoard").innerHTML = "First to " + maxScore + " wins!";
+  var mainWindow = document.getElementById('main-window');
 
   // now reset player and opponent scores
   score1 = 0;
@@ -119,7 +122,7 @@ function createScene() {
     NEAR = 0.1,
     FAR = 1000;
 
-  var c = document.getElementById("gameCanvas");
+  var c = document.getElementById("main-window");
 
   // create a WebGL renderer, camera and a scene
   renderer = new THREE.WebGLRenderer();
@@ -694,8 +697,8 @@ function matchScoreCheck() {
 }
 
 
-window.onload = function () {
-  setupVsBot(); // loading vsbot by default
-  // setupVsHuman(); 
-}
+// window.onload = function () {
+//   setupVsBot(); // loading vsbot by default
+//   // setupVsHuman(); 
+// }
 

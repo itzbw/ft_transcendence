@@ -4,11 +4,11 @@ import "./frontpage.js"
 import { setupVsBot } from "./game.js"
 import { setupVsHuman } from "./game.js"
 
-// var clickMeButton = document.createElement('button');
-// clickMeButton.id = 'myButton';
-// clickMeButton.innerHTML = 'Click Me';
-// clickMeButton.style.background = '#4FFF8F';
-// document.body.appendChild(clickMeButton);
+var clickMeButton = document.createElement('button');
+clickMeButton.id = 'myButton';
+clickMeButton.innerHTML = 'Click Me';
+clickMeButton.style.background = '#4FFF8F';
+document.body.appendChild(clickMeButton);
 
 // var vsHumanButton = document.createElement('button');
 // clickMeButton.id = 'vsHuman';
@@ -21,6 +21,8 @@ import { setupVsHuman } from "./game.js"
 // clickMeButton.innerHTML = 'vs Bot';
 // clickMeButton.style.background = '#4FFF8F';
 // document.body.appendChild(vsBotButton);
+
+
 
 
 // var ball1 = document.getElementById("ball1");
