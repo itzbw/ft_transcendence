@@ -20,7 +20,7 @@
 	    			<p id="NumbersGames">Numbers of game: </p>
 	    			<p id="PointsScored">Number of points scored: </p>
 	    			<p id="PointsSuffered">Number of points suffered: </p>
-	    			<canvas id="graph" width="300" height="200" style="border:1px solid black;" style ="width:80% ; height:auto;"></canvas>
+	    			<canvas id="graph" style="border:1px solid black;" style ="width:100%;"></canvas>
 	    			<script type="text/javascript">
 	    				User = "Arene";
 	    				WinGames = 4;
@@ -30,19 +30,20 @@
 	    				PointsSuffered = 21;
 	    				const canvas = document.getElementById("graph");
 	    				const ctx = canvas.getContext("2d");
+	    				var heightRatio = 0.5;
 						document.getElementById("User").textContent += User;
 						document.getElementById("WinGames").textContent += WinGames;
 						document.getElementById("LostGames").textContent += LostGames;
 						document.getElementById("NumbersGames").textContent += NumbersGames;
 						document.getElementById("PointsScored").textContent += PointsScored;
 						document.getElementById("PointsSuffered").textContent += PointsSuffered;
-						window.onresize = updateCanvas;
-						function updateCanvas() {
+						window.onresize = function() {
 							ctx.clearRect(0, 0, canvas.width, canvas.height);
+							canvas.height = canvas.width * heightRatio;
 							var width = canvas.width;
 							var height = canvas.height;
-							ctx.fillText(width, 10, 50);
-							ctx.fillText(height, 10, 100);	
+							ctx.fillText("w: " + width, 10, 50);
+							ctx.fillText("h: " + height, 10, 100);
 						}
 	    			</script>
 				</div>
