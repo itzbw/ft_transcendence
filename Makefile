@@ -5,3 +5,5 @@ all :
 
 stop :
 	$(DC) down
+
+re : stop all

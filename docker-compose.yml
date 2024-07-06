@@ -7,6 +7,14 @@ services:
       context: ./frontend
     ports:
       - "5555:443"
-    # networks:
-    #   - trans_net
+    networks:
+      - trans_net
     restart: on-failure
+    # volumes:
+    #   - ./frontend/website:/etc/website
+
+
+networks:
+  trans_net:
+    name: trans_net
+    driver: bridge
