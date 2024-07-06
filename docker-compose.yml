@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  frontend:
+    container_name: trans_front
+    build:
+      context: ./frontend
+    ports:
+      - "5555:443"
+    # networks:
+    #   - trans_net
+    restart: on-failure
