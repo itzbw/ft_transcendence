@@ -10,9 +10,36 @@ services:
     networks:
       - trans_net
     restart: on-failure
+    depends_on:
+      - backend
     # volumes:
-    #   - ./frontend/website:/etc/website
+    #   - ./frontend/website:/etc/website   # 403 Forbidden error... why ?
 
+  backend:
+    container_name: trans_back
+    build: 
+      context: ./backend
+    ports: 
+    - "6666:8000"
+    env_file:
+      - tools/.env
+    volumes:
+      - ./backend:/usr/src/app/
+      - ./srcs/media:/usr/src/app/media
+
+  database:
+    container_name: trans_db
+    image: postgres:16
+    restart: on-failure:5
+    volumes:
+      - database:/var/lib/postgresql/data
+    ports:
+      - '7777:7777'
+    env_file:
+      - tools/.env
+
+volumes:
+  database:
 
 networks:
   trans_net:

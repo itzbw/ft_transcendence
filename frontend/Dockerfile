@@ -1,4 +1,3 @@
-# Utilisation d'une image légère de Nginx
 FROM nginx:1.27
 
 RUN mkdir -p /etc/nginx/ssl && \
@@ -6,5 +5,5 @@ RUN mkdir -p /etc/nginx/ssl && \
 
 COPY conf/default.conf /etc/nginx/conf.d/default.conf
 COPY website /etc/website
-# Launch NGINX
+
 CMD ["nginx", "-g", "daemon off;"]

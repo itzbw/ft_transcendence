@@ -1,1 +1,3 @@
 .local
+frontend/website/access.log
+frontend/website/error.log
