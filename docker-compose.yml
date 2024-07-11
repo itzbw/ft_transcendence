@@ -26,6 +26,8 @@ services:
     volumes:
       - ./backend:/usr/src/app/
       - ./srcs/media:/usr/src/app/media
+    depends_on:
+      - database
 
   database:
     container_name: trans_db
@@ -34,7 +36,7 @@ services:
     volumes:
       - database:/var/lib/postgresql/data
     ports:
-      - '7777:7777'
+      - '5432:5432'
     env_file:
       - tools/.env
 

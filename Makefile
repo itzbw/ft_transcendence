@@ -6,4 +6,7 @@ all :
 stop :
 	$(DC) down
 
+vol :
+	$(DC) down -v
+
 re : stop all
