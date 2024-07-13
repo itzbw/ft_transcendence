@@ -7,7 +7,3 @@ while true; do
         sleep 2
     fi
 done
-
-while true; do
-	sleep 1
-done
