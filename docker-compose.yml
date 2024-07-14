@@ -12,8 +12,8 @@ services:
     restart: on-failure
     depends_on:
       - backend
-    # volumes:
-    #   - ./frontend/website:/etc/website   # 403 Forbidden error... why ?
+    volumes:
+      - ./frontend/logs:/var/log/nginx   # 403 Forbidden error... why ?
 
   backend:
     container_name: trans_back
@@ -25,7 +25,6 @@ services:
       - tools/.env
     # volumes:
       # - ./backend:/usr/src/app/
-      # - ./srcs/media:/usr/src/app/media
     depends_on:
       - database
 

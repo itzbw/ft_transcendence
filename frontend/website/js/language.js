@@ -1,4 +1,4 @@
-const translations =
+export const translations =
 {
 	en: {
 		profile: 'Profile',
@@ -9,7 +9,8 @@ const translations =
 		legalnotice: 'Legal Notices',
 		spring: 'Spring 2024',
 		legalbody1: 'This site is for educational purposes only. None of the data collected (name, first name, email address, etc...) will be used outside of this site and will not be shared with a third party.',
-		legalbody2: 'This website is the property of the members of its dev team and 42Born2Code.'
+		legalbody2: 'This website is the property of the members of its dev team and 42Born2Code.',
+		about: 'We are a student team from 42Born2Code at Paris.'
 	},
 	fr: {
 		profile: 'Profil',
@@ -20,8 +21,8 @@ const translations =
 		legalnotice: 'Mentions Légales',
 		spring: 'Printemps 2024',
 		legalbody1: 'Ce site est à caractère pédagogique uniquement. Aucune des données recueillies (nom, prénom, adresse mail, etc...) ne sera utilisée en dehors de ce site et ne sera communiquée à un tiers.',
-		legalbody2: 'Ce site est la propriété des membres de son équipe de devs et de 42Born2Code.'
-
+		legalbody2: 'Ce site est la propriété des membres de son équipe de devs et de 42Born2Code.',
+		about: 'Nous sommes une équipe d\'étudiants de l\'école de 42Born2Code à Paris.'
 	},
 	ch: {
 		profile: '个人资料',
@@ -32,7 +33,8 @@ const translations =
 		legalnotice: '法律声明',
 		spring: '2024年春季',
 		legalbody1: '本网站仅用于教育目的。收集的任何数据（姓名、名字、电子邮件地址等）都不会在本网站之外使用，也不会与第三方共享。',
-		legalbody2: '本网站是其开发团队成员和42Born2Code的财产。'
+		legalbody2: '本网站是其开发团队成员和42Born2Code的财产。',
+		about: '我们是巴黎42Born2Code的学生团队。'
 	},
 	jp: {
 		profile: 'プロフィール',
@@ -43,12 +45,13 @@ const translations =
 		legalnotice: '法的通知',
 		spring: '2024年春',
 		legalbody1: 'このサイトは教育目的のみです。収集されたデータ（名前、名字、電子メールアドレスなど）はこのサイトの外では使用されず、第三者と共有されません。',
-		legalbody2: 'このウェブサイトは、その開発チームのメンバーと42Born2Codeの所有物です。'
+		legalbody2: 'このウェブサイトは、その開発チームのメンバーと42Born2Codeの所有物です。',
+		about: '私たちはパリの42Born2Codeからの学生チームです。'
 	}
 };
 
 // get translation for the given key
-function getTranslationForKey(key, language)
+export function getTranslationForKey(key, language)
 {
 	// if the key exists, return the translation, else return the key
 	if (translations[language] && translations[language][key])
@@ -56,7 +59,7 @@ function getTranslationForKey(key, language)
 	return key;
 }
 
-function applyLanguage()
+export function applyLanguage()
 {
 	const language = localStorage.getItem('language') || 'en';
 	document.documentElement.lang = language;
@@ -72,7 +75,7 @@ function applyLanguage()
 	});
 }
 
-function setLanguage(language)
+export function setLanguage(language)
 {
 	const currentLanguage = localStorage.getItem('language') || 'en';
 
@@ -84,4 +87,7 @@ function setLanguage(language)
 	}
 }
 
-document.addEventListener('DOMContentLoaded', applyLanguage);
+window.setLanguage = setLanguage;
+
+// Already done in main.js
+// document.addEventListener('DOMContentLoaded', applyLanguage);
