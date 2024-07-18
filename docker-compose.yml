@@ -6,7 +6,7 @@ services:
     build:
       context: ./frontend
     ports:
-      - "5555:443"
+      - "${FRONT_PORT}:443"
     networks:
       - trans_net
     restart: on-failure
@@ -19,12 +19,8 @@ services:
     container_name: trans_back
     build: 
       context: ./backend
-    ports: 
-    - "6666:8000"
-    env_file:
-      - tools/.env
-    # volumes:
-      # - ./backend:/usr/src/app/
+    expose: 
+    - "${BACK_PORT}"
     depends_on:
       - database
 
@@ -33,14 +29,17 @@ services:
     image: postgres:16
     restart: on-failure:5
     volumes:
-      - database:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
     ports:
       - '5432:5432'
-    env_file:
-      - tools/.env
+    environment:
+      - POSTGRES_HOST=${DB_HOST}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PORT=${DB_PORT}
 
 volumes:
-  database:
+  db_data:
 
 networks:
   trans_net:
