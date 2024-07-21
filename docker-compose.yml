@@ -30,8 +30,8 @@ services:
       - .env
     depends_on:
       - database
-    # volumes:
-    #   - ./backend/django/ft_transcendence:/app
+    volumes:
+      - ./backend/django:/app
 
   database:
     container_name: trans_db
