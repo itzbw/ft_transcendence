@@ -10,10 +10,13 @@ services:
     networks:
       - trans_net
     restart: on-failure
+    env_file:
+      - .env
     depends_on:
       - backend
     volumes:
-      - ./frontend/logs:/var/log/nginx   # 403 Forbidden error... why ?
+      - ./frontend/logs:/var/log/nginx
+      - ./frontend/website:/etc/website # WHEN PROJECT FINISHED, DELETE THIS LINE
 
   backend:
     container_name: trans_back
@@ -21,8 +24,14 @@ services:
       context: ./backend
     expose: 
     - "${BACK_PORT}"
+    networks:
+      - trans_net
+    env_file:
+      - .env
     depends_on:
       - database
+    # volumes:
+    #   - ./backend/django/ft_transcendence:/app
 
   database:
     container_name: trans_db
@@ -32,6 +41,8 @@ services:
       - db_data:/var/lib/postgresql/data
     ports:
       - '5432:5432'
+    networks:
+      - trans_net
     environment:
       - POSTGRES_HOST=${DB_HOST}
       - POSTGRES_PASSWORD=${DB_PASSWORD}

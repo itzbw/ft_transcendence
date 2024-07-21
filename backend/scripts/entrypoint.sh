@@ -1,5 +1,6 @@
+# Install dependencies
 while true; do
-    if nc -z -w 2 $POSTGRES_HOST $POSTGRES_PORT; then
+    if nc -z -w 2 $DB_HOST $DB_PORT; then
         echo "Postgres is up!"
         break
     else
@@ -7,3 +8,7 @@ while true; do
         sleep 2
     fi
 done
+
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
