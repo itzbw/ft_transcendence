@@ -6,6 +6,10 @@ WORKDIR /app
 # RUN apt-get update && apt-get install -y netcat gcc libffi-dev
 RUN apt-get update && apt-get install -y --no-install-recommends netcat
 
+# DEV MODE ONLY
+RUN apt install -y iputils-ping curl
+
+
 #Install Python dependencies
 RUN pip install --upgrade pip
 COPY requirements.txt .

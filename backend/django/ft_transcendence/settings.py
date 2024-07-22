@@ -27,7 +27,15 @@ SECRET_KEY = 'django-insecure-bq^l6js&*iwr+e&zpvt3toh*66ol1edrh*3m4x@h#jck7sa#^l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [os.getenv("FRONTEND_URL", "https://localhost:5555")]
+
+# DEV MODE ONLY, CAREFULL!
+ALLOWED_HOSTS = [
+	os.getenv("FRONTEND_URL", "https://localhost:5555"),
+	"localhost",
+	"frontend",
+	"backend",
+	"*"
+]
 
 
 # Application definition
@@ -39,6 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+	'corsheaders',
+	"api",
 ]
 
 MIDDLEWARE = [
@@ -49,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'ft_transcendence.urls'
@@ -77,10 +88,10 @@ WSGI_APPLICATION = 'ft_transcendence.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.getenv("DB_ENGINE", "django.db.backends.postgresql"),
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv("DB_NAME", "postgres"),
         'USER': os.getenv("DB_USER", "postgres"),
-        'PASSWORD': os.getenv("DB_PASSWORD", "postgres"),
+        'PASSWORD': os.getenv("DB_PASSWORD"),
         'HOST': os.getenv("DB_HOST", "database"),
         'PORT': os.getenv("DB_PORT", "5432"),
     }

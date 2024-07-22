@@ -10,7 +10,8 @@ export const translations =
 		spring: 'Spring 2024',
 		legalbody1: 'This site is for educational purposes only. None of the data collected (name, first name, email address, etc...) will be used outside of this site and will not be shared with a third party.',
 		legalbody2: 'This website is the property of the members of its dev team and 42Born2Code.',
-		about: 'We are a student team from 42Born2Code at Paris.'
+		about: 'We are a student team from 42Born2Code at Paris.',
+		chat: 'Chat'
 	},
 	fr: {
 		profile: 'Profil',
@@ -22,7 +23,8 @@ export const translations =
 		spring: 'Printemps 2024',
 		legalbody1: 'Ce site est à caractère pédagogique uniquement. Aucune des données recueillies (nom, prénom, adresse mail, etc...) ne sera utilisée en dehors de ce site et ne sera communiquée à un tiers.',
 		legalbody2: 'Ce site est la propriété des membres de son équipe de devs et de 42Born2Code.',
-		about: 'Nous sommes une équipe d\'étudiants de l\'école de 42Born2Code à Paris.'
+		about: 'Nous sommes une équipe d\'étudiants de l\'école de 42Born2Code à Paris.',
+		chat: 'Tchat'
 	},
 	ch: {
 		profile: '个人资料',
@@ -34,7 +36,8 @@ export const translations =
 		spring: '2024年春季',
 		legalbody1: '本网站仅用于教育目的。收集的任何数据（姓名、名字、电子邮件地址等）都不会在本网站之外使用，也不会与第三方共享。',
 		legalbody2: '本网站是其开发团队成员和42Born2Code的财产。',
-		about: '我们是巴黎42Born2Code的学生团队。'
+		about: '我们是巴黎42Born2Code的学生团队。',
+		chat: '聊天'
 	},
 	jp: {
 		profile: 'プロフィール',
@@ -46,7 +49,8 @@ export const translations =
 		spring: '2024年春',
 		legalbody1: 'このサイトは教育目的のみです。収集されたデータ（名前、名字、電子メールアドレスなど）はこのサイトの外では使用されず、第三者と共有されません。',
 		legalbody2: 'このウェブサイトは、その開発チームのメンバーと42Born2Codeの所有物です。',
-		about: '私たちはパリの42Born2Codeからの学生チームです。'
+		about: '私たちはパリの42Born2Codeからの学生チームです。',
+		chat: 'チャット'
 	}
 };
 
