@@ -1,3 +1,4 @@
 .local
-frontend/logs
+tools/nginx_logs
 __pycache__
+tools/ssl/certificates

@@ -15,7 +15,8 @@ services:
     depends_on:
       - backend
     volumes:
-      - ./frontend/logs:/var/log/nginx
+      - ./tools/nginx_logs:/var/log/nginx
+      - ./tools/ssl/certificates/frontend:/etc/nginx/ssl
       - ./frontend/website:/etc/website # WHEN PROJECT FINISHED, DELETE THIS LINE
 
   backend:
@@ -35,6 +36,7 @@ services:
       - database
     volumes:
       - ./backend/django:/app
+      - ./tools/ssl/certificates/backend:/app/ssl
 
   database:
     container_name: trans_db

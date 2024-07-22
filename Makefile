@@ -2,12 +2,14 @@ DC = docker-compose
 DOC = docker
 
 all :
+	sh ./tools/ssl/ssl_create.sh
 	$(DC) up --build -d
 
 stop :
 	$(DC) down
 
 vol :
+	rm -rf ./tools/ssl/certificates
 	$(DC) down -v
 
 re : stop all
