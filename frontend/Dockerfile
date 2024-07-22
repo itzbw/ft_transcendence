@@ -14,4 +14,5 @@ COPY conf/nginx.conf /etc/nginx/nginx.conf
 
 RUN mkdir -p /var/log/nginx && env > /var/log/nginx/access.log
 
-CMD ["nginx", "-g", "daemon off;"]
+# DEPRECATED
+# CMD ["nginx", "-g", "daemon off;"]
