@@ -5,3 +5,5 @@ django-cors-headers
 #In order to use Postgresql
 psycopg
 psycopg-binary
+
+gunicorn

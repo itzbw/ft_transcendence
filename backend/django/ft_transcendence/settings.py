@@ -83,6 +83,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ft_transcendence.wsgi.application'
 
 
+# Set https
+SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
