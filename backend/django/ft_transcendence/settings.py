@@ -31,10 +31,9 @@ DEBUG = True
 # DEV MODE ONLY, CAREFULL!
 ALLOWED_HOSTS = [
 	os.getenv("FRONTEND_URL", "https://localhost:5555"),
-	"localhost",
-	"frontend",
-	"backend",
-	"*"
+    'https://127.0.0.1:5555',
+    'https://localhost:8000',
+    'https://127.0.0.1:8000',
 ]
 
 
@@ -50,6 +49,7 @@ INSTALLED_APPS = [
 	'corsheaders',					# Adds Cross-Origin Resource Sharing (CORS) headers to responses
 	'api',							# Our application "api"
 	'authentification',				# Our authentification application "auth"
+	'gunicorn'
 ]
 
 MIDDLEWARE = [
@@ -82,7 +82,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ft_transcendence.wsgi.application'
-
+ASGI_APPLICATION = 'ft_transcendence.asgi.application'
 
 # Set https
 SECURE_SSL_REDIRECT = True
@@ -148,3 +148,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Added for user authentification
 AUTH_USER_MODEL = 'authentification.CustomUser'
+LOGIN_URL = "login"
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://localhost:5555',
+    'https://127.0.0.1:5555',
+    'https://localhost:8000',
+    'https://127.0.0.1:8000',
+]
