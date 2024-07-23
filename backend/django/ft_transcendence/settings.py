@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 	'corsheaders',					# Adds Cross-Origin Resource Sharing (CORS) headers to responses
 	'api',							# Our application "api"
+	'authentification',				# Our authentification application "auth"
 ]
 
 MIDDLEWARE = [
@@ -143,3 +144,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Added for user authentification
+AUTH_USER_MODEL = 'authentification.CustomUser'

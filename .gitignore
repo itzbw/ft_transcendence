@@ -1,4 +1,4 @@
 .local
-tools/nginx_logs
+tools/logs
 __pycache__
 tools/ssl/certificates

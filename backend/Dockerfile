@@ -2,6 +2,7 @@
 FROM python:3.12-rc-slim-bullseye
 
 WORKDIR /app
+RUN mkdir -p /logs
 
 # Install netcat to use it in the entrypoint
 RUN apt-get update && apt-get install -y --no-install-recommends netcat
