@@ -1,9 +1,10 @@
 Django
-daphne
 django-cors-headers
 
 #In order to use Postgresql
 psycopg
 psycopg-binary
 
-gunicorn
+
+gunicorn 	# wsgi server
+daphne 		# asgi server

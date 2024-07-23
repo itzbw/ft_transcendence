@@ -10,7 +10,7 @@ def register(request):
 		if form.is_valid():
 			user = form.save()
 			login(request, user)
-			return redirect('home')  # Redirige vers une page d'accueil ou tableau de bord après l'inscription
+			return redirect('https://localhost:5555')  # Redirige vers une page d'accueil ou tableau de bord après l'inscription
 	else:
 		form = CustomUserCreationForm()
 	return render(request, 'authentification/register.html', {'form': form})
@@ -22,7 +22,7 @@ def login_view(request):
 		if form.is_valid():
 			user = form.get_user()
 			login(request, user)
-			return redirect('home')  # Redirige vers une page d'accueil ou tableau de bord après la connexion
+			return redirect('https://localhost:5555')  # Redirige vers une page d'accueil ou tableau de bord après la connexion
 	else:
 		form = CustomAuthenticationForm()
 	return render(request, 'authentification/login.html', {'form': form})

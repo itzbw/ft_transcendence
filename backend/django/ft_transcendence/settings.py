@@ -28,11 +28,7 @@ SECRET_KEY = 'django-insecure-bq^l6js&*iwr+e&zpvt3toh*66ol1edrh*3m4x@h#jck7sa#^l
 DEBUG = True
 
 
-# DEV MODE ONLY, CAREFULL!
-ALLOWED_HOSTS = [
-	'localhost',
-	'127.0.0.1',
-]
+
 
 
 # Application definition
@@ -149,7 +145,22 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'authentification.CustomUser'
 LOGIN_URL = "login"
 
+
+
+ALLOWED_HOSTS = [
+	'localhost',
+	'127.0.0.1',
+]
+
+CORS_ALLOWED_ORIGINS = [
+	'https://localhost:8000',
+	'http://localhost:5555'
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
 CSRF_TRUSTED_ORIGINS = [
-    'localhost',
-    '127.0.0.1',
+	'https://localhost',
+    'https://localhost:5555',
+    'https://127.0.0.1:5555',
 ]
