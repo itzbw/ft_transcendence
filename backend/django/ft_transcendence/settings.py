@@ -30,10 +30,8 @@ DEBUG = True
 
 # DEV MODE ONLY, CAREFULL!
 ALLOWED_HOSTS = [
-	os.getenv("FRONTEND_URL", "https://localhost:5555"),
-    'https://127.0.0.1:5555',
-    'https://localhost:8000',
-    'https://127.0.0.1:8000',
+	'localhost',
+	'127.0.0.1',
 ]
 
 
@@ -49,7 +47,8 @@ INSTALLED_APPS = [
 	'corsheaders',					# Adds Cross-Origin Resource Sharing (CORS) headers to responses
 	'api',							# Our application "api"
 	'authentification',				# Our authentification application "auth"
-	'gunicorn'
+	'gunicorn',						# wsgi server
+	# 'daphne',						# asgi server
 ]
 
 MIDDLEWARE = [
@@ -151,8 +150,6 @@ AUTH_USER_MODEL = 'authentification.CustomUser'
 LOGIN_URL = "login"
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://localhost:5555',
-    'https://127.0.0.1:5555',
-    'https://localhost:8000',
-    'https://127.0.0.1:8000',
+    'localhost',
+    '127.0.0.1',
 ]

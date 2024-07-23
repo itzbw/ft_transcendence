@@ -1,9 +1,17 @@
 DC = docker-compose
 DOC = docker
+BACK = trans_back
+FRONT = trans_front
 
 all :
 	sh ./tools/ssl/ssl_create.sh
 	$(DC) up --build -d
+
+back_re:
+		$(DOC) restart $(BACK)
+
+front_re:
+		$(DC) exec -ti $(FRONT) nginx -s reload
 
 stop :
 	$(DC) down

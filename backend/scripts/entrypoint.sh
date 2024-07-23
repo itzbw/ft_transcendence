@@ -9,6 +9,11 @@ while true; do
     fi
 done
 
+# Adds a seperator in logfile to see when the container is re-created
+if [ -f /logs/gunicorn.log ]; then
+	echo "\n----------- SERVER LAUNCH ------------\n" >> /logs/gunicorn.log
+fi
+
 python manage.py makemigrations
 python manage.py migrate
 # python manage.py runserver 0.0.0.0:$BACK_PORT
