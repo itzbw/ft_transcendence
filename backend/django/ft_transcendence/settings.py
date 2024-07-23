@@ -41,14 +41,14 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
+    'django.contrib.admin',			# Django admin tools
+    'django.contrib.auth',			# User authentifications
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'corsheaders',
-	"api",
+	'corsheaders',					# Adds Cross-Origin Resource Sharing (CORS) headers to responses
+	'api',							# Our application "api"
 ]
 
 MIDDLEWARE = [
