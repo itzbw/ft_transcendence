@@ -8,34 +8,34 @@ const routes = {
     description: "Page not found",
   },
   "/": {
-    template: "pages/frontpage.html",
+    template: "/pages/frontpage.html",
     title: "frontpage | " + urlPageTitle,
     description: "This is the home page",
   },
   "profile": {
     template: "/pages/profile.html",
     title: "Profile | " + urlPageTitle,
-    description: "This is the about page",
+    description: "This is the Profile page",
   },
   "leaderboard": {
     template: "/pages/leaderboard.html",
     title: "Profile | " + urlPageTitle,
-    description: "This is the about page",
+    description: "This is the leaderboard page",
   },
   "chat": {
     template: "/pages/chat.html",
     title: "Profile | " + urlPageTitle,
-    description: "This is the about page",
+    description: "This is the chat page",
   },
   "pongvsbot": {
-    template: "/pages/pongVSbot.html",
+    template: "/pages/pongvsbot.html",
     title: "About Us | " + urlPageTitle,
-    description: "This is the about page",
+    description: "This is the pongvsbot page",
   },
   "pongvsman": {
-    template: "/pages/pongVSman.html",
+    template: "/pages/pongvsman.html",
     title: "About Us | " + urlPageTitle,
-    description: "This is the about page",
+    description: "This is the pongvsman page",
   },
   "tournament": {
     template: "/pages/tournament.html",

@@ -17,10 +17,12 @@ camera.lookAt(0, 0, 0);
 
 // Create a renderer
 const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-// document.getElementById("main-window");
-document.body.appendChild(renderer.domElement);
 
+var canvasman = document.getElementById('canvasvsman');
+// renderer.setSize(window.innerWidth, window.innerHeight);
+// document.body.appendChild(renderer.domElement);
+canvasman.innerHTML = ''; // Clear any existing content
+canvasman.appendChild(renderer.domElement);
 
 // Create a point light
 const light = new THREE.AmbientLight(0xffffff, 1, 100);
@@ -79,42 +81,49 @@ let rightScore = 0;
 const scoreLimit = 7;
 
 /////////////////// HTML Score Showing /////////////////////
-// const leftScoreElement = document.createElement('div');
-// leftScoreElement.style.position = 'absolute';
-// leftScoreElement.style.top = '10px';
-// leftScoreElement.style.left = '10px';
-// leftScoreElement.style.color = 'white';
-// leftScoreElement.style.fontSize = '24px';
-// leftScoreElement.innerHTML = 'Left: 0';
-// document.body.appendChild(leftScoreElement);
+const leftScoreElement = document.createElement('div');
+leftScoreElement.style.position = 'absolute';
+leftScoreElement.style.top = '10px';
+leftScoreElement.style.left = '10px';
+leftScoreElement.style.color = 'white';
+leftScoreElement.style.fontSize = '24px';
+leftScoreElement.innerHTML = 'Left: 0';
+document.body.appendChild(leftScoreElement);
 
-// const rightScoreElement = document.createElement('div');
-// rightScoreElement.style.position = 'absolute';
-// rightScoreElement.style.top = '10px';
-// rightScoreElement.style.right = '10px';
-// rightScoreElement.style.color = 'white';
-// rightScoreElement.style.fontSize = '24px';
-// rightScoreElement.innerHTML = 'Right: 0';
-// document.body.appendChild(rightScoreElement);
+const rightScoreElement = document.createElement('div');
+rightScoreElement.style.position = 'absolute';
+rightScoreElement.style.top = '10px';
+rightScoreElement.style.right = '10px';
+rightScoreElement.style.color = 'white';
+rightScoreElement.style.fontSize = '24px';
+rightScoreElement.innerHTML = 'Right: 0';
+document.body.appendChild(rightScoreElement);
 
-// const winnerElement = document.createElement('div');
-// winnerElement.style.position = 'absolute';
-// winnerElement.style.top = '20%';
-// winnerElement.style.left = '50%';
-// winnerElement.style.transform = 'translate(-50%, -50%)';
-// winnerElement.style.color = 'white';
-// winnerElement.style.fontSize = '48px';
-// winnerElement.style.display = 'none';
-// document.body.appendChild(winnerElement);
+const winnerElement = document.createElement('div');
+winnerElement.style.position = 'absolute';
+winnerElement.style.top = '20%';
+winnerElement.style.left = '50%';
+winnerElement.style.transform = 'translate(-50%, -50%)';
+winnerElement.style.color = 'white';
+winnerElement.style.fontSize = '48px';
+winnerElement.style.display = 'none';
+document.body.appendChild(winnerElement);
 
 
 
 // Add event listener for resizing the window
-window.addEventListener('resize', () => {
+// window.addEventListener('resize', () => {
+//   camera.aspect = window.innerWidth / window.innerHeight;
+//   camera.updateProjectionMatrix();
+//   renderer.setSize(window.innerWidth, window.innerHeight);
+// });
+var resizeRenderer = () => {
   camera.aspect = window.innerWidth / window.innerHeight;
+  
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
-});
+};
+resizeRenderer();
 
 // Add mouse interaction
 document.addEventListener('mousemove', onDocumentMouseMove);
@@ -224,8 +233,8 @@ function animate() {
   leftPaddle.position.z = THREE.MathUtils.clamp(leftPaddle.position.z, -boardHeight + (boardHeight / 2 + paddleLength / 2), boardHeight - (boardHeight / 2 + paddleLength / 2));
 
   // ball movement
-  ball.position.x += ballDirX;
-  ball.position.z += ballDirZ;
+  ball.position.x += ballDirX * 0.5;
+  ball.position.z += ballDirZ * 0.5;
 
   // ball collision with top and bottom all
   if (ball.position.z > boardLength / 2 || ball.position.z < -boardLength / 2)

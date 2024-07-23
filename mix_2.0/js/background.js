@@ -41,7 +41,7 @@ var Stars = function(args) {
 
     this.animate = function() {
         window.requestAnimationFrame(this.animate.bind(this));
-        this.render();
+        this.render({alpha: true});
     }
     this.render = function() {
         context.fillStyle = 'rgba(1, 4, 35, 0.8)';
