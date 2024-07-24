@@ -2,23 +2,33 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.generic import View
+
 from . import forms
 
 
-# Create your views here.
-def login_view(request):
-	form = forms.LoginForm()
-	message = ''
-	if request.method == 'POST':
-		form = forms.LoginForm(request.POST)
+class LoginPageView(View):
+	template_name = 'authentication/login.html'
+	form_class = forms.LoginForm
+
+	def get(self, request):
+		form = self.form_class()
+		message = ''
+		return render(request, self.template_name, context={'form': form, 'message': message})
+
+	def post(self, request):
+		form = self.form_class(request.POST)
 		if form.is_valid():
-			user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
+			user = authenticate(
+				username=form.cleaned_data['username'],
+				password=form.cleaned_data['password'],
+				)
 			if user is not None:
 				login(request, user)
-				message = f'Welcome, {user.username}!'
-			else:
-				message = "invalid credentials"
-	return render(request, 'authentication/login.html', context={'form': form, 'message': message})
+				return redirect('auth_index')
+		message = "invalid credentials"
+		return render(request, self.template_name, context={'form': form, 'message': message})
+
 
 
 def register_view(request):

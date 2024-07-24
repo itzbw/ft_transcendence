@@ -14,6 +14,11 @@ if [ -f /logs/gunicorn.log ]; then
 	echo "\n----------- SERVER LAUNCH ------------\n" >> /logs/gunicorn.log
 fi
 
+# Adds a seperator in error logfile to see when the container is re-created
+if [ -f /logs/gunicorn_error.log ]; then
+	echo "\n----------- SERVER LAUNCH ------------\n" >> /logs/gunicorn_error.log
+fi
+
 python manage.py makemigrations
 python manage.py migrate
 # python manage.py runserver 0.0.0.0:$BACK_PORT
@@ -22,4 +27,11 @@ python manage.py migrate
 python manage.py create_superuser
 
 # gunicorn is a WSGI server for Django
-gunicorn --bind 0.0.0.0:$BACK_PORT --certfile=$BACK_SSL_CERT --keyfile=$BACK_SSL_KEY ft_transcendence.wsgi:application --error-logfile /logs/gunicorn.log
+gunicorn --bind 0.0.0.0:$BACK_PORT \
+			--certfile=$BACK_SSL_CERT \
+			--keyfile=$BACK_SSL_KEY \
+			ft_transcendence.wsgi:application \
+			--error-logfile /logs/gunicorn_error.log \
+			--log-file /logs/gunicorn.log \
+			--log-level info \
+			> /logs/gunicorn_stdout.log 2>&1
