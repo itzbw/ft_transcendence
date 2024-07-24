@@ -11,3 +11,7 @@ daphne 		# asgi server
 
 
 Pillow		#Image processing (mandatory to use models.ImageField)
+
+
+djangorestframework
+djangorestframework-simplejwt

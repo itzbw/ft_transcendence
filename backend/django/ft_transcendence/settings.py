@@ -34,18 +34,20 @@ DEBUG = True
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',			# Django admin tools
-    'django.contrib.auth',			# User authentications
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+	'django.contrib.admin',			# Django admin tools
+	'django.contrib.auth',			# User authentications
+	'django.contrib.contenttypes',
+	'django.contrib.sessions',
+	'django.contrib.messages',
+	'django.contrib.staticfiles',
 	'corsheaders',					# Adds Cross-Origin Resource Sharing (CORS) headers to responses
 	'api',							# Our application "api"
 	'authentication',				# Our authentication application for the login/regist/logout
 	'users',						# our users application
 	'gunicorn',						# wsgi server
 	# 'daphne',						# asgi server
+	'rest_framework',
+	'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -155,7 +157,7 @@ ALLOWED_HOSTS = [
 
 CORS_ALLOWED_ORIGINS = [
 	'https://localhost:8000',
-	'http://localhost:5555'
+	'https://localhost:5555'
 ]
 
 CORS_ALLOW_CREDENTIALS = True

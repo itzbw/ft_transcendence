@@ -38,3 +38,7 @@ Postgresql with django : https://docs.djangoproject.com/fr/5.0/intro/tutorial02/
 CORS = Cross-Origin Resource Sharing
 
 CSRF = Cross-Site Request Forgery
+
+REST = Representational State Transfer
+
+URI = Uniform Resource Identifier

@@ -34,4 +34,4 @@ gunicorn --bind 0.0.0.0:$BACK_PORT \
 			--error-logfile /logs/gunicorn_error.log \
 			--log-file /logs/gunicorn.log \
 			--log-level info \
-			> /logs/gunicorn_stdout.log 2>&1
+			# > /logs/gunicorn_stdout.log 2>&1
