@@ -2,18 +2,32 @@
 
 Postgresql with django : https://docs.djangoproject.com/fr/5.0/intro/tutorial02/
 
-To do : 
+## To do : 
+### Mandatory global 
+	- Tournament
 
-- settings.py -> CsRF_TRUSTED requiers https://localhost  format instead of localhost
+### User Management
 
-- settings.py -> SECRET_KEY must be replaced by SECRET_KEY = os.environ["SECRET_KEY"]
-	(to create a new key : ```echo "export SECRET_KEY='$(openssl rand -hex 40)'" > .DJANGO_SECRET_KEY```
-	then copy it in .env file)
+	- Passwords mut be encrypted
+	- Users can update their info
+	- Users can upload an avatar (bu hey have a default one if none is provided)
+	- Add a friend and see user status (online or offline) is a mandatory part of the module.
+	- User profile must display stats (wins, losses,...)
+	- Users have a match history, including dates and other relevant details
 
-- CORS ?
 
-- auth/admin.py -> remove once project is done
-- Remove admin/ when finished ?
+### Miscellaneous 
+
+	- settings.py -> CsRF_TRUSTED requiers https://localhost  format instead of localhost
+
+	- settings.py -> SECRET_KEY must be replaced by SECRET_KEY = os.environ["SECRET_KEY"]
+		(to create a new key : ```echo "export SECRET_KEY='$(openssl rand -hex 40)'" > .DJANGO_SECRET_KEY```
+		then copy it in .env file)
+
+	- CORS ?
+
+	- auth/admin.py -> remove once project is done
+	- Remove admin/ when finished ?
 
 
 

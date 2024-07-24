@@ -35,14 +35,15 @@ DEBUG = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',			# Django admin tools
-    'django.contrib.auth',			# User authentifications
+    'django.contrib.auth',			# User authentications
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 	'corsheaders',					# Adds Cross-Origin Resource Sharing (CORS) headers to responses
 	'api',							# Our application "api"
-	'authentification',				# Our authentification application "auth"
+	'authentication',				# Our authentication application for the login/regist/logout
+	'users',						# our users application
 	'gunicorn',						# wsgi server
 	# 'daphne',						# asgi server
 ]
@@ -141,9 +142,9 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# Added for user authentification
-AUTH_USER_MODEL = 'authentification.CustomUser'
-LOGIN_URL = "login"
+# Added for user authentication
+AUTH_USER_MODEL = 'users.SiteUser'	# Tells Django to use our own user model
+# LOGIN_URL = "login"				# is that really usefull ?
 
 
 
