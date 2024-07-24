@@ -18,5 +18,8 @@ python manage.py makemigrations
 python manage.py migrate
 # python manage.py runserver 0.0.0.0:$BACK_PORT
 
+# Need to delete that later :
+python manage.py create_superuser
+
 # gunicorn is a WSGI server for Django
 gunicorn --bind 0.0.0.0:$BACK_PORT --certfile=$BACK_SSL_CERT --keyfile=$BACK_SSL_KEY ft_transcendence.wsgi:application --error-logfile /logs/gunicorn.log

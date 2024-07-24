@@ -29,6 +29,7 @@ Postgresql with django : https://docs.djangoproject.com/fr/5.0/intro/tutorial02/
 	- auth/admin.py -> remove once project is done
 	- Remove admin/ when finished ?
 
+	- When project finished, remove dir /backend/django/authentication/management
 
 
 

@@ -1,6 +1,10 @@
 # using 3.12 instead of 3.13 to avoid "gcc" and "libffi-dev" as requirements to install daphnee
 FROM python:3.12-rc-slim-bullseye
 
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
 WORKDIR /app
 RUN mkdir -p /logs
 
