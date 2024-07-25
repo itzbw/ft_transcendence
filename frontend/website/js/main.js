@@ -16,10 +16,10 @@ document.addEventListener('DOMContentLoaded', async function() {
 	loadContent('static/about.html', 'aboutContainer', applyLanguage);
 
 	if (isLoggedIn) {
-		loadContent('static/header/header_full.html', 'header', applyLanguage)
+		await loadContent('static/header/header_full.html', 'header', applyLanguage)
+		setupLogout();
 	} else {
-		loadContent('static/header/header_mini.html', 'header', applyLanguage)
-		setupLogin();
+		await loadContent('static/header/header_mini.html', 'header', applyLanguage)
+		await setupLogin("init");
 	}
 });
-

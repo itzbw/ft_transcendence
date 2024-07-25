@@ -16,7 +16,8 @@ const translations =
 		password: 'Password',
 		log_in: 'Log in',
 		noaccountyet: 'Don\'t have an account yet?',
-		registerhere: 'Register here'
+		alreadyaccount: 'Already have an account?',
+		registerhere: 'Register here',
 	},
 	fr: {
 		profile: 'Profil',
@@ -33,8 +34,9 @@ const translations =
 		username: 'Nom d\'utilisateur',
 		password: 'Mot de passe',
 		log_in: 'Connexion',
-		noaccountyet: 'Pas encore de compte?', 
-		registerhere: 'Inscrivez-vous ici'
+		noaccountyet: 'Pas encore de compte?',
+		alreadyaccount: 'Déjà membre ?',
+		registerhere: 'Inscrivez-vous'
 	},
 	ch: {
 		profile: '个人资料',
@@ -52,6 +54,7 @@ const translations =
 		password: '密码',
 		log_in: '登录',
 		noaccountyet: '还没有账户吗？',
+		alreadyaccount: '已有账号？',
 		registerhere: '在这里注册'
 	},
 	jp: {
@@ -70,6 +73,7 @@ const translations =
 		password: 'パスワード',
 		log_in: 'ログイン',
 		noaccountyet: 'まだアカウントを持っていませんか？',
+		alreadyaccount: '既にアカウントをお持ちですか？',
 		registerhere: 'ここで登録'
 	}
 };

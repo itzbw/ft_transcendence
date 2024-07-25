@@ -3,14 +3,17 @@ from rest_framework.response import Response
 from rest_framework import status
 
 
-from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponse
+# from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+# from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import View
+# from django.views.generic import View
 
-from . import forms
+from users.models import SiteUser
+
+
+
 
 
 class LoginView(APIView):
@@ -39,3 +42,24 @@ def login_status(request):
 def logout_view(request):
 	logout(request)
 	return JsonResponse({'message': 'Successfully logged out'})
+
+
+class RegisterView(APIView):
+	def post(self, request):
+		username = request.data.get('username')
+		password = request.data.get('password')
+		email = request.data.get('email')
+
+		if not username or not password or not email:
+			return Response({"error": "Please provide all required fields"}, status=status.HTTP_400_BAD_REQUEST)
+	
+		if SiteUser.objects.filter(username=username).exists():
+			return Response({"error": "Username already exists"}, status=status.HTTP_400_BAD_REQUEST)
+
+		if SiteUser.objects.filter(email=email).exists():
+			return Response({"error": "Email already exists"}, status=status.HTTP_400_BAD_REQUEST)
+	
+		user = SiteUser.objects.create_user(username=username, password=password, email=email)
+		user.save()
+
+		return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
