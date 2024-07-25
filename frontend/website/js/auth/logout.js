@@ -1,6 +1,14 @@
 import { getCookie } from "../csrf_token.js";
 
 function doLogout() {
+
+	// Asks for confirmation
+    const confirmed = window.confirm('Are you sure you want to log out?');
+    if (!confirmed) {
+        // If the user cancels, exit the function
+        return;
+    }
+
 	const csrftoken = getCookie('csrftoken');
 
 	// send a disconnection request
