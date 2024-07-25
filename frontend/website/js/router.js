@@ -1,10 +1,7 @@
 import { applyLanguage } from "./language.js";
 
-// select the element:
-const contentDiv = document.getElementById('aboutContainer');
-
 // Load html file's content and insert it in the div:
-export function loadContent(file, callback) {
+export function loadContent(file, element, callback) {
 	fetch(file)
 		.then(response => {
 			if (!response.ok) {
@@ -14,7 +11,7 @@ export function loadContent(file, callback) {
 		})
 		.then(html => {
 			//Insert the content in the div:
-			contentDiv.innerHTML = html;
+			element.innerHTML = html;
 			if (typeof callback === 'function') {
 				callback();
 			}
