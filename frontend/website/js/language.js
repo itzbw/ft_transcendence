@@ -1,4 +1,4 @@
-export const translations =
+const translations =
 {
 	en: {
 		profile: 'Profile',
@@ -14,6 +14,7 @@ export const translations =
 		chat: 'Chat',
 		username: 'Username',
 		password: 'Password',
+		log_in: 'Log in',
 		noaccountyet: 'Don\'t have an account yet?',
 		registerhere: 'Register here'
 	},
@@ -31,6 +32,7 @@ export const translations =
 		chat: 'Tchat',
 		username: 'Nom d\'utilisateur',
 		password: 'Mot de passe',
+		log_in: 'Connexion',
 		noaccountyet: 'Pas encore de compte?', 
 		registerhere: 'Inscrivez-vous ici'
 	},
@@ -48,6 +50,7 @@ export const translations =
 		chat: '聊天',
 		username: '用户名',
 		password: '密码',
+		log_in: '登录',
 		noaccountyet: '还没有账户吗？',
 		registerhere: '在这里注册'
 	},
@@ -65,6 +68,7 @@ export const translations =
 		chat: 'チャット',
 		username: 'ユーザー名',
 		password: 'パスワード',
+		log_in: 'ログイン',
 		noaccountyet: 'まだアカウントを持っていませんか？',
 		registerhere: 'ここで登録'
 	}
@@ -108,6 +112,3 @@ export function setLanguage(language)
 }
 
 window.setLanguage = setLanguage;
-
-// Already done in main.js
-// document.addEventListener('DOMContentLoaded', applyLanguage);

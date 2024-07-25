@@ -1,5 +1,3 @@
-import os
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -34,14 +32,10 @@ def login_status(request):
         return JsonResponse({'isAuthenticated': False})
 
 
-def register_view(request):
-	return HttpResponse("<h1> Hello World! </h1><p> this is the register page </p>")
+# def register_view(request):
+# 	return HttpResponse("<h1> Hello World! </h1><p> this is the register page </p>")
 
 
 def logout_view(request):
 	logout(request)
-	return redirect('https://localhost:5555')
-
-@login_required
-def base_view(request):
-	return render(request, 'authentication/base.html')
+	return JsonResponse({'message': 'Successfully logged out'})
