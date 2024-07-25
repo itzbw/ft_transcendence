@@ -33,6 +33,7 @@ def login_status(request):
     else:
         return JsonResponse({'isAuthenticated': False})
 
+
 def register_view(request):
 	return HttpResponse("<h1> Hello World! </h1><p> this is the register page </p>")
 
