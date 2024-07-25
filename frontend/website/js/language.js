@@ -14,10 +14,12 @@ const translations =
 		chat: 'Chat',
 		username: 'Username',
 		password: 'Password',
+		email: 'email',
 		log_in: 'Log in',
 		noaccountyet: 'Don\'t have an account yet?',
 		alreadyaccount: 'Already have an account?',
 		registerhere: 'Register here',
+		registertitle: 'Registration'
 	},
 	fr: {
 		profile: 'Profil',
@@ -33,10 +35,12 @@ const translations =
 		chat: 'Tchat',
 		username: 'Nom d\'utilisateur',
 		password: 'Mot de passe',
+		email: 'email',
 		log_in: 'Connexion',
 		noaccountyet: 'Pas encore de compte?',
 		alreadyaccount: 'Déjà membre ?',
-		registerhere: 'Inscrivez-vous'
+		registerhere: 'Inscrivez-vous',
+		registertitle: 'Inscription'
 	},
 	ch: {
 		profile: '个人资料',
@@ -52,10 +56,12 @@ const translations =
 		chat: '聊天',
 		username: '用户名',
 		password: '密码',
+		email: '电子邮件',
 		log_in: '登录',
 		noaccountyet: '还没有账户吗？',
 		alreadyaccount: '已有账号？',
-		registerhere: '在这里注册'
+		registerhere: '在这里注册',
+		registertitle: '注册'
 	},
 	jp: {
 		profile: 'プロフィール',
@@ -71,10 +77,12 @@ const translations =
 		chat: 'チャット',
 		username: 'ユーザー名',
 		password: 'パスワード',
+		email: 'メール',
 		log_in: 'ログイン',
 		noaccountyet: 'まだアカウントを持っていませんか？',
 		alreadyaccount: '既にアカウントをお持ちですか？',
-		registerhere: 'ここで登録'
+		registerhere: 'ここで登録',
+		registertitle: '登録'
 	}
 };
 

@@ -19,9 +19,9 @@ async function doRegister() {
 
 
 export function setupRegister(){
-	const logoutButton = document.getElementById('registerButton');
-	if (logoutButton) {
-		logoutButton.addEventListener('click', doRegister);
+	const registerButton = document.getElementById('registerButton');
+	if (registerButton) {
+		registerButton.addEventListener('click', doRegister);
 	}
 }
 

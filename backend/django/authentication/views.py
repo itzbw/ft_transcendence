@@ -10,10 +10,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 # from django.views.generic import View
 
-from users.models import SiteUser
-
-
-
+from users.models import SiteUser   # used for RegisterView
 
 
 class LoginView(APIView):
