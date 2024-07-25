@@ -1,14 +1,16 @@
-<div id="login-box" class="container d-flex flex-column justify-content-center align-items-center h-100 border border-white">
-	<p id="login-message" class="mb-3"></p>
+<div id="login-box" class="container d-flex flex-column justify-content-center align-items-center h-100 ">
+	<p id="login-message"></p>
 	<form id="login-form" >
 		<div class="mb-3">
-			<label for="username" class="form-label" data-translate="username"></label>
+			<label for="username" class="form-label w-100 text-center" data-translate="username"></label>
 			<input type="text" class="form-control" id="username" required>
 		</div>
 		<div class="mb-3">
-			<label for="password" class="form-label" data-translate="password"></label>
+			<label for="password" class="form-label w-100 text-center" data-translate="password"></label>
 			<input type="password" class="form-control" id="password" required>
 		</div>
-		<button type="submit" class="btn btn-primary">Login</button>
+		<button type="submit" class="btn btn-secondary  offset-4 col-4">Login</button>
 	</form>
+
+	<p class="mt-5" data-translate="noaccountyet"></p>
 </div>

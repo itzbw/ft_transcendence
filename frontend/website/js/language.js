@@ -13,7 +13,9 @@ export const translations =
 		about: 'We are a student team from 42Born2Code at Paris.',
 		chat: 'Chat',
 		username: 'Username',
-		password: 'Password'
+		password: 'Password',
+		noaccountyet: 'Don\'t have an account yet?',
+		registerhere: 'Register here'
 	},
 	fr: {
 		profile: 'Profil',
@@ -28,7 +30,9 @@ export const translations =
 		about: 'Nous sommes une équipe d\'étudiants de l\'école de 42Born2Code à Paris.',
 		chat: 'Tchat',
 		username: 'Nom d\'utilisateur',
-		password: 'Mot de passe'
+		password: 'Mot de passe',
+		noaccountyet: 'Pas encore de compte?', 
+		registerhere: 'Inscrivez-vous ici'
 	},
 	ch: {
 		profile: '个人资料',
@@ -43,7 +47,9 @@ export const translations =
 		about: '我们是巴黎42Born2Code的学生团队。',
 		chat: '聊天',
 		username: '用户名',
-		password: '密码'
+		password: '密码',
+		noaccountyet: '还没有账户吗？',
+		registerhere: '在这里注册'
 	},
 	jp: {
 		profile: 'プロフィール',
@@ -58,7 +64,9 @@ export const translations =
 		about: '私たちはパリの42Born2Codeからの学生チームです。',
 		chat: 'チャット',
 		username: 'ユーザー名',
-		password: 'パスワード'
+		password: 'パスワード',
+		noaccountyet: 'まだアカウントを持っていませんか？',
+		registerhere: 'ここで登録'
 	}
 };
 

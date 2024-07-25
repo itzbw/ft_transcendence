@@ -10,6 +10,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Charger le formulaire de login dans main-box
     loadHTML('static/login.html', 'main-box');
 
+	// Pour eviter les CSRF errors
+	function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
     // Fonction pour initialiser le formulaire de login
     function initLoginForm() {
         const form = document.getElementById('login-form');
@@ -21,12 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 const username = document.getElementById('username').value;
                 const password = document.getElementById('password').value;
-                
+                const csrftoken = getCookie('csrftoken');
+
                 try {
                     const response = await fetch('/authentication/login/', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken,
                         },
                         body: JSON.stringify({ username, password }),
                     });
