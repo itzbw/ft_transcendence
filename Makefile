@@ -19,6 +19,7 @@ stop :
 vol :
 	rm -rf ./tools/ssl/certificates
 	$(DC) down -v
+	find ./backend/django/users/avatars/ -type f ! -name 'default.jpg' -print0 | xargs -0 rm -rf
 
 re : stop all
 
