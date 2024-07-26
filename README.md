@@ -15,6 +15,10 @@ Postgresql with django : https://docs.djangoproject.com/fr/5.0/intro/tutorial02/
 	- User profile must display stats (wins, losses,...)
 	- Users have a match history, including dates and other relevant details
 
+	- User's avatar display size must be set + can be changed + default avatar must be set by JS if backend->none
+
+	- User must be able to delete its account
+
 
 ### Miscellaneous 
 
