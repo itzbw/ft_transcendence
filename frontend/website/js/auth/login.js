@@ -38,7 +38,7 @@ async function doLogin() {
 						messageElem.textContent = result.error;
 					}
 				} catch (error) {
-					messageElem.textContent = 'An error occurred';
+					messageElem.textContent = 'An error occurred during fecth';
 				}
 			});
 		}
