@@ -2,14 +2,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-
-# from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
-# from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-# from django.views.generic import View
-
 from users.models import SiteUser   # used for RegisterView
 
 
@@ -22,18 +17,14 @@ class LoginView(APIView):
 			login(request, user)
 			return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
 		return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
-	
+
 
 @csrf_exempt
 def login_status(request):
-    if request.user.is_authenticated:
-        return JsonResponse({'isAuthenticated': True})
-    else:
-        return JsonResponse({'isAuthenticated': False})
-
-
-# def register_view(request):
-# 	return HttpResponse("<h1> Hello World! </h1><p> this is the register page </p>")
+	if request.user.is_authenticated:
+		return JsonResponse({'isAuthenticated': True})
+	else:
+		return JsonResponse({'isAuthenticated': False})
 
 
 def logout_view(request):
