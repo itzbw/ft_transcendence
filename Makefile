@@ -29,8 +29,6 @@ vol :
 	@$(DC) down -v
 	@echo $(R)Cleaning ssl certificates$(X)
 	@rm -rf ./tools/ssl/certificates
-	@echo $(R)Cleaning user avatars$(X)
-	@find ./backend/django/users/avatars/ -type f ! -name 'default.jpg' -print0 | xargs -0 rm -rf
 
 re : stop all
 

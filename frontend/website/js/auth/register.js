@@ -47,7 +47,7 @@ async function doRegister() {
 			// Check if form entries are correct
 			const validationErrors = validateForm(username, email, password);
 			if (validationErrors.length > 0) {
-				document.getElementById('registermessage').textContent = validationErrors.join(' ');
+				message.textContent = validationErrors.join(' ');
 				return;
 			}
 
@@ -66,7 +66,7 @@ async function doRegister() {
 
 				const result = await response.json();
 				if (!response.ok) {
-					document.getElementById('registermessage').textContent = result.error;
+					message.textContent = result.error;
 				} else {
 					window.location.href='/';
 					location.reload();

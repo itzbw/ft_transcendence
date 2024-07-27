@@ -13,6 +13,3 @@ COPY conf/nginx.conf /etc/nginx/nginx.conf
 # COPY website /etc/website
 
 RUN mkdir -p /var/log/nginx && env > /var/log/nginx/access.log
-
-# DEPRECATED
-# CMD ["nginx", "-g", "daemon off;"]

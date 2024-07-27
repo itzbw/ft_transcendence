@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 	# 'daphne',						# asgi server
 	'rest_framework',
 	'rest_framework_simplejwt',
+	# 'channels',						# for websockets
 ]
 
 MIDDLEWARE = [

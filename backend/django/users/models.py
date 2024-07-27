@@ -7,7 +7,7 @@ from django.utils import timezone
 class SiteUser(AbstractUser):
 	username = models.CharField(max_length=30, unique=True)
 	email = models.EmailField(unique=True)
-	avatar = models.ImageField(verbose_name="Profile picture", null=True, blank=True)
+	avatar = models.CharField(null=True, blank=True)
 	datecreated = models.DateField(null=True, blank=True)
 
 	# Override SiteUser.save() to get the date creation

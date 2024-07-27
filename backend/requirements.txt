@@ -7,7 +7,7 @@ psycopg-binary
 
 
 gunicorn 	# wsgi server
-daphne 		# asgi server
+# daphne 		# asgi server
 
 
 Pillow		#Image processing (mandatory to use models.ImageField)
@@ -15,3 +15,5 @@ Pillow		#Image processing (mandatory to use models.ImageField)
 
 djangorestframework
 djangorestframework-simplejwt
+
+# channels	# websockets

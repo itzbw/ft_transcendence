@@ -19,7 +19,8 @@ const translations =
 		noaccountyet: 'Don\'t have an account yet?',
 		alreadyaccount: 'Already have an account?',
 		registerhere: 'Register here',
-		registertitle: 'Registration'
+		registertitle: 'Registration',
+		member_since: 'Member since'
 	},
 	fr: {
 		profile: 'Profil',
@@ -40,7 +41,8 @@ const translations =
 		noaccountyet: 'Pas encore de compte?',
 		alreadyaccount: 'Déjà membre ?',
 		registerhere: 'Inscrivez-vous',
-		registertitle: 'Inscription'
+		registertitle: 'Inscription',
+		member_since: 'Membre depuis le'
 	},
 	ch: {
 		profile: '个人资料',
@@ -61,7 +63,8 @@ const translations =
 		noaccountyet: '还没有账户吗？',
 		alreadyaccount: '已有账号？',
 		registerhere: '在这里注册',
-		registertitle: '注册'
+		registertitle: '注册',
+		member_since: '会员自'
 	},
 	jp: {
 		profile: 'プロフィール',
@@ -82,7 +85,8 @@ const translations =
 		noaccountyet: 'まだアカウントを持っていませんか？',
 		alreadyaccount: '既にアカウントをお持ちですか？',
 		registerhere: 'ここで登録',
-		registertitle: '登録'
+		registertitle: '登録',
+		member_since: '登録日'
 	}
 };
 

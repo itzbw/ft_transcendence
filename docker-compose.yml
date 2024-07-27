@@ -18,6 +18,7 @@ services:
       - ./frontend/website:/etc/website # WHEN PROJECT FINISHED, DELETE THIS LINE
       - ./tools/logs/nginx_logs:/var/log/nginx
       - ./tools/ssl/certificates/frontend:/etc/nginx/ssl
+      - shared_media:/shared_media:rw # volume used for sharing media like users avatars
 
   backend:
     container_name: trans_back
@@ -38,6 +39,7 @@ services:
       - ./backend/django:/app
       - ./tools/logs/django_logs:/logs
       - ./tools/ssl/certificates/backend:/ssl
+      - shared_media:/shared_media:rw
 
   database:
     container_name: trans_db
@@ -60,6 +62,7 @@ services:
 
 volumes:
   db_data:
+  shared_media:
 
 networks:
   trans_net:

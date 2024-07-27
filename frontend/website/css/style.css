@@ -18,3 +18,10 @@ canvas.background-canvas {
     height: 100%;
     z-index: -1; /* absolute back */
 }
+
+.avatar {
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+	object-fit: cover;
+}
