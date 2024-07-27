@@ -13,6 +13,7 @@ async function doProfile() {
 		const csrftoken = getCookie('csrftoken');
 		const profileUsername = document.getElementById('profileUsername');
 		const profileMemberSince = document.getElementById('profileMemberSince');
+		const profileEmail = document.getElementById('profileEmail');
 		const profileAvatar = document.getElementById('profileAvatar');
 		// add other infos
 
@@ -34,6 +35,7 @@ async function doProfile() {
 				const data = await response.json();
 				profileUsername.textContent = data.username;
 				profileMemberSince.textContent = data.datecreated;
+				profileEmail.textContent = data.email;
 	
 				// Set the avatar image
 				const avatarImg = document.createElement('img');
