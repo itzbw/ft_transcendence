@@ -8,7 +8,7 @@ export async function checkLoginStatus() {
         if (response.ok) {
             const result = await response.json();
 			console.log(result);
-            return result.isAuthenticated; // Supposons que le backend renvoie { isAuthenticated: true/false }
+            return result.isAuthenticated;
         } else {
             return false;
         }
