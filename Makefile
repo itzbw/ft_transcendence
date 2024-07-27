@@ -1,3 +1,9 @@
+#Colors
+R			=	"\e[31m"
+G			=	"\e[32m"
+X			=	"\e[0m"
+BOLD		=	"\e[1m"
+
 DC = docker-compose
 DOC = docker
 BACK = trans_back
@@ -8,18 +14,22 @@ all :
 	$(DC) up --build -d
 
 back_re:
-		$(DOC) restart $(BACK)
+		@echo $(G)Restarting backup container$(X)
+		@$(DOC) restart $(BACK)
 
 front_re:
-		$(DC) exec -ti $(FRONT) nginx -s reload
+		@echo $(G)Reloading NGINX$(X)
+		@$(DC) exec -ti $(FRONT) nginx -s reload
 
 stop :
 	$(DC) down
 
 vol :
-	rm -rf ./tools/ssl/certificates
-	$(DC) down -v
-	find ./backend/django/users/avatars/ -type f ! -name 'default.jpg' -print0 | xargs -0 rm -rf
+	@$(DC) down -v
+	@echo $(R)Cleaning ssl certificates$(X)
+	@rm -rf ./tools/ssl/certificates
+	@echo $(R)Cleaning user avatars$(X)
+	@find ./backend/django/users/avatars/ -type f ! -name 'default.jpg' -print0 | xargs -0 rm -rf
 
 re : stop all
 
