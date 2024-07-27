@@ -17,6 +17,7 @@ if [ ! -d "$SSL_DIR" ]; then
 	mkdir -p $FRONT_DIR $BACK_DIR
 	openssl $CMD_ARGS -keyout $BACK_KEY -out $BACK_CERT -subj $SUBJ
 	openssl $CMD_ARGS -keyout $FRONT_KEY -out $FRONT_CERT -subj $SUBJ
+	echo "\e[32mssl certificates created\e[0m"
 else
-	echo "ssl certificates already exist"
+	echo "\e[32mssl certificates already exist\e[0m"
 fi

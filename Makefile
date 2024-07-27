@@ -10,8 +10,9 @@ BACK = trans_back
 FRONT = trans_front
 
 all :
-	sh ./tools/ssl/ssl_create.sh
-	$(DC) up --build -d
+	@echo $(G)Handling SSL certificates...$(X)
+	@sh ./tools/ssl/ssl_create.sh
+	@$(DC) up --build -d
 
 back_re:
 		@echo $(G)Restarting backup container$(X)
@@ -22,7 +23,7 @@ front_re:
 		@$(DC) exec -ti $(FRONT) nginx -s reload
 
 stop :
-	$(DC) down
+	@$(DC) down
 
 vol :
 	@$(DC) down -v
