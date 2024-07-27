@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+
 // Create the scene
 const scene = new THREE.Scene();
 
@@ -16,7 +17,7 @@ camera.position.y = 5;
 camera.lookAt(0, 0, 0);
 
 // Create a renderer
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({ alpha: true });
 
 var canvas = document.getElementById('canvasvsbot');
 
@@ -24,7 +25,7 @@ var canvas = document.getElementById('canvasvsbot');
 // document.body.appendChild(renderer.domElement);
 
 canvas.innerHTML = ''; // Clear any existing content
-canvas.appendChild(renderer.domElement);  
+canvas.appendChild(renderer.domElement);
 
 // Create a point light
 const light = new THREE.AmbientLight(0xffffff, 1, 100);
@@ -85,7 +86,7 @@ const scoreLimit = 7;
 /////////////////// HTML Score Showing /////////////////////
 const leftScoreElement = document.createElement('div');
 leftScoreElement.style.position = 'absolute';
-leftScoreElement.style.top = '10px';
+leftScoreElement.style.top = '50%';
 leftScoreElement.style.left = '10px';
 leftScoreElement.style.color = 'white';
 leftScoreElement.style.fontSize = '24px';
@@ -94,7 +95,7 @@ document.body.appendChild(leftScoreElement);
 
 const rightScoreElement = document.createElement('div');
 rightScoreElement.style.position = 'absolute';
-rightScoreElement.style.top = '10px';
+rightScoreElement.style.top = '50%';
 rightScoreElement.style.right = '10px';
 rightScoreElement.style.color = 'white';
 rightScoreElement.style.fontSize = '24px';
@@ -103,11 +104,11 @@ document.body.appendChild(rightScoreElement);
 
 const winnerElement = document.createElement('div');
 winnerElement.style.position = 'absolute';
-winnerElement.style.top = '20%';
+winnerElement.style.top = '35%';
 winnerElement.style.left = '50%';
 winnerElement.style.transform = 'translate(-50%, -50%)';
 winnerElement.style.color = 'white';
-winnerElement.style.fontSize = '48px';
+winnerElement.style.fontSize = '24px';
 winnerElement.style.display = 'none';
 document.body.appendChild(winnerElement);
 
@@ -121,7 +122,7 @@ document.body.appendChild(winnerElement);
 // });
 var resizeRenderer = () => {
   camera.aspect = window.innerWidth / window.innerHeight;
-  
+
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 };
@@ -141,7 +142,7 @@ function onDocumentMouseMove(event) {
   mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
 }
 
-const controls = new   OrbitControls(camera, renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
 controls.update();
 
 
@@ -315,7 +316,7 @@ function animate() {
 }
 
 
-function loadPongVsBot (){
+function loadPongVsBot() {
   animate();
   console.log("loadPongVsBot");
 
