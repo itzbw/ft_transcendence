@@ -22,9 +22,15 @@ class LoginView(APIView):
 @csrf_exempt
 def login_status(request):
 	if request.user.is_authenticated:
-		return JsonResponse({'isAuthenticated': True})
+		return JsonResponse({
+			'isAuthenticated': True,
+			'username': request.user.username
+			})
 	else:
-		return JsonResponse({'isAuthenticated': False})
+		return JsonResponse({
+			'isAuthenticated': False,
+			'username':None
+			})
 
 
 def logout_view(request):
@@ -51,3 +57,4 @@ class RegisterView(APIView):
 		user.save()
 
 		return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
+
