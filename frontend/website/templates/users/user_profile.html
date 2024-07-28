@@ -1,42 +1,51 @@
 <div class="container h-100 w-100 justify-content-center ">
-	<div class="d-flex justify-content-center row">
-
-		<!-- Avatar -->
-		<div class="col-12 col-md-3 ">
-			<div class="d-flex flex-column align-items-center avatar-container">
-				<div id="profileAvatar"></div>
-				<div id="modifyProfileAvatar" data-translate="modify"></div>
-			</div>
-			<!-- Avatar box must be adjusted  -->
-			
-		</div>
-
-		<!-- User is online/offline status -->
-		<div id="profileOnlineStatus" class="col-12 col-md-2">
-			Online
-		</div>
-
-		<!-- Username & account creation date -->
-		<div class="col-12 col-md-7 ">
-
-			<!-- Username -->
-			<div class="d-flex align-items-center">
-				<div id="profileUsername" class="fw-bold fs-3"></div>
-				<div id="modifyProfileUsername" class="m-2" data-translate="modify"></div>
-			</div>
-
-			<!-- member creation date -->
-			<div class="mb-1 mb-md-4">
-				<span data-translate="member_since"></span>
-				<span id="profileMemberSince"></span>
-			</div>
-
-			<!-- email (only for profile owner) -->
-			<div id="profileEmailContainer" class="d-flex align-items-center">
-				<div id="profileEmail"></div>
-				<div id="modifyProfileEmail" class="m-2 fs-6" data-translate="modify"></div>
+	<div class="row">
+		<div class="row d-flex justify-content-center">
+	
+			<!-- Avatar -->
+			<div class="col-12 col-md-3 ">
+				<div class="d-flex flex-column align-items-center avatar-container">
+					<div id="profileAvatar"></div>
+					<div id="modifyProfileAvatar" data-translate="modify"></div>
+				</div>
+				<!-- Avatar box must be adjusted  -->
+				
 			</div>
 	
+			<!-- User is online/offline status -->
+			<div id="profileOnlineStatus" class="col-12 col-md-1">
+				Online
+			</div>
+	
+			<!-- Username & account creation date -->
+			<div class="col-12 col-md-6">
+	
+				<!-- Username -->
+				<div class="d-flex align-items-center">
+					<div id="profileUsername" class="fw-bold fs-3"></div>
+					<div id="modifyProfileUsername" class="m-2" data-translate="modify"></div>
+				</div>
+	
+				<!-- member creation date -->
+				<div class="mb-1 mb-md-4">
+					<span data-translate="member_since"></span>
+					<span id="profileMemberSince"></span>
+				</div>
+	
+				<!-- email (only for profile owner) -->
+				<div id="profileEmailContainer" class="d-flex align-items-center">
+					<div id="profileEmail"></div>
+					<div id="modifyProfileEmail" class="m-2 fs-6" data-translate="modify"></div>
+				</div>
+		
+			</div>
+
+			<!-- Add as a friend / Friend List (depends if self profile or other's) -->
+			<div class="col-12 col-md-1 d-flex align-items-center">
+				<div id="friend-container">
+					Friends
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -46,9 +55,32 @@
 	</div> -->
 
 	<!-- Overall scores (Wins, Losses, leaderboard rank,...) -->
-	<div class="row">
-		<p id="profileMatchOverview" class="d-flex justify-content-center">Match results overview</p>
+	 <div class="container row mt-3 border border-white rounded">
+		<div class="row justify-content-center">
+			<div class="col-12 text-center border border-white rounded">
+				<div id="profileMatchOverview" data-translate="overallstats"></div>
+			</div>
+		</div>
+		<div class="row text-center">
+			<div class="col">
+				<div data-translate="totalplayed">Total played:</div>
+				<div id="profileTotalPlayed">3</div>
+			</div>
+			<div class="col">
+				<div data-translate="totalwon">Total won:</div>
+				<div id="profileTotalWon">2</div>
+			</div>
+			<div class="col">
+				<div data-translate="totallost">Total lost:</div>
+				<div id="profileTotalLost">1</div>
+			</div>
+			<div class="col">
+				<div data-translate="winrate">Win rate:</div>
+				<div id="profileWinRate">66%</div>
+			</div>
+		</div>
 	</div>
+
 
 	<!-- Match history button will be here (will open a modal ?)-->
 	<div id="profileMatchHistory"></div>

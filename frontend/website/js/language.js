@@ -20,7 +20,13 @@ const translations =
 		alreadyaccount: 'Already have an account?',
 		registerhere: 'Register here',
 		registertitle: 'Registration',
-		member_since: 'Member since'
+		member_since: 'Member since',
+		overallstats: 'Overall Statistics',
+		totalplayed: 'Total played',
+		totalwon: 'Total won',
+		totallost: 'Total lost',
+		winrate: 'Win rate'
+		
 	},
 	fr: {
 		profile: 'Profil',
@@ -42,7 +48,12 @@ const translations =
 		alreadyaccount: 'Déjà membre ?',
 		registerhere: 'Inscrivez-vous',
 		registertitle: 'Inscription',
-		member_since: 'Membre depuis le'
+		member_since: 'Membre depuis le',
+		overallstats: 'Statistiques générales',
+		totalplayed: 'Total joué',
+		totalwon: 'Total gagné',
+		totallost: 'Total perdu',
+		winrate: 'Taux de victoire'
 	},
 	ch: {
 		profile: '个人资料',
@@ -64,7 +75,12 @@ const translations =
 		alreadyaccount: '已有账号？',
 		registerhere: '在这里注册',
 		registertitle: '注册',
-		member_since: '会员自'
+		member_since: '会员自',
+		overallstats: '总体统计',
+		totalplayed: '总场次',
+		totalwon: '总胜场',
+		totallost: '总负场',
+		winrate: '胜率'
 	},
 	jp: {
 		profile: 'プロフィール',
@@ -86,7 +102,12 @@ const translations =
 		alreadyaccount: '既にアカウントをお持ちですか？',
 		registerhere: 'ここで登録',
 		registertitle: '登録',
-		member_since: '登録日'
+		member_since: '登録日',
+		overallstats: '全体統計',
+		totalplayed: '総プレイ数',
+		totalwon: '総勝利数',
+		totallost: '総敗北数',
+		winrate: '勝率'
 	}
 };
 

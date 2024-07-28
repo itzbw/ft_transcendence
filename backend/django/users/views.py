@@ -16,6 +16,9 @@ def user_profile_view(request):
 		"email": user.email,
 		"avatar": user.avatar,
 		"datecreated": user.datecreated.strftime('%Y-%m-%d'),
+		"totalplayed": user.totalplayed,
+		"totalwin": user.totalwin,
+		"totaldefait": user.totaldefait,
 	}
 	return JsonResponse(data)
 

@@ -10,6 +10,11 @@ class SiteUser(AbstractUser):
 	avatar = models.CharField(null=True, blank=True)
 	datecreated = models.DateField(null=True, blank=True)
 
+	# Overall stats
+	totalplayed = models.IntegerField(default=0)
+	totalwin = models.IntegerField(default=0)
+	totaldefait = models.IntegerField(default=0)
+
 	# Override SiteUser.save() to get the date creation
 	def save(self, *args, **kwargs):
 		if not self.id:  # Si l'utilisateur est nouveau
