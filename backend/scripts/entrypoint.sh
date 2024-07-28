@@ -31,7 +31,6 @@ gunicorn --bind 0.0.0.0:$BACK_PORT \
 			--certfile=$BACK_SSL_CERT \
 			--keyfile=$BACK_SSL_KEY \
 			ft_transcendence.wsgi:application \
-			--error-logfile /logs/gunicorn_error.log \
 			--log-file /logs/gunicorn.log \
-			--log-level info \
+			--log-level debug
 			# > /logs/gunicorn_stdout.log 2>&1

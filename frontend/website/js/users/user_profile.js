@@ -3,23 +3,57 @@ import { applyLanguage } from "../language.js";
 import { loadContent } from "../router.js";
 
 
+function setInformations(data){
+	const profileUsername = document.getElementById('profileUsername');
+	profileUsername.textContent = data.username;
+
+	const profileMemberSince = document.getElementById('profileMemberSince');
+	profileMemberSince.textContent = data.dateCreated;
+
+	// Must not be HERE but in additionnal
+	const profileEmail = document.getElementById('profileEmail');
+	profileEmail.textContent = data.email;
+}
+
+function setAvatar(data){
+	const avatarImg = document.createElement('img');
+	avatarImg.src = data.avatar;
+	avatarImg.alt = "User's Avatar";
+	avatarImg.classList.add('avatar');
+
+
+	const profileAvatar = document.getElementById('profileAvatar');
+	profileAvatar.innerHTML = '';			// Clear previous one
+	profileAvatar.appendChild(avatarImg);
+}
+
+function setOverallStats(data)
+{
+	const totalPlayed = document.getElementById('profileTotalPlayed');
+	totalPlayed.textContent = data.totalPlayed;
+
+	const totalWon = document.getElementById('profileTotalWon');
+	totalWon.textContent = data.totalWon;
+
+	const totalLost = document.getElementById('profileTotalLost');
+	totalLost.textContent = data.totalLost;
+
+	const winRate = document.getElementById('profileWinRate');
+	if ((data.totalWon + data.totalLost) == 0){
+		winRate.textContent = '0%';
+	} else {
+		winRate.textContent = ((data.totalWon / (data.totalWon + data.totalLost)) / 100) + '%';
+	}
+}
+
 async function doProfile() {
 
 	const csrftoken = getCookie('csrftoken');
 
 	try {
-		await loadContent('static/users/user_profile.html', 'main-box', applyLanguage);
-		
 		const csrftoken = getCookie('csrftoken');
-		const profileUsername = document.getElementById('profileUsername');
-		const profileMemberSince = document.getElementById('profileMemberSince');
-		const profileEmail = document.getElementById('profileEmail');
-		const profileAvatar = document.getElementById('profileAvatar');
-		// add other infos
+		await loadContent('static/users/user_profile.html', 'main-box', applyLanguage);
 
-		// NEED TO INCOPORATE OVERALL STATS
-
-		// Need the logic to get the profile of the wanted choice
 		try {
 			
 			const response = await fetch('/users/user_profile/', {
@@ -31,21 +65,10 @@ async function doProfile() {
 			});
 
 			if (response.ok) {
-				// Fill uername and creation date
 				const data = await response.json();
-				profileUsername.textContent = data.username;
-				profileMemberSince.textContent = data.datecreated;
-				profileEmail.textContent = data.email;
-	
-				// Set the avatar image
-				const avatarImg = document.createElement('img');
-				avatarImg.src = data.avatar;
-				avatarImg.alt = "User's Avatar";
-				avatarImg.classList.add('avatar');
-
-				// Clear previous avatar if any and append new one
-				profileAvatar.innerHTML = '';
-				profileAvatar.appendChild(avatarImg);
+				setInformations(data);
+				setAvatar(data);
+				setOverallStats(data);
 			} else {
 				console.log('Failed to load profile data:', response.statusText);
 			}
@@ -53,7 +76,6 @@ async function doProfile() {
 		} catch (error) {
 					console.log('An error occurred during fetch:', error);
 		}
-
 
 	} catch (error) {
 		console.error('Error loading profile page:', error);

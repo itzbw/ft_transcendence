@@ -15,10 +15,10 @@ def user_profile_view(request):
 		"username": user.username,
 		"email": user.email,
 		"avatar": user.avatar,
-		"datecreated": user.datecreated.strftime('%Y-%m-%d'),
-		"totalplayed": user.totalplayed,
-		"totalwin": user.totalwin,
-		"totaldefait": user.totaldefait,
+		"dateCreated": user.dateCreated.strftime('%Y-%m-%d'),
+		"totalPlayed": user.totalPlayed,
+		"totalWon": user.totalWon,
+		"totalLost": user.totalLost,
 	}
 	return JsonResponse(data)
 

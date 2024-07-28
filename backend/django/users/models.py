@@ -8,15 +8,15 @@ class SiteUser(AbstractUser):
 	username = models.CharField(max_length=30, unique=True)
 	email = models.EmailField(unique=True)
 	avatar = models.CharField(null=True, blank=True)
-	datecreated = models.DateField(null=True, blank=True)
+	dateCreated = models.DateField(null=True, blank=True)
 
 	# Overall stats
-	totalplayed = models.IntegerField(default=0)
-	totalwin = models.IntegerField(default=0)
-	totaldefait = models.IntegerField(default=0)
+	totalPlayed = models.IntegerField(default=0)
+	totalWon = models.IntegerField(default=0)
+	totalLost = models.IntegerField(default=0)
 
 	# Override SiteUser.save() to get the date creation
 	def save(self, *args, **kwargs):
 		if not self.id:  # Si l'utilisateur est nouveau
-			self.datecreated = timezone.now().date()
+			self.dateCreated = timezone.now().date()
 		super(SiteUser, self).save(*args, **kwargs)
