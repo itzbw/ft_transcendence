@@ -7,8 +7,7 @@ export async function checkLoginStatus() {
 
 		if (response.ok) {
 			const result = await response.json();
-			console.log(result);
-			return result.isAuthenticated;
+			return result;
 		} else {
 			console.error('Error: Response not ok: ', response.status, response.statusText);
 			return false;

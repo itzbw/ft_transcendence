@@ -1,4 +1,3 @@
-import { applyLanguage } from "./language.js";
 
 // Load html file's content and insert it in the div:
 export async function loadContent(file, elementID, callback) {

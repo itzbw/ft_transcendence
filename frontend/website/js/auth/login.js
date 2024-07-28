@@ -50,6 +50,7 @@ async function doLogin() {
 
 export function setupLogin(type)
 {
+	// If not defined, no button "login to click", so no doLogin()
 	if (type === "init")
 		doLogin()
 	else

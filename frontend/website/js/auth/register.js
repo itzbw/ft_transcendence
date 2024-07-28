@@ -69,6 +69,7 @@ async function doRegister() {
 					message.textContent = result.error;
 				} else {
 					window.location.href='/';
+					
 					location.reload();
 				}
 			} catch (error) {

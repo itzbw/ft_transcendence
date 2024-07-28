@@ -29,7 +29,7 @@ def login_status(request):
 	else:
 		return JsonResponse({
 			'isAuthenticated': False,
-			'username':None
+			'username': None
 			})
 
 

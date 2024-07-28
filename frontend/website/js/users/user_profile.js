@@ -1,7 +1,8 @@
 import { getCookie } from "../csrf_token.js";
 import { applyLanguage } from "../language.js";
 import { loadContent } from "../router.js";
-
+import { checkLoginStatus } from "../auth/status.js";
+import { changeAvatar } from "./change_avatar.js"
 
 function setInformations(data){
 	const profileUsername = document.getElementById('profileUsername');
@@ -46,17 +47,17 @@ function setOverallStats(data)
 	}
 }
 
-async function doProfile() {
-
+async function showUserProfile(profileUsername) {
 	const csrftoken = getCookie('csrftoken');
-
+	const profileUrl = "/users/" + profileUsername + "/";
+	
 	try {
 		const csrftoken = getCookie('csrftoken');
 		await loadContent('static/users/user_profile.html', 'main-box', applyLanguage);
 
 		try {
 			
-			const response = await fetch('/users/user_profile/', {
+			const response = await fetch(profileUrl, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
@@ -66,9 +67,11 @@ async function doProfile() {
 
 			if (response.ok) {
 				const data = await response.json();
+				console.log(data);
 				setInformations(data);
 				setAvatar(data);
 				setOverallStats(data);
+				SetUserProfileEvents(profileUsername);
 			} else {
 				console.log('Failed to load profile data:', response.statusText);
 			}
@@ -84,21 +87,22 @@ async function doProfile() {
 }
 
 
-// function editUsername()
-// function editEmail()
-// function changePassword()
-// function changeAvatar()
-// + method addEventListener for all
-
-
-
-
-
-export function setupProfile(){
+// Used to call our own profile
+export function setupProfile(username){
 	const profileButton = document.getElementById('profileButton');
 	if (profileButton) {
-		profileButton.addEventListener('click', doProfile);
+		profileButton.addEventListener('click', () => showUserProfile(username));
 	} else {
 		console.log('no profile button found');
+	}
+}
+
+
+function SetUserProfileEvents(username){
+	const avatar = document.getElementById('profileAvatar');
+	if (avatar){
+		avatar.addEventListener('click', () => changeAvatar(username));
+	} else {
+		console.log('no avatar button found');
 	}
 }

@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import user_profile_view
+from .views import UserProfileView, upload_avatar
 
 urlpatterns = [
-	path('user_profile/', user_profile_view, name="user-profile"),
-	# path('users/<str:profile_username>/', user_profile_view, name='user-profile'),
+	path('<str:profile_username>/', UserProfileView.as_view(), name='user-profile'),
+	path('upload_avatar/', upload_avatar, name='upload-avatar'),
 ]

@@ -8,19 +8,19 @@ import { checkLoginStatus } from './auth/status.js';
 import { setupLogin } from './auth/login.js';
 import { setupLogout } from './auth/logout.js';
 
+// User profile
 import { setupProfile } from './users/user_profile.js';
 
 
 document.addEventListener('DOMContentLoaded', async function() {
 
+	loadContent('static/about.html', 'aboutContainer');
 	const isLoggedIn = await checkLoginStatus();
-
-	loadContent('static/about.html', 'aboutContainer', applyLanguage);
-
-	if (isLoggedIn) {
+	
+	if (isLoggedIn.isAuthenticated) {
 		await loadContent('static/header/header_full.html', 'header', applyLanguage)
 		setupLogout();
-		setupProfile();
+		setupProfile(isLoggedIn.username);
 	} else {
 		await loadContent('static/header/header_mini.html', 'header', applyLanguage)
 		await setupLogin("init");
