@@ -21,6 +21,7 @@ function setAvatar(data){
 	avatarImg.src = data.avatar;
 	avatarImg.alt = "User's Avatar";
 	avatarImg.classList.add('avatar');
+	avatarImg.id = 'profileAvatarImg';
 
 
 	const profileAvatar = document.getElementById('profileAvatar');
