@@ -11,7 +11,7 @@ const routes = {
   },
   "/": {
     template: "/pages/frontpage.html",
-    title: "Front | " + urlPageTitle,
+    title: "frontpage | " + urlPageTitle,
     description: "This is the home page",
   },
   "profile": {
@@ -19,29 +19,24 @@ const routes = {
     title: "Profile | " + urlPageTitle,
     description: "This is the Profile page",
   },
-  "gamemenu": {
-    template: "/pages/gamemenu.html",
-    title: "Game Menu | " + urlPageTitle,
-    description: "This is the leaderboard page",
-  },
   "leaderboard": {
     template: "/pages/leaderboard.html",
-    title: "Leaderboard | " + urlPageTitle,
+    title: "Profile | " + urlPageTitle,
     description: "This is the leaderboard page",
   },
   "chat": {
     template: "/pages/chat.html",
-    title: "Chat | " + urlPageTitle,
+    title: "Profile | " + urlPageTitle,
     description: "This is the chat page",
   },
   "pongvsbot": {
     template: "/pages/pongvsbot.html",
-    title: "Pong vs Bot | " + urlPageTitle,
+    title: "About Us | " + urlPageTitle,
     description: "This is the pongvsbot page",
   },
   "pongvsman": {
     template: "/pages/pongvsman.html",
-    title: "Pong vs Man | " + urlPageTitle,
+    title: "About Us | " + urlPageTitle,
     description: "This is the pongvsman page",
   },
   "tournament": {
@@ -76,6 +71,21 @@ const locationHandler = async () => {
     .querySelector('meta[name="description"]')
     .setAttribute("main-window", route.description);
 };
+
+// switch path for loading js in different page //
+// check if login 
+
+// switch(location){
+//   case "#":
+//   case "#home":
+//     loadFrontPage();
+//     console.log("home");
+//   break;
+//   default:
+//     console.log("default");
+//   break;
+// }
+
 
 
 // create a function that watches the hash and calls the urlLocationHandler

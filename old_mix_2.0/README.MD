@@ -1,10 +1,9 @@
 # mix - mix_2.0
 
 TODO
-1. Clear scene before loading
+1. -[x] Clear scene before loading
 
-2. game customization page
-    - paddle size -> big, small
+2. -[x] game customization page
     - paddle color ->   pink, blue, green, wireframe(white)
     - table color -> grey , black , wireframe(white)
 

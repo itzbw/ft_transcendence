@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import dat from 'https://cdn.skypack.dev/dat.gui';
 
 
 // Create the scene
@@ -55,28 +54,18 @@ const leftPaddleGeometry = new THREE.BoxGeometry(paddleWidth, paddleHeight, padd
 const leftPaddleMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff }); // Blue color for the paddles
 const leftPaddle = new THREE.Mesh(leftPaddleGeometry, leftPaddleMaterial);
 leftPaddle.position.set(-5, 0.15, 0); // Position it on the left edge of the board
-// scene.add(leftPaddle);
+scene.add(leftPaddle);
 
 // Right paddle
 const rightPaddleGeometry = new THREE.BoxGeometry(paddleWidth, paddleHeight, paddleDepth); // Width, height, depth
 const rightPaddleMaterial = new THREE.MeshStandardMaterial({ color: 0x00ffff }); // Blue color for the paddles
 const rightPaddle = new THREE.Mesh(rightPaddleGeometry, rightPaddleMaterial);
 rightPaddle.position.set(5, 0.15, 0); // Position it on the right edge of the board
-// scene.add(rightPaddle);
-
-// GROUP PADDLE //
-const groupPaddle = new THREE.Group();
-groupPaddle.add(leftPaddle);
-groupPaddle.add(rightPaddle);
-scene.add(groupPaddle);
+scene.add(rightPaddle);
 
 // Create a sphere geometry
-const sphereData = {
-  radius: 0.3,
-  widthSegments: 32,
-  heightSegments: 32
-}
-const sphereGeometry = new THREE.SphereGeometry(sphereData.radius, sphereData.widthSegments, sphereData.heightSegments); // Radius, width segments, height segments
+const ballRadius = 0.3;
+const sphereGeometry = new THREE.SphereGeometry(ballRadius, 32, 32); // Radius, width segments, height segments
 const sphereMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000, wireframe: true }); // Red color for the sphere
 const ball = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
@@ -95,7 +84,7 @@ let rightScore = 0;
 const scoreLimit = 7;
 
 /////////////////// HTML Score Showing /////////////////////
-const leftScoreElement = document.createElement('vsbotcontent');
+const leftScoreElement = document.createElement('div');
 leftScoreElement.style.position = 'absolute';
 leftScoreElement.style.top = '50%';
 leftScoreElement.style.left = '10px';
@@ -104,7 +93,7 @@ leftScoreElement.style.fontSize = '24px';
 leftScoreElement.innerHTML = 'Left: 0';
 document.body.appendChild(leftScoreElement);
 
-const rightScoreElement = document.createElement('vsbotcontent');
+const rightScoreElement = document.createElement('div');
 rightScoreElement.style.position = 'absolute';
 rightScoreElement.style.top = '50%';
 rightScoreElement.style.right = '10px';
@@ -113,7 +102,7 @@ rightScoreElement.style.fontSize = '24px';
 rightScoreElement.innerHTML = 'Right: 0';
 document.body.appendChild(rightScoreElement);
 
-const winnerElement = document.createElement('vsbotcontent');
+const winnerElement = document.createElement('div');
 winnerElement.style.position = 'absolute';
 winnerElement.style.top = '35%';
 winnerElement.style.left = '50%';
@@ -122,49 +111,6 @@ winnerElement.style.color = 'white';
 winnerElement.style.fontSize = '24px';
 winnerElement.style.display = 'none';
 document.body.appendChild(winnerElement);
-
-
-/// GUI Panel ///
-const gui = new dat.GUI({ autoPlace: false });
-gui.close();
-gui.domElement.id = 'gui';
-gui_container.appendChild(gui.domElement);
-
-///Paddle Size Change//
-gui.add(groupPaddle.scale, 'z', 0.2, 0.75).name('Paddle Size');
-
-//Paddle Color Change //
-const materialLeftPaddle = {
-  leftPaddleColor: leftPaddle.material.color.getHex(),
-};
-const materialRightPaddle = {
-  rightPaddleColor: rightPaddle.material.color.getHex(),
-};
-gui
-  .addColor(materialLeftPaddle, 'leftPaddleColor')
-  .onChange((value) => leftPaddle.material.color.set(value));
-gui
-  .addColor(materialRightPaddle, 'rightPaddleColor')
-  .onChange((value) => rightPaddle.material.color.set(value));
-
-// Ball Color Change //
-const materialBall = {
-  ballColor: ball.material.color.getHex(),
-}
-gui
-  .addColor(materialBall, 'ballColor')
-  .onChange((value) => ball.material.color.set(value));
-
-// Board color
-const materialBoard = {
-  boardColor: board.material.color.getHex(),
-}
-gui.add(board.material, 'wireframe').name('Board Wireframe');
-gui
-  .addColor(materialBoard, 'boardColor')
-  .onChange((value) => board.material.color.set(value));
-
-
 
 
 
@@ -342,13 +288,13 @@ function animate() {
 
 
   // if ball goes beyond letf or right edeg, score ++
-  if (ball.position.x > (boardWidth / 2 + sphereData.radius)) {
+  if (ball.position.x > (boardWidth / 2 + ballRadius)) {
     // Left player scores
     leftScore += 1;
     leftScoreElement.innerHTML = `Left: ${leftScore}`;
     resetBall();
 
-  } else if (ball.position.x < (-boardWidth / 2 - sphereData.radius)) {
+  } else if (ball.position.x < (-boardWidth / 2 - ballRadius)) {
     // Right player scores
     rightScore += 1;
     rightScoreElement.innerHTML = `Right: ${rightScore}`;
@@ -370,15 +316,12 @@ function animate() {
 }
 
 
+function loadPongVsBot() {
+  animate();
+  console.log("loadPongVsBot");
 
+}
 
-animate();
-
-
-
-
-
-
-
+loadPongVsBot();
 
 
