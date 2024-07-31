@@ -1,0 +1,88 @@
+<div class="container h-100 w-100 justify-content-center ">
+
+	<!-- Main informations -->
+	<div class="row">
+		<div class="row d-flex justify-content-center">
+
+			<!-- Avatar -->
+			<div class="col-12 col-md-3 ">
+				<div class="d-flex flex-column align-items-center avatar-container">
+					<div id="profileAvatar"></div>
+				</div>
+				<!-- Avatar box must be adjusted  -->
+
+			</div>
+
+			<!-- User is online/offline status -->
+			<div id="profileOnlineStatus" class="col-12 col-md-1">
+				Online
+			</div>
+
+			<!-- Username & account creation date -->
+			<div class="col-12 col-md-6">
+
+				<!-- Username -->
+				<div class="d-flex align-items-center">
+					<div id="profileUsername" class="fw-bold fs-3"></div>
+					<button id="modifyProfileUsername" class="m-2 bi bi-pencil-fill"></button>
+				</div>
+
+				<!-- member creation date -->
+				<div class="mb-1 mb-md-4">
+					<span data-translate="member_since"></span>
+					<span id="profileMemberSince"></span>
+				</div>
+
+				<!-- email (only for profile owner) -->
+				<div id="profileEmailContainer" class="d-flex align-items-center">
+					<div id="profileEmail"></div>
+					<div id="modifyProfileEmail" class="m-2 fs-6 bi bi-pencil-fill"></div>
+				</div>
+
+			</div>
+
+			<!-- Add as a friend / Friend List (depends if self profile or other's) -->
+			<div class="col-12 col-md-1 d-flex align-items-center">
+				<div id="friend-container">
+					Friends
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Biography or Desciption,not mandatory -->
+	<!-- <div class="row d-flex justify-content-end">
+		<div id="profileBiography" class="col-7 d-flex justify-content-center">Hello there</div>
+	</div> -->
+
+	<!-- Overall scores (Wins, Losses, leaderboard rank,...) -->
+	<div class="container mt-3 border border-white rounded">
+		<div class="row justify-content-center">
+			<div class="col-12 text-center border border-white rounded">
+				<div id="profileMatchOverview" data-translate="overallstats"></div>
+			</div>
+		</div>
+		<div class="row text-center">
+			<div class="col">
+				<div data-translate="totalplayed"></div>
+				<div id="profileTotalPlayed">3</div>
+			</div>
+			<div class="col">
+				<div data-translate="totalwon"></div>
+				<div id="profileTotalWon">2</div>
+			</div>
+			<div class="col">
+				<div data-translate="totallost"></div>
+				<div id="profileTotalLost">1</div>
+			</div>
+			<div class="col">
+				<div data-translate="winrate"></div>
+				<div id="profileWinRate">66%</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Match history button will be here (will open a modal ?)-->
+	<div id="profileMatchHistory"></div>
+</div>

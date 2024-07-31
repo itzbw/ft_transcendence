@@ -1,0 +1,5 @@
+.local
+backend/django/*/migrations
+tools/logs
+__pycache__
+tools/ssl/certificates

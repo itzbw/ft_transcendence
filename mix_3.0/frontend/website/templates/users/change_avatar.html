@@ -1,0 +1,26 @@
+<div id="profileAvatarModal" data-bs-toggle="modal" data-bs-target="#emptyModal"></div>
+
+<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+	<div class="modal-content ft_box_bg">
+		
+		<!-- modal header -->
+		<div class="modal-header">
+			<h5 class="modal-title" id="avatarEditorLabel" data-translate="editavatar"></h5>
+			<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+
+		<!-- modal body -->
+		<div class="modal-body">
+				<div id="changeAvatarContainer" class="d-flex flex-row justify-content-center">
+					<div id="changeAvatarPreview"></div>
+					<input type="file" id="fileInput" style="display: none;"/>
+					<button id="changeAvatarUploadButton" data-translate="uploadFile"></button>
+				</div>
+		</div>
+
+		<!-- modal footer -->
+		<div class="modal-footer">
+			<button id="avatarSubmitButton"></button>
+		</div>
+	</div>
+</div>

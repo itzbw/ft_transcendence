@@ -1,0 +1,70 @@
+version: '3'
+
+services:
+  frontend:
+    container_name: trans_front
+    build:
+      context: ./frontend
+    ports:
+      - "${FRONT_PORT}:443"
+    networks:
+      - trans_net
+    restart: on-failure
+    env_file:
+      - .env
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend/website:/etc/website # WHEN PROJECT FINISHED, DELETE THIS LINE
+      - ./tools/logs/nginx_logs:/var/log/nginx
+      - ./tools/ssl/certificates/frontend:/etc/nginx/ssl
+      - shared_media:/shared_media:rw # volume used for sharing media like users avatars
+
+  backend:
+    container_name: trans_back
+    build: 
+      context: ./backend
+    # DEV MODE ONLY, REPLACE ports WITH expose when finished
+    # expose:
+    #   - ${BACK_PORT}
+    ports:
+      - "${BACK_PORT}:${BACK_PORT}"
+    networks:
+      - trans_net
+    env_file:
+      - .env
+    depends_on:
+      - database
+    volumes:
+      - ./backend/django:/app
+      - ./tools/logs/django_logs:/logs
+      - ./tools/ssl/certificates/backend:/ssl
+      - shared_media:/shared_media:rw
+
+  database:
+    container_name: trans_db
+    image: postgres:16
+    command: ["postgres", "-c", "logging_collector=on", "-c", "log_directory=/var/log/postgresql", "-c", "log_filename=postgresql.log", "-c", "log_statement=all"]
+    restart: on-failure:5
+    ports:
+      - '5432:5432'
+    networks:
+      - trans_net
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_HOST=${DB_HOST}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PORT=${DB_PORT}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      # - ./tools/logs/postgresql_logs:/var/log/postgresql:rw
+
+volumes:
+  db_data:
+  shared_media:
+
+networks:
+  trans_net:
+    name: trans_net
+    driver: bridge
