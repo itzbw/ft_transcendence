@@ -82,7 +82,23 @@
 		</div>
 	</div>
 
-
+	<div id="registration-box" class="container d-flex flex-column justify-content-center align-items-center h-100">
+		<form id="registerForm" class="d-flex flex-column align-items-center">
+			<div class="form-check text-center">
+				<label for="check_2FA" class="form-check-label w-100 text-center" data-translate="Enable 2FA?">Enable 2FA?</label>
+				<input type="checkbox" id="check_2FA" class="form-check-input" name="check_2FA" required><br><br>
+			</div>
+			<input type="text" id="text_2FA" class="form-control" name="text_2FA"><br><br>
+		</form>
+	</div>
 	<!-- Match history button will be here (will open a modal ?)-->
 	<div id="profileMatchHistory"></div>
 </div>
+
+<script>
+text_2FA.addEventListener("DOMContentLoaded", function()
+{
+	console.log("Toto titi");
+	alert("Bubulle");
+});
+</script>
