@@ -5,6 +5,7 @@ Postgresql with django : https://docs.djangoproject.com/fr/5.0/intro/tutorial02/
 ## To do : 
 ### Mandatory global 
 	- Tournament
+	- back -> next buttons in browser must work (??)
 
 ### User Management
 
