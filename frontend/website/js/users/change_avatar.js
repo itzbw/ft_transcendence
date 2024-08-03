@@ -28,7 +28,7 @@ export async function changeAvatar(username){
 			
 	const uploadButton = document.getElementById('changeAvatarUploadButton');
 	uploadButton.addEventListener('click', function() {
-		document.getElementById('fileInput').click();
+		document.getElementById('changeAvatarFileInput').click();
 	});
 }
 
