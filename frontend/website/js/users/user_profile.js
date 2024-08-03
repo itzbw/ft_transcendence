@@ -35,7 +35,7 @@ function setOverallStats(data)
 	}
 }
 
-async function showUserProfile(profileUsername) {
+export async function showUserProfile(profileUsername) {
 	const csrftoken = getCookie('csrftoken');
 	const profileUrl = "/users/" + profileUsername + "/";
 	
@@ -55,6 +55,7 @@ async function showUserProfile(profileUsername) {
 
 			if (response.ok) {
 				const data = await response.json();
+				// console.log(data);
 				setInformations(data);
 				showAvatar(data.avatar, 'profileAvatar');
 				setOverallStats(data);

@@ -3,5 +3,5 @@ from .views import UserProfileView, upload_avatar
 
 urlpatterns = [
 	path('<str:profile_username>/', UserProfileView.as_view(), name='user-profile'),
-	path('upload_avatar/', upload_avatar, name='upload-avatar'),
+	path('upload_avatar/<str:profile_username>/', upload_avatar, name='upload-avatar'),
 ]

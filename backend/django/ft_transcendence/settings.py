@@ -41,9 +41,10 @@ INSTALLED_APPS = [
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
 	'corsheaders',					# Adds Cross-Origin Resource Sharing (CORS) headers to responses
-	'api',							# Our application "api"
+
 	'authentication',				# Our authentication application for the login/regist/logout
 	'users',						# our users application
+
 	'gunicorn',						# wsgi server
 	# 'daphne',						# asgi server
 	'rest_framework',
@@ -138,6 +139,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+MEDIA_ROOT = '/shared_media/'
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

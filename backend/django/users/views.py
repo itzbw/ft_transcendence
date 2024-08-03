@@ -1,10 +1,10 @@
 import os
-from django.core.files.storage import default_storage
+from django.conf import settings   # upload_avatar
+from django.core.files.storage import default_storage # upload_avatar
 from django.core.exceptions import ValidationError
 from django.views import View
 from django.http import JsonResponse
-from urllib.parse import quote
-from django.views.decorators.http import require_POST
+# from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404
 from .models import SiteUser
 
@@ -33,19 +33,19 @@ class UserProfileView(View):
 
 	def post(self, request, profile_username):
 		user = self.get_user(profile_username)
-		
+
 		data = request.POST
-		
+
 		if 'username' in data:
 			if SiteUser.objects.filter(username=data['username']).exclude(username=profile_username).exists():
 				return JsonResponse({"error": "already in use"}, status=400)
 			user.username = data['username']
 
 		if 'email' in data:
-			if SiteUser.objects.filter(username=data['username']).exclude(username=profile_username).exists():
+			if SiteUser.objects.filter(email=data['email']).exists():
 				return JsonResponse({"error": "already in use"}, status=400)
 			user.email = data['email']
-		
+
 		try:
 			user.save()
 		except ValidationError as e:
@@ -63,37 +63,62 @@ class UserProfileView(View):
 		return JsonResponse(response_data)
 
 
-@require_POST
-def upload_avatar(request):
-	user = request.user
+# @require_POST
+# def upload_avatar(request):
+# 	user = request.user
 
-	# Check if user is authenticated
-	if not user.is_authenticated:
-		return JsonResponse({'error': 'User not authenticated'}, status=401)
+# 	# Check if user is authenticated
+# 	if not user.is_authenticated:
+# 		return JsonResponse({'error': 'User not authenticated'}, status=401)
 	
-	# Check if there is an 'avatar' in the request
-	if 'avatar' not in request.FILES:
-		return JsonResponse({'error': 'No file uploaded'}, status=400)
+# 	# Check if there is an 'avatar' in the request
+# 	if 'avatar' not in request.FILES:
+# 		return JsonResponse({'error': 'No file uploaded'}, status=400)
 	
-	# Check file's extension
-	avatar_file = request.FILES['avatar']
-	if not avatar_file.name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
-		return JsonResponse({'error': 'Invalid file type'}, status=400)
+# 	# Check file's extension
+# 	avatar_file = request.FILES['avatar']
+# 	if not avatar_file.name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
+# 		return JsonResponse({'error': 'Invalid file type'}, status=400)
 
-	# Save the file in /shared_media/
-	file_name = f"{user.username}{os.path.splitext(avatar_file.name)[-1]}"
-	file_path = os.path.join('shared_media', file_name)
-	file_url = quote(file_path)
+# 	# Save the file in /shared_media/
+# 	file_name = f"{user.username}{os.path.splitext(avatar_file.name)[-1]}"
+# 	file_path = os.path.join('shared_media', file_name)
+# 	file_url = quote(file_path)
 
-	with default_storage.open(file_path, 'wb+') as destination:
-		for chunk in avatar_file.chunks():
-			destination.write(chunk)
+# 	with default_storage.open(file_path, 'wb+') as destination:
+# 		for chunk in avatar_file.chunks():
+# 			destination.write(chunk)
 
-	# Update user's avatar field
-	user.avatar = file_url
-	user.save()
+# 	# Update user's avatar field
+# 	user.avatar = file_url
+# 	user.save()
 
-	return JsonResponse({'avatar_url': file_url})
+# 	return JsonResponse({'avatar_url': file_url})
+
+
+def upload_avatar(request, profile_username):
+    if request.method == 'POST':
+        # Ensure the request contains a file
+        if 'avatar' in request.FILES:
+            avatar_file = request.FILES['avatar']
+            
+            # Define the path to save the file
+            file_path = os.path.join(settings.MEDIA_ROOT, avatar_file.name)
+            
+            # Save the file
+            with default_storage.open(file_path, 'wb+') as destination:
+                for chunk in avatar_file.chunks():
+                    destination.write(chunk)
+            
+            # Here you could update the user's avatar field with the file path
+            user = SiteUser.objects.get(username=profile_username)
+            user.avatar = file_path
+            user.save()
+            
+            return JsonResponse({'message': 'Avatar uploaded successfully!'})
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
 
 # def delete_account_view()
 

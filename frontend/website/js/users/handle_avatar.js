@@ -1,5 +1,7 @@
 import { loadContent } from "../router.js";
 import { applyLanguage } from "../language.js";
+import { getCookie } from "../csrf_token.js";
+import { showUserProfile } from "./user_profile.js";
 
 
 // display the choosen image in the given zone
@@ -11,13 +13,15 @@ export function showAvatar(sourceFile, targetArea){
 	avatar.classList.add('avatar');
 	avatar.id = targetArea + 'Img';
 
+	console.log(avatar);
+
 	const avatarContainer = document.getElementById(targetArea);
 	avatarContainer.innerHTML = '';
 	avatarContainer.appendChild(avatar);
 }
 
 
-export async function changeAvatar(username){
+async function changeAvatar(username){
 
 	// load modal box and open it with a click
 	await loadContent('static/users/change_avatar.html', 'emptyModal', applyLanguage);
@@ -41,7 +45,9 @@ export async function changeAvatar(username){
 
 	// if the Upload button is pressed, click on the fileInput to open explorer box
 	const uploadButton = document.getElementById('changeAvatarUploadButton');
-	const fileInput = document.getElementById('changeAvatarFileInput')
+	const fileInput = document.getElementById('changeAvatarFileInput');
+	let selectedFile = null;
+
 	if (uploadButton && fileInput){
 		uploadButton.addEventListener('click', function() {
 			fileInput.click();
@@ -56,7 +62,7 @@ export async function changeAvatar(username){
 				if (fileInput.files.length > 0) {
 					confirmButton.disabled = false; // Enable the button if it's disabled
 
-					const file = fileInput.files[0];
+					selectedFile = fileInput.files[0];
 					const reader = new FileReader();
 
 					// triggered when "reader.readAsDataURL(file);" has been read
@@ -65,13 +71,42 @@ export async function changeAvatar(username){
 							showAvatar(e.target.result, "changeAvatarPreview"); // Set the preview image source
 						}
 					};
-					reader.readAsDataURL(file);
+					reader.readAsDataURL(selectedFile);
 				}
 			}
 		});
 	} else {
 		console.error("Upload button or file input not found:", error);
 	}
+
+	// Handle the confirm button click
+	if (confirmButton) {
+        confirmButton.addEventListener('click', async function(){
+            if (selectedFile) {
+                const formData = new FormData();
+                formData.append('avatar', selectedFile);
+                
+                try {
+                    const response = await fetch(`/users/upload_avatar/${username}/`, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken')
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        console.log('Avatar uploaded successfully!');
+						showUserProfile(username);
+                    } else {
+                        console.error('Failed to upload avatar');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+        });
+    }
 }
 
 
