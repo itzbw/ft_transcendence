@@ -17,41 +17,49 @@ export function showAvatar(sourceFile, targetArea){
 }
 
 
-
-
 export async function changeAvatar(username){
 
 	// load modal box and open it with a click
 	await loadContent('static/users/change_avatar.html', 'emptyModal', applyLanguage);
 	const modal = document.getElementById('profileAvatarModal');
-	modal.click();
-	console.log("your asked to change your avatar", username);
+	if (modal) {
+		modal.click();
+	}
+	console.log("you asked to change your avatar", username);
 
 	// load the confirm button and set it as disabled
 	const confirmButton = document.getElementById('changeAvatarConfirmButton');
-	confirmButton.disabled = true;
+	if (confirmButton){
+		confirmButton.disabled = true;
+	}
 	
 	// Display a preview of the actual avatar
 	const actualAvatar = document.getElementById('profileAvatarImg');
-	showAvatar(actualAvatar.src, "changeAvatarPreview");
+	if (actualAvatar) {
+		showAvatar(actualAvatar.src, "changeAvatarPreview");
+	}
 
 	// if the Upload button is pressed, click on the fileInput to open explorer box
 	const uploadButton = document.getElementById('changeAvatarUploadButton');
 	const fileInput = document.getElementById('changeAvatarFileInput')
-	uploadButton.addEventListener('click', function() {
-		fileInput.click();
-	});
+	if (uploadButton && fileInput){
+		uploadButton.addEventListener('click', function() {
+			fileInput.click();
+		});
 
-	// Check if a file was uploaded
-	fileInput.addEventListener('change', function() {
-		const confirmButton = document.getElementById('changeAvatarConfirmButton');
-
-		// a file was detected 
-        if (fileInput.files.length > 0) {
-            confirmButton.disabled = false; // Enable the button if it's disabled
-		}
-	});
-
+		// Check if a file was uploaded
+		fileInput.addEventListener('change', function() {
+			const confirmButton = document.getElementById('changeAvatarConfirmButton');
+			if (confirmButton) {
+				// a file was detected 
+				if (fileInput.files.length > 0) {
+					confirmButton.disabled = false; // Enable the button if it's disabled
+				}
+			}
+		});
+	} else {
+		console.error("Upload button or file input not found:", error);
+	}
 }
 
 
