@@ -2,15 +2,13 @@ Django
 django-cors-headers
 
 #In order to use Postgresql
-psycopg
-psycopg-binary
-
+psycopg[c]
 
 gunicorn 	# wsgi server
 # daphne 		# asgi server
 
 
-Pillow		#Image processing (mandatory to use models.ImageField)
+# Pillow		#Image processing (mandatory to use models.ImageField)
 
 
 djangorestframework
