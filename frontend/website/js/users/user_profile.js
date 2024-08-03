@@ -86,6 +86,53 @@ export function setupProfile(username){
 }
 
 
-function SetUserProfileEvents(username){
-	setupChangeAvatar(username);
+function SetUserProfileEvents(username) {
+    setupChangeAvatar(username);
+    const modifyUsernameBtn = document.getElementById('modifyProfileUsername');
+    if (modifyUsernameBtn) {
+        modifyUsernameBtn.addEventListener('click', function() {
+            let inputField = document.getElementById('usernameInputField');
+            if (!inputField) {
+                inputField = document.createElement('input');
+                inputField.id = 'usernameInputField';
+                inputField.type = 'text';
+                inputField.placeholder = 'Enter new username';
+                inputField.style.marginTop = '10px';
+                modifyUsernameBtn.parentNode.insertBefore(inputField, modifyUsernameBtn.nextSibling);
+                inputField.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        updateUsername(username, inputField.value);
+                    }
+                });
+                inputField.focus();
+            } else {
+                inputField.focus();
+            }
+        });
+    }
+}
+
+async function updateUsername(oldUsername, newUsername) {
+    const csrftoken = getCookie('csrftoken');
+    try {
+        const response = await fetch(`/users/${encodeURIComponent(oldUsername)}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': csrftoken
+            },
+            body: `username=${encodeURIComponent(newUsername)}`
+        });
+        const data = await response.json();
+        if (response.ok) {
+            console.log('Username updated successfully:', data);
+            alert('Username updated successfully!');
+            window.location.reload();
+        } else {
+            alert('Error updating username: ' + data.error);
+        }
+    } catch (error) {
+        console.error('Failed to update username:', error);
+        alert('Failed to update username. See console for more details.');
+    }
 }
