@@ -50,10 +50,22 @@ export async function changeAvatar(username){
 		// Check if a file was uploaded
 		fileInput.addEventListener('change', function() {
 			const confirmButton = document.getElementById('changeAvatarConfirmButton');
+
 			if (confirmButton) {
 				// a file was detected 
 				if (fileInput.files.length > 0) {
 					confirmButton.disabled = false; // Enable the button if it's disabled
+
+					const file = fileInput.files[0];
+					const reader = new FileReader();
+
+					// triggered when "reader.readAsDataURL(file);" has been read
+					reader.onload = function(e) {
+						if (e.target.result) {
+							showAvatar(e.target.result, "changeAvatarPreview"); // Set the preview image source
+						}
+					};
+					reader.readAsDataURL(file);
 				}
 			}
 		});
