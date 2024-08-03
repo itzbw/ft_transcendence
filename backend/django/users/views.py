@@ -111,15 +111,23 @@ def upload_avatar(request, profile_username):
 			# Define the path to save the file
 			file_path = os.path.join(settings.MEDIA_ROOT, new_file_name)
 			
+			# get user'sold avatar file path
+			user = SiteUser.objects.get(username=profile_username)
+			old_avatar_name = user.avatar
+			old_file_path = os.path.join(settings.MEDIA_ROOT, old_avatar_name)
+
 			# Save the file
 			with default_storage.open(file_path, 'wb+') as destination:
 				for chunk in avatar_file.chunks():
 					destination.write(chunk)
 			
 			# Here you could update the user's avatar field with the file path
-			user = SiteUser.objects.get(username=profile_username)
 			user.avatar = file_path
 			user.save()
+
+			# Delete the old avatar file if it exists and is different from the new one
+			if old_avatar_name and old_file_path != file_path and default_storage.exists(old_file_path):
+				default_storage.delete(old_file_path)
 			
 			return JsonResponse({'message': 'Avatar uploaded successfully!'})
 
