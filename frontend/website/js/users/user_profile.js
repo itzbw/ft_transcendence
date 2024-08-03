@@ -2,7 +2,7 @@ import { getCookie } from "../csrf_token.js";
 import { applyLanguage } from "../language.js";
 import { loadContent } from "../router.js";
 import { checkLoginStatus } from "../auth/status.js";
-import { changeAvatar } from "./change_avatar.js"
+import { setupChangeAvatar, showAvatar } from "./handle_avatar.js"
 
 function setInformations(data){
 	const profileUsername = document.getElementById('profileUsername');
@@ -14,19 +14,6 @@ function setInformations(data){
 	// Must not be HERE but in additionnal
 	const profileEmail = document.getElementById('profileEmail');
 	profileEmail.textContent = data.email;
-}
-
-function setAvatar(data){
-	const avatarImg = document.createElement('img');
-	avatarImg.src = data.avatar;
-	avatarImg.alt = "User's Avatar";
-	avatarImg.classList.add('avatar');
-	avatarImg.id = 'profileAvatarImg';
-
-
-	const profileAvatar = document.getElementById('profileAvatar');
-	profileAvatar.innerHTML = '';			// Clear previous one
-	profileAvatar.appendChild(avatarImg);
 }
 
 function setOverallStats(data)
@@ -70,7 +57,7 @@ async function showUserProfile(profileUsername) {
 				const data = await response.json();
 				console.log(data);
 				setInformations(data);
-				setAvatar(data);
+				showAvatar(data.avatar, 'profileAvatar');
 				setOverallStats(data);
 				SetUserProfileEvents(profileUsername);
 			} else {
@@ -100,10 +87,5 @@ export function setupProfile(username){
 
 
 function SetUserProfileEvents(username){
-	const avatar = document.getElementById('profileAvatar');
-	if (avatar){
-		avatar.addEventListener('click', () => changeAvatar(username));
-	} else {
-		console.log('no avatar button found');
-	}
+	setupChangeAvatar(username);
 }
