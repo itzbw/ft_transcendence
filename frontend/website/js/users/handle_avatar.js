@@ -13,8 +13,6 @@ export function showAvatar(sourceFile, targetArea){
 	avatar.classList.add('avatar');
 	avatar.id = targetArea + 'Img';
 
-	console.log(avatar);
-
 	const avatarContainer = document.getElementById(targetArea);
 	avatarContainer.innerHTML = '';
 	avatarContainer.appendChild(avatar);
@@ -29,7 +27,7 @@ async function changeAvatar(username){
 	if (modal) {
 		modal.click();
 	}
-	console.log("you asked to change your avatar", username);
+	console.log(username, "requested a change of avatar");
 
 	// load the confirm button and set it as disabled
 	const confirmButton = document.getElementById('changeAvatarConfirmButton');
