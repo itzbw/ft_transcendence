@@ -97,27 +97,33 @@ class UserProfileView(View):
 
 
 def upload_avatar(request, profile_username):
-    if request.method == 'POST':
-        # Ensure the request contains a file
-        if 'avatar' in request.FILES:
-            avatar_file = request.FILES['avatar']
-            
-            # Define the path to save the file
-            file_path = os.path.join(settings.MEDIA_ROOT, avatar_file.name)
-            
-            # Save the file
-            with default_storage.open(file_path, 'wb+') as destination:
-                for chunk in avatar_file.chunks():
-                    destination.write(chunk)
-            
-            # Here you could update the user's avatar field with the file path
-            user = SiteUser.objects.get(username=profile_username)
-            user.avatar = file_path
-            user.save()
-            
-            return JsonResponse({'message': 'Avatar uploaded successfully!'})
+	if request.method == 'POST':
+		# Ensure the request contains a file
+		if 'avatar' in request.FILES:
+			avatar_file = request.FILES['avatar']
+			
+			# Extract the file extension (include the dot)
+			file_extension = os.path.splitext(avatar_file.name)[1]
 
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+			#  create the new filename : username.ext
+			new_file_name = f"{profile_username}{file_extension}"
+
+			# Define the path to save the file
+			file_path = os.path.join(settings.MEDIA_ROOT, new_file_name)
+			
+			# Save the file
+			with default_storage.open(file_path, 'wb+') as destination:
+				for chunk in avatar_file.chunks():
+					destination.write(chunk)
+			
+			# Here you could update the user's avatar field with the file path
+			user = SiteUser.objects.get(username=profile_username)
+			user.avatar = file_path
+			user.save()
+			
+			return JsonResponse({'message': 'Avatar uploaded successfully!'})
+
+	return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
 # def delete_account_view()
