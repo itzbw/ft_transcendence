@@ -2,202 +2,226 @@ import { getCookie } from "../csrf_token.js";
 import { applyLanguage } from "../language.js";
 import { loadContent } from "../router.js";
 import { checkLoginStatus } from "../auth/status.js";
-import { setupChangeAvatar, showAvatar } from "./handle_avatar.js"
+import { setupChangeAvatar, showAvatar } from "./handle_avatar.js";
 
-async function isProfileOwner(profileUsername){
-	const data = await checkLoginStatus();
-	if (profileUsername == data.username){
-		return true;
-	}
-	return false;
+async function isProfileOwner(profileUsername) {
+    const data = await checkLoginStatus();
+    if (profileUsername == data.username) {
+        return true;
+    }
+    return false;
 }
 
+function setModifyButtons() {
+    // create the username modify button
+    let modifyUsernameButton = document.createElement('button');
+    modifyUsernameButton.id = 'modifyProfileUsername';
+    modifyUsernameButton.className = 'm-2 bi bi-pencil-fill';
+    
+    const usernameContainer = document.getElementById("profileUsernameContainer");
+    usernameContainer.appendChild(modifyUsernameButton);
 
-function setModifyButtons(){
+    // create the email modify button
+    let modifyEmailButton = document.createElement('button');
+    modifyEmailButton.id = "modifyProfileEmail";
+    modifyEmailButton.className = 'm-2 bi bi-pencil-fill';
 
-	// create the username modify button
-	let modifyUsernameButton = document.createElement('button');
-	modifyUsernameButton.id = 'modifyProfileUsername';
-	modifyUsernameButton.className = 'm-2 bi bi-pencil-fill';
-	
-	const usernameContainer = document.getElementById("profileUsernameContainer");
-	usernameContainer.appendChild(modifyUsernameButton);
+    const emailContainer = document.getElementById("profileEmailContainer");
+    emailContainer.appendChild(modifyEmailButton);
+    
+    // create the delete account button
+    let deleteAccountButton = document.createElement('button');
+    deleteAccountButton.id = 'deleteAccountButton';
+    deleteAccountButton.className = 'm-2 btn btn-danger';
+    deleteAccountButton.textContent = 'Delete Account';
 
-	// create the email modify button
-	let modifyEmailButton = document.createElement('button');
-	modifyEmailButton.id = "modifyProfileEmail";
-	modifyEmailButton.className = 'm-2 bi bi-pencil-fill';
-
-	const emailContainer = document.getElementById("profileEmailContainer");
-	emailContainer.appendChild(modifyEmailButton);
+    const buttonContainer = document.getElementById("profileEmailContainer"); // Adjusted container
+    buttonContainer.appendChild(deleteAccountButton);
 }
 
+function setInformations(data, isProfileOwner) {
+    const profileUsername = document.getElementById('profileUsername');
+    profileUsername.textContent = data.username;
 
-function setInformations(data, isProfileOwner){
-	const profileUsername = document.getElementById('profileUsername');
-	profileUsername.textContent = data.username;
+    const profileMemberSince = document.getElementById('profileMemberSince');
+    profileMemberSince.textContent = data.dateCreated;
 
-	const profileMemberSince = document.getElementById('profileMemberSince');
-	profileMemberSince.textContent = data.dateCreated;
-
-	// Must be shown only on our own profile
-	if (isProfileOwner){
-		const profileEmail = document.getElementById('profileEmail');
-		profileEmail.textContent = data.email;
-	}
+    // Must be shown only on our own profile
+    if (isProfileOwner) {
+        const profileEmail = document.getElementById('profileEmail');
+        profileEmail.textContent = data.email;
+    }
 }
 
+function setOverallStats(data) {
+    const totalPlayed = document.getElementById('profileTotalPlayed');
+    totalPlayed.textContent = data.totalPlayed;
 
-// May need more actions to complete the module
-function setOverallStats(data)
-{
-	const totalPlayed = document.getElementById('profileTotalPlayed');
-	totalPlayed.textContent = data.totalPlayed;
+    const totalWon = document.getElementById('profileTotalWon');
+    totalWon.textContent = data.totalWon;
 
-	const totalWon = document.getElementById('profileTotalWon');
-	totalWon.textContent = data.totalWon;
+    const totalLost = document.getElementById('profileTotalLost');
+    totalLost.textContent = data.totalLost;
 
-	const totalLost = document.getElementById('profileTotalLost');
-	totalLost.textContent = data.totalLost;
-
-	const winRate = document.getElementById('profileWinRate');
-	if ((data.totalWon + data.totalLost) == 0){
-		winRate.textContent = '0%';
-	} else {
-		winRate.textContent = ((data.totalWon / (data.totalWon + data.totalLost)) / 100) + '%';
-	}
+    const winRate = document.getElementById('profileWinRate');
+    if ((data.totalWon + data.totalLost) == 0) {
+        winRate.textContent = '0%';
+    } else {
+        winRate.textContent = ((data.totalWon / (data.totalWon + data.totalLost)) * 100).toFixed(2) + '%';
+    }
 }
-
 
 async function updateUsername(oldUsername, newUsername) {
-	const csrftoken = getCookie('csrftoken');
-	try {
-		const response = await fetch(`/users/${encodeURIComponent(oldUsername)}/`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-				'X-CSRFToken': csrftoken
-			},
-			body: `username=${encodeURIComponent(newUsername)}`
-		});
-		if (response.ok) {
-			showUserProfile(newUsername);
-		}
-	}catch (error) {
-		console.error('Failed to update username:', error);
-		alert('Failed to update username. See console for more details.');
-	}
+    const csrftoken = getCookie('csrftoken');
+    try {
+        const response = await fetch(`/users/${encodeURIComponent(oldUsername)}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': csrftoken
+            },
+            body: `username=${encodeURIComponent(newUsername)}`
+        });
+        if (response.ok) {
+            showUserProfile(newUsername);
+        }
+    } catch (error) {
+        console.error('Failed to update username:', error);
+        alert('Failed to update username. See console for more details.');
+    }
 }
-
 
 async function updateEmail(username, newEmail) {
-	const csrftoken = getCookie('csrftoken');
-	try {
-		const response = await fetch(`/users/${encodeURIComponent(username)}/`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-				'X-CSRFToken': csrftoken
-			},
-			body: `email=${encodeURIComponent(newEmail)}`
-		});
-		if (response.ok) {
-			showUserProfile(username);
-		}
-	} catch (error) {
-		console.error('Failed to update email:', error);
-		alert('Failed to update email. See console for more details.');
-	}
+    const csrftoken = getCookie('csrftoken');
+    try {
+        const response = await fetch(`/users/${encodeURIComponent(username)}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': csrftoken
+            },
+            body: `email=${encodeURIComponent(newEmail)}`
+        });
+        if (response.ok) {
+            showUserProfile(username);
+        }
+    } catch (error) {
+        console.error('Failed to update email:', error);
+        alert('Failed to update email. See console for more details.');
+    }
 }
-
 
 export async function showUserProfile(profileUsername) {
-	const profileUrl = "/users/" + profileUsername + "/";
+    const profileUrl = "/users/" + profileUsername + "/";
 
-	try {
-		const csrftoken = getCookie('csrftoken');
-		await loadContent('static/users/user_profile.html', 'main-box', applyLanguage);
+    try {
+        const csrftoken = getCookie('csrftoken');
+        await loadContent('static/users/user_profile.html', 'main-box', applyLanguage);
 
-		try {
-			
-			const response = await fetch(profileUrl, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-					'X-CSRFToken': getCookie('csrftoken'),
-				}
-			});
+        try {
+            const response = await fetch(profileUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                }
+            });
 
-			if (response.ok) {
-				const data = await response.json();
-				showAvatar(data.avatar, 'profileAvatar');
-				setOverallStats(data);
-				if (await isProfileOwner(profileUsername) == true) {
-					setInformations(data, true);
-					setModifyButtons();
-					SetUserProfileEvents(profileUsername);
-					// setDeleteAccountButton(profileUsername);
-				} else {
-					setInformations(data, false);
-				}
-			} else {
-				console.log('Failed to load profile data:', response.statusText);
-			}
-
-		} catch (error) {
-					console.log('An error occurred during fetch:', error);
-		}
-
-	} catch (error) {
-		console.error('Error loading profile page:', error);
-	}
+            if (response.ok) {
+                const data = await response.json();
+                showAvatar(data.avatar, 'profileAvatar');
+                setOverallStats(data);
+                if (await isProfileOwner(profileUsername) == true) {
+                    setInformations(data, true);
+                    setModifyButtons();
+                    SetUserProfileEvents(profileUsername);
+                } else {
+                    setInformations(data, false);
+                }
+            } else {
+                console.log('Failed to load profile data:', response.statusText);
+            }
+        } catch (error) {
+            console.log('An error occurred during fetch:', error);
+        }
+    } catch (error) {
+        console.error('Error loading profile page:', error);
+    }
 }
 
-
-//Will listen click on the profile button
-export function setupProfile(username){
-	const profileButton = document.getElementById('profileButton');
-	if (profileButton) {
-		profileButton.addEventListener('click', () => showUserProfile(username));
-	} else {
-		console.log('no profile button found');
-	}
+// Will listen click on the profile button
+export function setupProfile(username) {
+    const profileButton = document.getElementById('profileButton');
+    if (profileButton) {
+        profileButton.addEventListener('click', () => showUserProfile(username));
+    } else {
+        console.log('no profile button found');
+    }
 }
-
 
 function SetUserProfileEvents(username) {
-	setupChangeAvatar(username);
+    setupChangeAvatar(username);
 
-	const modifyUsernameBtn = document.getElementById('modifyProfileUsername');
-	const modifyEmailBtn = document.getElementById('modifyProfileEmail');
+    const modifyUsernameBtn = document.getElementById('modifyProfileUsername');
+    const modifyEmailBtn = document.getElementById('modifyProfileEmail');
+    const deleteAccountBtn = document.getElementById('deleteAccountButton');
 
-	modifyUsernameBtn.addEventListener('click', function() {
-		handleInputField('usernameInputField', 'Enter new username', updateUsername);
-	});
+    modifyUsernameBtn.addEventListener('click', function() {
+        handleInputField('usernameInputField', 'Enter new username', updateUsername);
+    });
 
-	modifyEmailBtn.addEventListener('click', function() {
-		handleInputField('emailInputField', 'Enter new email', updateEmail);
-	});
+    modifyEmailBtn.addEventListener('click', function() {
+        handleInputField('emailInputField', 'Enter new email', updateEmail);
+    });
 
-	function handleInputField(fieldId, placeholder, updateFunction) {
-		let inputField = document.getElementById(fieldId);
-		if (!inputField) {
-			inputField = document.createElement('input');
-			inputField.id = fieldId;
-			inputField.type = fieldId === 'emailInputField' ? 'email' : 'text'; 
-			inputField.placeholder = placeholder;
-			inputField.style.marginTop = '10px';
-			const button = fieldId === 'emailInputField' ? modifyEmailBtn : modifyUsernameBtn;
-			button.parentNode.insertBefore(inputField, button.nextSibling);
-			inputField.addEventListener('keypress', function(event) {
-				if (event.key === 'Enter') {
-					updateFunction(username, inputField.value);
-					inputField.remove(); 
-				}
-			});
-			inputField.focus();
-		} else {
-			inputField.focus();
-		}
-	}
+    deleteAccountBtn.addEventListener('click', function() {
+        if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+            deleteAccount(username);
+        }
+    });
+
+    function handleInputField(fieldId, placeholder, updateFunction) {
+        let inputField = document.getElementById(fieldId);
+        if (!inputField) {
+            inputField = document.createElement('input');
+            inputField.id = fieldId;
+            inputField.type = fieldId === 'emailInputField' ? 'email' : 'text';
+            inputField.placeholder = placeholder;
+            inputField.style.marginTop = '10px';
+            const button = fieldId === 'emailInputField' ? modifyEmailBtn : modifyUsernameBtn;
+            button.parentNode.insertBefore(inputField, button.nextSibling);
+            inputField.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    updateFunction(username, inputField.value);
+                    inputField.remove();
+                }
+            });
+            inputField.focus();
+        } else {
+            inputField.focus();
+        }
+    }
+}
+
+async function deleteAccount(username) {
+    const csrftoken = getCookie('csrftoken');
+    try {
+        const response = await fetch(`/users/${encodeURIComponent(username)}/`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            }
+        });
+        if (response.ok) {
+            alert('Account deleted successfully.');
+            window.location.href = '/'; // Redirect to home page or login page after account deletion
+        } else {
+            const data = await response.json();
+            alert('Failed to delete account: ' + data.error);
+        }
+    } catch (error) {
+        console.error('Failed to delete account:', error);
+        alert('Failed to delete account. See console for more details.');
+    }
 }
