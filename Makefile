@@ -11,7 +11,7 @@ FRONT = trans_front
 
 all :
 	@echo $(G)Handling SSL certificates...$(X)
-	@sh ./tools/ssl/ssl_create.sh
+	# @sh ./tools/ssl/ssl_create.sh
 	@$(DC) up --build -d
 
 back_re:
@@ -28,7 +28,7 @@ stop :
 vol :
 	@$(DC) down -v
 	@echo $(R)Cleaning ssl certificates$(X)
-	@rm -rf ./tools/ssl/certificates
+	# @rm -rf ./tools/ssl/certificates
 
 re : stop all
 
