@@ -25,3 +25,16 @@ canvas.background-canvas {
 	border-radius: 50%;
 	object-fit: cover;
 }
+
+/* Button hover and focus effect */
+#modifyProfileUsername {
+	transition: all 0.3s ease;
+  }
+  
+  #modifyProfileUsername:focus,
+  #modifyProfileUsername:hover {
+	background-color: #f0f0f0; /* Light grey background on hover/focus */
+	transform: scale(1.1);     /* Slightly enlarge the button */
+	color: #333;               /* Darker text color */
+  }
+  
