@@ -1,4 +1,4 @@
-import { getCookie } from "../csrf_token.js";
+import { getCookie } from "../tools.js";
 
 function doLogout() {
 

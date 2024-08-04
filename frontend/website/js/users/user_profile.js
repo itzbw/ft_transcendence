@@ -1,6 +1,5 @@
-import { getCookie } from "../csrf_token.js";
+import { loadContent, getCookie } from "../tools.js";
 import { applyLanguage } from "../language.js";
-import { loadContent } from "../router.js";
 import { checkLoginStatus } from "../auth/status.js";
 import { setupChangeAvatar, showAvatar } from "./handle_avatar.js";
 

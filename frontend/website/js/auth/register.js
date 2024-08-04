@@ -1,6 +1,5 @@
-import { loadContent } from "../router.js";
+import { loadContent, getCookie } from "../tools.js";
 import { applyLanguage } from "../language.js";
-import { getCookie } from "../csrf_token.js";
 import { setupLogin } from "./login.js"; 
 
 // Check if fields are correctly filled

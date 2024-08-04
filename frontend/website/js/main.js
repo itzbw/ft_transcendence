@@ -1,4 +1,5 @@
-import { loadContent } from './router.js';
+import { loadContent } from './tools.js';
+import { locationHandler } from './router.js';
 
 // Translation
 import { applyLanguage} from './language.js';
@@ -19,6 +20,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 		await loadContent('static/header/header_full.html', 'header', applyLanguage)
 		setupLogout();
 		setupProfile(isLoggedIn.username);
+		locationHandler();
 	} else {
 		await loadContent('static/header/header_mini.html', 'header', applyLanguage)
 		await setupLogin("init");
@@ -33,3 +35,4 @@ document.addEventListener('DOMContentLoaded', async function() {
 		showUserProfile("toto");		// Change username HERE
 	});
 });
+
