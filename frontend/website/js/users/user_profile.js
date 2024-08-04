@@ -7,7 +7,6 @@ import { setupChangeAvatar, showAvatar } from "./handle_avatar.js"
 async function isProfileOwner(profileUsername){
 	const data = await checkLoginStatus();
 	if (profileUsername == data.username){
-		console.log(profileUsername, "is on its own page");
 		return true;
 	}
 	return false;
@@ -135,7 +134,7 @@ export async function showUserProfile(profileUsername) {
 				const data = await response.json();
 				showAvatar(data.avatar, 'profileAvatar');
 				setOverallStats(data);
-				if (isProfileOwner(profileUsername)) {
+				if (isProfileOwner(profileUsername) == true) {
 					setInformations(data, true);
 					setModifyButtons();
 					SetUserProfileEvents(profileUsername);
