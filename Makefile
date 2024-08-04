@@ -28,8 +28,6 @@ stop :
 vol :
 	@$(DC) down -v
 	@echo $(R)Cleaning ssl certificates$(X)
-	@rm -rf ./tools/ssl/certificates
-
 re : stop all
 
 fclean : vol
