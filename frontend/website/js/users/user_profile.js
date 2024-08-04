@@ -30,8 +30,6 @@ function setModifyButtons(){
 
 	const emailContainer = document.getElementById("profileEmailContainer");
 	emailContainer.appendChild(modifyEmailButton);
-
-
 }
 
 
