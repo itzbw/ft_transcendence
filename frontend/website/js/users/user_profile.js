@@ -4,16 +4,47 @@ import { loadContent } from "../router.js";
 import { checkLoginStatus } from "../auth/status.js";
 import { setupChangeAvatar, showAvatar } from "./handle_avatar.js"
 
-function setInformations(data){
+async function isProfileOwner(profileUsername){
+	const data = await checkLoginStatus();
+	if (profileUsername == data.username){
+		return true;
+	}
+	return false;
+}
+
+
+function setModifyButtons(){
+
+	// create the username modify button
+	let modifyUsernameButton = document.createElement('button');
+	modifyUsernameButton.id = 'modifyProfileUsername';
+	modifyUsernameButton.className = 'm-2 bi bi-pencil-fill';
+	
+	const usernameContainer = document.getElementById("profileUsernameContainer");
+	usernameContainer.appendChild(modifyUsernameButton);
+
+	// create the email modify button
+	let modifyEmailButton = document.createElement('button');
+	modifyEmailButton.id = "modifyProfileEmail";
+	modifyEmailButton.className = 'm-2 bi bi-pencil-fill';
+
+	const emailContainer = document.getElementById("profileEmailContainer");
+	emailContainer.appendChild(modifyEmailButton);
+}
+
+
+function setInformations(data, isProfileOwner){
 	const profileUsername = document.getElementById('profileUsername');
 	profileUsername.textContent = data.username;
 
 	const profileMemberSince = document.getElementById('profileMemberSince');
 	profileMemberSince.textContent = data.dateCreated;
 
-	// Must not be HERE but in additionnal
-	const profileEmail = document.getElementById('profileEmail');
-	profileEmail.textContent = data.email;
+	// Must be shown only on our own profile
+	if (isProfileOwner){
+		const profileEmail = document.getElementById('profileEmail');
+		profileEmail.textContent = data.email;
+	}
 }
 
 function setOverallStats(data)
@@ -35,10 +66,52 @@ function setOverallStats(data)
 	}
 }
 
-async function showUserProfile(profileUsername) {
+
+async function updateUsername(oldUsername, newUsername) {
 	const csrftoken = getCookie('csrftoken');
+	try {
+		const response = await fetch(`/users/${encodeURIComponent(oldUsername)}/`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+				'X-CSRFToken': csrftoken
+			},
+			body: `username=${encodeURIComponent(newUsername)}`
+		});
+		if (response.ok) {
+			showUserProfile(newUsername);
+		}
+	}catch (error) {
+		console.error('Failed to update username:', error);
+		alert('Failed to update username. See console for more details.');
+	}
+}
+
+
+async function updateEmail(username, newEmail) {
+	const csrftoken = getCookie('csrftoken');
+	try {
+		const response = await fetch(`/users/${encodeURIComponent(username)}/`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+				'X-CSRFToken': csrftoken
+			},
+			body: `email=${encodeURIComponent(newEmail)}`
+		});
+		if (response.ok) {
+			showUserProfile(username);
+		}
+	} catch (error) {
+		console.error('Failed to update email:', error);
+		alert('Failed to update email. See console for more details.');
+	}
+}
+
+
+export async function showUserProfile(profileUsername) {
 	const profileUrl = "/users/" + profileUsername + "/";
-	
+
 	try {
 		const csrftoken = getCookie('csrftoken');
 		await loadContent('static/users/user_profile.html', 'main-box', applyLanguage);
@@ -49,17 +122,22 @@ async function showUserProfile(profileUsername) {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
-					'X-CSRFToken': csrftoken,
+					'X-CSRFToken': getCookie('csrftoken'),
 				}
 			});
 
 			if (response.ok) {
 				const data = await response.json();
-				console.log(data);
-				setInformations(data);
 				showAvatar(data.avatar, 'profileAvatar');
 				setOverallStats(data);
-				SetUserProfileEvents(profileUsername);
+				if (await isProfileOwner(profileUsername) == true) {
+					setInformations(data, true);
+					setModifyButtons();
+					SetUserProfileEvents(profileUsername);
+					// setDeleteAccountButton(profileUsername);
+				} else {
+					setInformations(data, false);
+				}
 			} else {
 				console.log('Failed to load profile data:', response.statusText);
 			}
@@ -70,12 +148,11 @@ async function showUserProfile(profileUsername) {
 
 	} catch (error) {
 		console.error('Error loading profile page:', error);
-		// document.getElementById('main-box').textContent = "Profile page was not loaded correctly"
 	}
 }
 
 
-// Used to call our own profile
+//Will listen click on the profile button
 export function setupProfile(username){
 	const profileButton = document.getElementById('profileButton');
 	if (profileButton) {
@@ -87,77 +164,38 @@ export function setupProfile(username){
 
 
 function SetUserProfileEvents(username) {
-    setupChangeAvatar(username);
+	setupChangeAvatar(username);
 
-    const modifyUsernameBtn = document.getElementById('modifyProfileUsername');
-    const modifyEmailBtn = document.getElementById('modifyProfileEmail');
+	const modifyUsernameBtn = document.getElementById('modifyProfileUsername');
+	const modifyEmailBtn = document.getElementById('modifyProfileEmail');
 
-    modifyUsernameBtn.addEventListener('click', function() {
-        handleInputField('usernameInputField', 'Enter new username', updateUsername);
-    });
+	modifyUsernameBtn.addEventListener('click', function() {
+		handleInputField('usernameInputField', 'Enter new username', updateUsername);
+	});
 
-    modifyEmailBtn.addEventListener('click', function() {
-        handleInputField('emailInputField', 'Enter new email', updateEmail);
-    });
+	modifyEmailBtn.addEventListener('click', function() {
+		handleInputField('emailInputField', 'Enter new email', updateEmail);
+	});
 
-    function handleInputField(fieldId, placeholder, updateFunction) {
-        let inputField = document.getElementById(fieldId);
-        if (!inputField) {
-            inputField = document.createElement('input');
-            inputField.id = fieldId;
-            inputField.type = fieldId === 'emailInputField' ? 'email' : 'text'; 
-            inputField.placeholder = placeholder;
-            inputField.style.marginTop = '10px';
-            const button = fieldId === 'emailInputField' ? modifyEmailBtn : modifyUsernameBtn;
-            button.parentNode.insertBefore(inputField, button.nextSibling);
-            inputField.addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') {
-                    updateFunction(username, inputField.value);
-                    inputField.remove(); 
-                }
-            });
-            inputField.focus();
-        } else {
-            inputField.focus();
-        }
-    }
-}
-async function updateUsername(oldUsername, newUsername) {
-    const csrftoken = getCookie('csrftoken');
-    try {
-        const response = await fetch(`/users/${encodeURIComponent(oldUsername)}/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFToken': csrftoken
-            },
-            body: `username=${encodeURIComponent(newUsername)}`
-        });
-        if (response.ok) {
-            showUserProfile(newUsername);
-        }
-    }catch (error) {
-        console.error('Failed to update username:', error);
-        alert('Failed to update username. See console for more details.');
-    }
-}
-
-async function updateEmail(username, newEmail) {
-    const csrftoken = getCookie('csrftoken');
-    try {
-        const response = await fetch(`/users/${encodeURIComponent(username)}/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFToken': csrftoken
-            },
-            body: `email=${encodeURIComponent(newEmail)}`
-        });
-        if (response.ok) {
-            showUserProfile(username);
-        }
-    } catch (error) {
-        console.error('Failed to update email:', error);
-        alert('Failed to update email. See console for more details.');
-    }
+	function handleInputField(fieldId, placeholder, updateFunction) {
+		let inputField = document.getElementById(fieldId);
+		if (!inputField) {
+			inputField = document.createElement('input');
+			inputField.id = fieldId;
+			inputField.type = fieldId === 'emailInputField' ? 'email' : 'text'; 
+			inputField.placeholder = placeholder;
+			inputField.style.marginTop = '10px';
+			const button = fieldId === 'emailInputField' ? modifyEmailBtn : modifyUsernameBtn;
+			button.parentNode.insertBefore(inputField, button.nextSibling);
+			inputField.addEventListener('keypress', function(event) {
+				if (event.key === 'Enter') {
+					updateFunction(username, inputField.value);
+					inputField.remove(); 
+				}
+			});
+			inputField.focus();
+		} else {
+			inputField.focus();
+		}
+	}
 }

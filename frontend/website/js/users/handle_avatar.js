@@ -1,6 +1,5 @@
-import { loadContent } from "../router.js";
-import { applyLanguage } from "../language.js";
-
+import { getCookie } from "../csrf_token.js";
+import { showUserProfile } from "./user_profile.js";
 
 // display the choosen image in the given zone
 export function showAvatar(sourceFile, targetArea){
@@ -15,43 +14,92 @@ export function showAvatar(sourceFile, targetArea){
 	avatarContainer.innerHTML = '';
 	avatarContainer.appendChild(avatar);
 }
-
-
-
-
-export async function changeAvatar(username){
+async function changeAvatar(username){
 
 	// load modal box and open it with a click
 	await loadContent('static/users/change_avatar.html', 'emptyModal', applyLanguage);
 	const modal = document.getElementById('profileAvatarModal');
-	modal.click();
-	console.log("your asked to change your avatar", username);
+	if (modal) {
+		modal.click();
+	}
+	console.log(username, "requested a change of avatar");
 
 	// load the confirm button and set it as disabled
 	const confirmButton = document.getElementById('changeAvatarConfirmButton');
-	confirmButton.disabled = true;
+	if (confirmButton){
+		confirmButton.disabled = true;
+	}
 	
 	// Display a preview of the actual avatar
 	const actualAvatar = document.getElementById('profileAvatarImg');
-	showAvatar(actualAvatar.src, "changeAvatarPreview");
+	if (actualAvatar) {
+		showAvatar(actualAvatar.src, "changeAvatarPreview");
+	}
 
 	// if the Upload button is pressed, click on the fileInput to open explorer box
 	const uploadButton = document.getElementById('changeAvatarUploadButton');
-	const fileInput = document.getElementById('changeAvatarFileInput')
-	uploadButton.addEventListener('click', function() {
-		fileInput.click();
-	});
+	const fileInput = document.getElementById('changeAvatarFileInput');
+	let selectedFile = null;
 
-	// Check if a file was uploaded
-	fileInput.addEventListener('change', function() {
-		const confirmButton = document.getElementById('changeAvatarConfirmButton');
+	if (uploadButton && fileInput){
+		uploadButton.addEventListener('click', function() {
+			fileInput.click();
+		});
 
-		// a file was detected 
-        if (fileInput.files.length > 0) {
-            confirmButton.disabled = false; // Enable the button if it's disabled
-		}
-	});
+		// Check if a file was uploaded
+		fileInput.addEventListener('change', function() {
+			const confirmButton = document.getElementById('changeAvatarConfirmButton');
 
+			if (confirmButton) {
+				// a file was detected 
+				if (fileInput.files.length > 0) {
+					confirmButton.disabled = false; // Enable the button if it's disabled
+
+					selectedFile = fileInput.files[0];
+					const reader = new FileReader();
+
+					// triggered when "reader.readAsDataURL(file);" has been read
+					reader.onload = function(e) {
+						if (e.target.result) {
+							showAvatar(e.target.result, "changeAvatarPreview"); // Set the preview image source
+						}
+					};
+					reader.readAsDataURL(selectedFile);
+				}
+			}
+		});
+	} else {
+		console.error("Upload button or file input not found:", error);
+	}
+
+	// Handle the confirm button click
+	if (confirmButton) {
+        confirmButton.addEventListener('click', async function(){
+            if (selectedFile) {
+                const formData = new FormData();
+                formData.append('avatar', selectedFile);
+                
+                try {
+                    const response = await fetch(`/users/upload_avatar/${username}/`, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken')
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        console.log('Avatar uploaded successfully!');
+						showUserProfile(username);
+                    } else {
+                        console.error('Failed to upload avatar');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+        });
+    }
 }
 
 
