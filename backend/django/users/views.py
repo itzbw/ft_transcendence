@@ -10,55 +10,59 @@ from .models import SiteUser
 
 class UserProfileView(View):
 
-	def get_user(self, profile_username):
-		user = get_object_or_404(SiteUser, username=profile_username)
-		if not user.avatar:
-			user.avatar = os.getenv("DEFAULT_AVATAR_URL")
-		return user
+    def get_user(self, profile_username):
+        user = get_object_or_404(SiteUser, username=profile_username)
+        if not user.avatar:
+            user.avatar = os.getenv("DEFAULT_AVATAR_URL")
+        return user
 
-	def get(self, request, profile_username):
-		user = self.get_user(profile_username)
-		
-		data = {
-			"username": user.username,
-			"email": user.email,
-			"avatar": user.avatar,
-			"dateCreated": user.dateCreated.strftime('%Y-%m-%d'),
-			"totalPlayed": user.totalPlayed,
-			"totalWon": user.totalWon,
-			"totalLost": user.totalLost,
-		}
-		return JsonResponse(data)
+    def get(self, request, profile_username):
+        user = self.get_user(profile_username)
+        
+        data = {
+            "username": user.username,
+            "email": user.email,
+            "avatar": user.avatar,
+            "dateCreated": user.dateCreated.strftime('%Y-%m-%d'),
+            "totalPlayed": user.totalPlayed,
+            "totalWon": user.totalWon,
+            "totalLost": user.totalLost,
+        }
+        return JsonResponse(data)
 
-	def post(self, request, profile_username):
-		user = self.get_user(profile_username)
-		message = ""
-		data = request.POST
+    def post(self, request, profile_username):
+        user = self.get_user(profile_username)
+        message = ""
+        data = request.POST
 
-		if 'username' in data:
-			if SiteUser.objects.filter(username=data['username']).exclude(username=profile_username).exists():
-				return JsonResponse({"error": "already in use"}, status=400)
-				message = "already in use"
-			user.username = data['username']
+        if 'username' in data:
+            if SiteUser.objects.filter(username=data['username']).exclude(username=profile_username).exists():
+                return JsonResponse({"error": "already in use"}, status=400)
+                message = "already in use"
+            user.username = data['username']
 
-		if 'email' in data:
-			if SiteUser.objects.filter(email=data['email']).exclude(email=user.email).exists():
-				return JsonResponse({"error": "already in use"}, status=400)
-				message = "already in use"
-			user.email = data['email']
+        if 'email' in data:
+            if SiteUser.objects.filter(email=data['email']).exclude(email=user.email).exists():
+                return JsonResponse({"error": "already in use"}, status=400)
+                message = "already in use"
+            user.email = data['email']
 
-		try:
-			user.save()
-		except ValidationError as e:
-			return JsonResponse({"error": str(e)}, status=400)
+        try:
+            user.save()
+        except ValidationError as e:
+            return JsonResponse({"error": str(e)}, status=400)
 
-		response_data = {
-			"username": user.username,
-			"email": user.email,
-			"message": message,
-		}
-		return JsonResponse(response_data)
+        response_data = {
+            "username": user.username,
+            "email": user.email,
+            "message": message,
+        }
+        return JsonResponse(response_data)
 
+    def delete(self, request, profile_username):
+        user = self.get_user(profile_username)
+        user.delete()
+        return JsonResponse({'message': 'Account deleted successfully.'})
 
 def upload_avatar(request, profile_username):
 	if request.method == 'POST':

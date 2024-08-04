@@ -2,19 +2,17 @@ import { getCookie } from "../csrf_token.js";
 import { applyLanguage } from "../language.js";
 import { loadContent } from "../router.js";
 import { checkLoginStatus } from "../auth/status.js";
-import { setupChangeAvatar, showAvatar } from "./handle_avatar.js"
+import { setupChangeAvatar, showAvatar } from "./handle_avatar.js";
 
-async function isProfileOwner(profileUsername){
+async function isProfileOwner(profileUsername) {
 	const data = await checkLoginStatus();
-	if (profileUsername == data.username){
+	if (profileUsername == data.username) {
 		return true;
 	}
 	return false;
 }
 
-
-function setModifyButtons(){
-
+function setModifyButtons() {
 	// create the username modify button
 	let modifyUsernameButton = document.createElement('button');
 	modifyUsernameButton.id = 'modifyProfileUsername';
@@ -30,10 +28,18 @@ function setModifyButtons(){
 
 	const emailContainer = document.getElementById("profileEmailContainer");
 	emailContainer.appendChild(modifyEmailButton);
+	
+	// create the delete account button
+	let deleteAccountButton = document.createElement('button');
+	deleteAccountButton.id = 'deleteAccountButton';
+	deleteAccountButton.className = 'm-2 btn btn-danger';
+	deleteAccountButton.textContent = 'Delete Account';
+
+	const buttonContainer = document.getElementById("profileDeleteContainer"); // Adjusted container
+	buttonContainer.appendChild(deleteAccountButton);
 }
 
-
-function setInformations(data, isProfileOwner){
+function setInformations(data, isProfileOwner) {
 	const profileUsername = document.getElementById('profileUsername');
 	profileUsername.textContent = data.username;
 
@@ -41,16 +47,13 @@ function setInformations(data, isProfileOwner){
 	profileMemberSince.textContent = data.dateCreated;
 
 	// Must be shown only on our own profile
-	if (isProfileOwner){
+	if (isProfileOwner) {
 		const profileEmail = document.getElementById('profileEmail');
 		profileEmail.textContent = data.email;
 	}
 }
 
-
-// May need more actions to complete the module
-function setOverallStats(data)
-{
+function setOverallStats(data) {
 	const totalPlayed = document.getElementById('profileTotalPlayed');
 	totalPlayed.textContent = data.totalPlayed;
 
@@ -61,13 +64,12 @@ function setOverallStats(data)
 	totalLost.textContent = data.totalLost;
 
 	const winRate = document.getElementById('profileWinRate');
-	if ((data.totalWon + data.totalLost) == 0){
+	if ((data.totalWon + data.totalLost) == 0) {
 		winRate.textContent = '0%';
 	} else {
-		winRate.textContent = ((data.totalWon / (data.totalWon + data.totalLost)) / 100) + '%';
+		winRate.textContent = ((data.totalWon / (data.totalWon + data.totalLost)) * 100).toFixed(2) + '%';
 	}
 }
-
 
 async function updateUsername(oldUsername, newUsername) {
 	const csrftoken = getCookie('csrftoken');
@@ -83,12 +85,11 @@ async function updateUsername(oldUsername, newUsername) {
 		if (response.ok) {
 			showUserProfile(newUsername);
 		}
-	}catch (error) {
+	} catch (error) {
 		console.error('Failed to update username:', error);
 		alert('Failed to update username. See console for more details.');
 	}
 }
-
 
 async function updateEmail(username, newEmail) {
 	const csrftoken = getCookie('csrftoken');
@@ -110,7 +111,6 @@ async function updateEmail(username, newEmail) {
 	}
 }
 
-
 export async function showUserProfile(profileUsername) {
 	const profileUrl = "/users/" + profileUsername + "/";
 
@@ -119,7 +119,6 @@ export async function showUserProfile(profileUsername) {
 		await loadContent('static/users/user_profile.html', 'main-box', applyLanguage);
 
 		try {
-			
 			const response = await fetch(profileUrl, {
 				method: 'GET',
 				headers: {
@@ -136,26 +135,22 @@ export async function showUserProfile(profileUsername) {
 					setInformations(data, true);
 					setModifyButtons();
 					SetUserProfileEvents(profileUsername);
-					// setDeleteAccountButton(profileUsername);
 				} else {
 					setInformations(data, false);
 				}
 			} else {
 				console.log('Failed to load profile data:', response.statusText);
 			}
-
 		} catch (error) {
-					console.log('An error occurred during fetch:', error);
+			console.log('An error occurred during fetch:', error);
 		}
-
 	} catch (error) {
 		console.error('Error loading profile page:', error);
 	}
 }
 
-
-//Will listen click on the profile button
-export function setupProfile(username){
+// Will listen click on the profile button
+export function setupProfile(username) {
 	const profileButton = document.getElementById('profileButton');
 	if (profileButton) {
 		profileButton.addEventListener('click', () => showUserProfile(username));
@@ -164,12 +159,12 @@ export function setupProfile(username){
 	}
 }
 
-
 function SetUserProfileEvents(username) {
 	setupChangeAvatar(username);
 
 	const modifyUsernameBtn = document.getElementById('modifyProfileUsername');
 	const modifyEmailBtn = document.getElementById('modifyProfileEmail');
+	const deleteAccountBtn = document.getElementById('deleteAccountButton');
 
 	modifyUsernameBtn.addEventListener('click', function() {
 		handleInputField('usernameInputField', 'Enter new username', updateUsername);
@@ -179,12 +174,18 @@ function SetUserProfileEvents(username) {
 		handleInputField('emailInputField', 'Enter new email', updateEmail);
 	});
 
+	deleteAccountBtn.addEventListener('click', function() {
+		if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+			deleteAccount(username);
+		}
+	});
+
 	function handleInputField(fieldId, placeholder, updateFunction) {
 		let inputField = document.getElementById(fieldId);
 		if (!inputField) {
 			inputField = document.createElement('input');
 			inputField.id = fieldId;
-			inputField.type = fieldId === 'emailInputField' ? 'email' : 'text'; 
+			inputField.type = fieldId === 'emailInputField' ? 'email' : 'text';
 			inputField.placeholder = placeholder;
 			inputField.style.marginTop = '10px';
 			const button = fieldId === 'emailInputField' ? modifyEmailBtn : modifyUsernameBtn;
@@ -192,12 +193,34 @@ function SetUserProfileEvents(username) {
 			inputField.addEventListener('keypress', function(event) {
 				if (event.key === 'Enter') {
 					updateFunction(username, inputField.value);
-					inputField.remove(); 
+					inputField.remove();
 				}
 			});
 			inputField.focus();
 		} else {
 			inputField.focus();
 		}
+	}
+}
+
+async function deleteAccount(username) {
+	try {
+		const response = await fetch(`/users/${encodeURIComponent(username)}/`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRFToken': getCookie('csrftoken')
+			}
+		});
+		if (response.ok) {
+			alert('Account deleted successfully.');
+			window.location.href = '/'; // Redirect to home page or login page after account deletion
+		} else {
+			const data = await response.json();
+			alert('Failed to delete account: ' + data.error);
+		}
+	} catch (error) {
+		console.error('Failed to delete account:', error);
+		alert('Failed to delete account. See console for more details.');
 	}
 }
