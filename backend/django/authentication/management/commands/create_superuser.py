@@ -3,6 +3,9 @@ from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from users.models import SiteUser
 
+
+
+# **TO_REMOVE** the whole folder
 class Command(BaseCommand):
 	help = 'Create a superuser'
 
@@ -16,3 +19,5 @@ class Command(BaseCommand):
 		if not SiteUser.objects.filter(username=username).exists():
 			SiteUser.objects.create_superuser(username, '', password)
 			self.stdout.write(self.style.SUCCESS('Superuser created successfully'))
+
+
