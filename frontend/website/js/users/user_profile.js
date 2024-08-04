@@ -91,25 +91,41 @@ async function updateUsername(oldUsername, newUsername) {
 	}
 }
 
-async function updateEmail(username, newEmail) {
-	const csrftoken = getCookie('csrftoken');
-	try {
-		const response = await fetch(`/users/${encodeURIComponent(username)}/`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-				'X-CSRFToken': csrftoken
-			},
-			body: `email=${encodeURIComponent(newEmail)}`
-		});
-		if (response.ok) {
-			showUserProfile(username);
-		}
-	} catch (error) {
-		console.error('Failed to update email:', error);
-		alert('Failed to update email. See console for more details.');
-	}
+function isValidEmail(email) {
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return regex.test(email);
 }
+
+async function updateEmail(username, newEmail) {
+    if (!isValidEmail(newEmail)) {
+        alert('Invalid email format. Please enter a valid email address.');
+        return;
+    }
+
+    const csrftoken = getCookie('csrftoken');
+    try {
+        const response = await fetch(`/users/${encodeURIComponent(username)}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': csrftoken
+            },
+            body: `email=${encodeURIComponent(newEmail)}`
+        });
+
+        if (response.ok) {
+            showUserProfile(username);
+        } else {
+            const errorData = await response.json();
+            console.error('Failed to update email:', errorData);
+            alert('Failed to update email. Please try again.');
+        }
+    } catch (error) {
+        console.error('Failed to update email:', error);
+        alert('Failed to update email. See console for more details.');
+    }
+}
+
 
 export async function showUserProfile(profileUsername) {
 	const profileUrl = "/users/" + profileUsername + "/";
