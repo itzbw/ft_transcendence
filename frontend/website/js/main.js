@@ -9,12 +9,10 @@ import { setupLogin } from './auth/login.js';
 import { setupLogout } from './auth/logout.js';
 
 // User profile
-import { setupProfile } from './users/user_profile.js';
-
+import { setupProfile, showUserProfile } from './users/user_profile.js';
 
 document.addEventListener('DOMContentLoaded', async function() {
 
-	loadContent('static/about.html', 'aboutContainer');
 	const isLoggedIn = await checkLoginStatus();
 	
 	if (isLoggedIn.isAuthenticated) {
@@ -25,4 +23,13 @@ document.addEventListener('DOMContentLoaded', async function() {
 		await loadContent('static/header/header_mini.html', 'header', applyLanguage)
 		await setupLogin("init");
 	}
+
+
+
+	// FOR TESTS ONLY  ** TO_REMOVE **
+	// create a button to see another account's profile
+	const test = document.getElementById('testButton');
+	test.addEventListener('click', function(){
+		showUserProfile("toto");		// Change username HERE
+	});
 });
