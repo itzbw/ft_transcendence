@@ -15,7 +15,7 @@ services:
     depends_on:
       - backend
     volumes:
-      - ./frontend/website:/etc/website # WHEN PROJECT FINISHED, DELETE THIS LINE
+      - ./frontend/website:/etc/website # WHEN PROJECT FINISHED, DELETE THIS LINE  ** TO_REMOVE **
       - ./tools/logs/nginx_logs:/var/log/nginx
       - ./tools/ssl/certificates/frontend:/etc/nginx/ssl
       - shared_media:/shared_media:rw # volume used for sharing media like users avatars
@@ -24,7 +24,7 @@ services:
     container_name: trans_back
     build: 
       context: ./backend
-    # DEV MODE ONLY, REPLACE ports WITH expose when finished
+    # DEV MODE ONLY, REPLACE ports WITH expose when finished  ** TO_REMOVE **
     # expose:
     #   - ${BACK_PORT}
     ports:
@@ -58,7 +58,6 @@ services:
       - POSTGRES_PORT=${DB_PORT}
     volumes:
       - db_data:/var/lib/postgresql/data
-      # - ./tools/logs/postgresql_logs:/var/log/postgresql:rw
 
 volumes:
   db_data:
