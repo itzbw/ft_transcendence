@@ -1,7 +1,7 @@
 import os
 from django.conf import settings   # upload_avatar
 from django.core.files.storage import default_storage # upload_avatar
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError # UserProfileView -> post
 from django.views import View
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -32,17 +32,19 @@ class UserProfileView(View):
 
 	def post(self, request, profile_username):
 		user = self.get_user(profile_username)
-
+		message = ""
 		data = request.POST
 
 		if 'username' in data:
 			if SiteUser.objects.filter(username=data['username']).exclude(username=profile_username).exists():
 				return JsonResponse({"error": "already in use"}, status=400)
+				message = "already in use"
 			user.username = data['username']
 
 		if 'email' in data:
-			if SiteUser.objects.filter(email=data['email']).exists():
+			if SiteUser.objects.filter(email=data['email']).exclude(email=user.email).exists():
 				return JsonResponse({"error": "already in use"}, status=400)
+				message = "already in use"
 			user.email = data['email']
 
 		try:
@@ -53,11 +55,7 @@ class UserProfileView(View):
 		response_data = {
 			"username": user.username,
 			"email": user.email,
-			"avatar": user.avatar,
-			"dateCreated": user.dateCreated.strftime('%Y-%m-%d'),
-			"totalPlayed": user.totalPlayed,
-			"totalWon": user.totalWon,
-			"totalLost": user.totalLost,
+			"message": message,
 		}
 		return JsonResponse(response_data)
 
@@ -99,8 +97,3 @@ def upload_avatar(request, profile_username):
 			return JsonResponse({'message': 'Avatar uploaded successfully!'})
 
 	return JsonResponse({'error': 'Invalid request'}, status=400)
-
-
-# def delete_account_view()
-
-# def user_history()
