@@ -1,4 +1,4 @@
 .local
 tools/logs
 __pycache__
-tools/ssl/certificates
+# tools/ssl/certificates
