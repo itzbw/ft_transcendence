@@ -4,7 +4,6 @@ from django.core.files.storage import default_storage # upload_avatar
 from django.core.exceptions import ValidationError
 from django.views import View
 from django.http import JsonResponse
-# from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404
 from .models import SiteUser
 
@@ -63,39 +62,6 @@ class UserProfileView(View):
 		return JsonResponse(response_data)
 
 
-# @require_POST
-# def upload_avatar(request):
-# 	user = request.user
-
-# 	# Check if user is authenticated
-# 	if not user.is_authenticated:
-# 		return JsonResponse({'error': 'User not authenticated'}, status=401)
-	
-# 	# Check if there is an 'avatar' in the request
-# 	if 'avatar' not in request.FILES:
-# 		return JsonResponse({'error': 'No file uploaded'}, status=400)
-	
-# 	# Check file's extension
-# 	avatar_file = request.FILES['avatar']
-# 	if not avatar_file.name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
-# 		return JsonResponse({'error': 'Invalid file type'}, status=400)
-
-# 	# Save the file in /shared_media/
-# 	file_name = f"{user.username}{os.path.splitext(avatar_file.name)[-1]}"
-# 	file_path = os.path.join('shared_media', file_name)
-# 	file_url = quote(file_path)
-
-# 	with default_storage.open(file_path, 'wb+') as destination:
-# 		for chunk in avatar_file.chunks():
-# 			destination.write(chunk)
-
-# 	# Update user's avatar field
-# 	user.avatar = file_url
-# 	user.save()
-
-# 	return JsonResponse({'avatar_url': file_url})
-
-
 def upload_avatar(request, profile_username):
 	if request.method == 'POST':
 		# Ensure the request contains a file
@@ -111,10 +77,11 @@ def upload_avatar(request, profile_username):
 			# Define the path to save the file
 			file_path = os.path.join(settings.MEDIA_ROOT, new_file_name)
 			
-			# get user'sold avatar file path
+			# get user's old avatar file path 
 			user = SiteUser.objects.get(username=profile_username)
 			old_avatar_name = user.avatar
-			old_file_path = os.path.join(settings.MEDIA_ROOT, old_avatar_name)
+			if (user.avatar):
+				old_file_path = os.path.join(settings.MEDIA_ROOT, old_avatar_name)
 
 			# Save the file
 			with default_storage.open(file_path, 'wb+') as destination:
