@@ -13,6 +13,7 @@ class SiteUser(AbstractUser):
 	totalPlayed = models.IntegerField(default=0)
 	totalWon = models.IntegerField(default=0)
 	totalLost = models.IntegerField(default=0)
+	friends = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='friend_set')
 
 	# Override SiteUser.save() to get the date creation
 	def save(self, *args, **kwargs):

@@ -1,83 +1,115 @@
-<div class="container h-100 w-100 justify-content-center">
-	
-	<!-- Main informations -->
-	<div class="row">
-		<div class="row d-flex justify-content-center">
-	
-			<!-- Avatar -->
-			<div class="col-12 col-md-3 ">
-				<div class="d-flex flex-column align-items-center avatar-container">
-					<div id="profileAvatar"></div>
-				</div>
-				<!-- Avatar box must be adjusted  -->
-				
-			</div>
-	
-			<!-- User is online/offline status -->
-			<div id="profileOnlineStatus" class="col-12 col-md-1">
-				Online
-			</div>
-	
-			<!-- Username & account creation date -->
-			<div class="col-12 col-md-6">
-	
-				<!-- Username -->
-				<div id="profileUsernameContainer" class="d-flex align-items-center">
-					<div id="profileUsername" class="fw-bold fs-3"></div>
-				</div>
-	
-				<!-- member creation date -->
-				<div class="mb-1 mb-md-4">
-					<span data-translate="member_since"></span>
-					<span id="profileMemberSince"></span>
-				</div>
-	
-				<!-- email (only for profile owner) -->
-				<div id="profileEmailContainer" class="d-flex align-items-center">
-					<div id="profileEmail"></div>
-				</div>
-				
-				<!-- delete button -->
-				<div id="profileDeleteContainer" class="d-flex align-items-center"></div>
-			</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script defer src="user_profile.js"></script>
+    <style>
+        .friends-list {
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .friend {
+            padding: 5px;
+            border-bottom: 1px solid #ccc;
+        }
+        .friend:last-child {
+            border-bottom: none;
+        }
+        .close-btn {
+            cursor: pointer;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container h-100 w-100 justify-content-center">
+        
+        <!-- Main information -->
+        <div class="row">
+            <div class="row d-flex justify-content-center">
+        
+                <!-- Avatar -->
+                <div class="col-12 col-md-3 ">
+                    <div class="d-flex flex-column align-items-center avatar-container">
+                        <div id="profileAvatar"></div>
+                    </div>
+                </div>
+        
+                <!-- User is online/offline status -->
+                <div id="profileOnlineStatus" class="col-12 col-md-1">
+                    Online
+                </div>
+        
+                <!-- Username & account creation date -->
+                <div class="col-12 col-md-6">
+        
+                    <!-- Username -->
+                    <div id="profileUsernameContainer" class="d-flex align-items-center">
+                        <div id="profileUsername" class="fw-bold fs-3"></div>
+                    </div>
+        
+                    <!-- member creation date -->
+                    <div class="mb-1 mb-md-4">
+                        <span data-translate="member_since"></span>
+                        <span id="profileMemberSince"></span>
+                    </div>
+        
+                    <!-- email (only for profile owner) -->
+                    <div id="profileEmailContainer" class="d-flex align-items-center">
+                        <div id="profileEmail"></div>
+                    </div>
+                    
+                    <!-- delete button -->
+                    <div id="profileDeleteContainer" class="d-flex align-items-center"></div>
+                </div>
+        
+                <!-- Add as a friend / Friend List (depends if self profile or other's) -->
+                <div class="col-12 col-md-1 d-flex align-items-center">
+                    <div id="friend-container"></div>
+                </div>
+            </div>
+        </div>
 
-			<!-- Add as a friend / Friend List (depends if self profile or other's) -->
-			<div class="col-12 col-md-1 d-flex align-items-center">
-				<div id="friend-container">
-					Friends
-				</div>
-			</div>
-		</div>
-	</div>
+        <!-- Overall scores (Wins, Losses, leaderboard rank,...) -->
+         <div class="container row mt-3 border border-white rounded">
+            <div class="row justify-content-center">
+                <div class="col-12 text-center border border-white rounded">
+                    <div id="profileMatchOverview" data-translate="overallstats"></div>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col">
+                    <div data-translate="totalplayed"></div>
+                    <div id="profileTotalPlayed">3</div>
+                </div>
+                <div class="col">
+                    <div data-translate="totalwon"></div>
+                    <div id="profileTotalWon">2</div>
+                </div>
+                <div class="col">
+                    <div data-translate="totallost"></div>
+                    <div id="profileTotalLost">1</div>
+                </div>
+                <div class="col">
+                    <div data-translate="winrate"></div>
+                    <div id="profileWinRate">66%</div>
+                </div>
+            </div>
+        </div>
 
-	<!-- Overall scores (Wins, Losses, leaderboard rank,...) -->
-	 <div class="container row mt-3 border border-white rounded">
-		<div class="row justify-content-center">
-			<div class="col-12 text-center border border-white rounded">
-				<div id="profileMatchOverview" data-translate="overallstats"></div>
-			</div>
-		</div>
-		<div class="row text-center">
-			<div class="col">
-				<div data-translate="totalplayed"></div>
-				<div id="profileTotalPlayed">3</div>
-			</div>
-			<div class="col">
-				<div data-translate="totalwon"></div>
-				<div id="profileTotalWon">2</div>
-			</div>
-			<div class="col">
-				<div data-translate="totallost"></div>
-				<div id="profileTotalLost">1</div>
-			</div>
-			<div class="col">
-				<div data-translate="winrate"></div>
-				<div id="profileWinRate">66%</div>
-			</div>
-		</div>
-	</div>
+        <!-- Match history button will be here (will open a modal ?)-->
+        <div id="profileMatchHistory"></div>
 
-
-	<!-- Match history button will be here (will open a modal ?)-->
-	<div id="profileMatchHistory"></div>
-</div>
+        <!-- Friends list container -->
+        <div id="friendsListContainer" class="container mt-3">
+            <!-- Friends list will be populated here -->
+        </div>
+    </div>
+</body>
+</html>
