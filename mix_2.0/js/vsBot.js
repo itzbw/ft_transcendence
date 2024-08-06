@@ -21,6 +21,8 @@ camera.lookAt(0, 0, 0);
 const renderer = new THREE.WebGLRenderer({ alpha: true });
 
 var canvas = document.getElementById('canvasvsbot');
+const context = document.createElement('canvas');
+const ctx = context.getContext('2d');
 
 // renderer.setSize(window.innerWidth, window.innerHeight);
 // document.body.appendChild(renderer.domElement);
@@ -94,7 +96,23 @@ let leftScore = 0
 let rightScore = 0;
 const scoreLimit = 7;
 
-/////////////////// HTML Score Showing /////////////////////
+const player1 = {
+  score: 0
+}
+
+const bot = {
+  score: 0
+}
+
+
+// function showScore() {
+//   ctx.font = '32px';
+//   ctx.fillStyle = 'white';
+//   ctx.fillText(player1.score.toString(), 100, 100);
+//   ctx.fillText(bot.score.toString, window.innerWidth - 100, 100);
+// }
+
+// /////////////////// HTML Score Showing /////////////////////
 const leftScoreElement = document.createElement('vsbotcontent');
 leftScoreElement.style.position = 'absolute';
 leftScoreElement.style.top = '50%';
@@ -254,6 +272,7 @@ function resetGame() {
 
 // AI paddle movement speed
 const aiPaddleSpeed = 0.05;
+// showScore();
 
 
 // Render the scene from the perspective of the camera
@@ -261,14 +280,14 @@ function animate() {
   requestAnimationFrame(animate);
 
   // check winner
-  if (leftScore >= scoreLimit) {
-    winnerElement.innerHTML = 'Left Player Wins!';
+  if (player1.score >= scoreLimit) {
+    winnerElement.innerHTML = 'Player 1 Wins!';
     winnerElement.style.display = 'block';
     //setTimeout(resetGame, 3000);
     //resetGame();
     return;
-  } else if (rightScore >= scoreLimit) {
-    winnerElement.innerHTML = 'Right Player Wins!';
+  } else if (bot.score >= scoreLimit) {
+    winnerElement.innerHTML = 'Marvin Wins!';
     winnerElement.style.display = 'block';
     //setTimeout(resetGame, 3000);
     //resetGame();
@@ -367,6 +386,7 @@ function animate() {
   // ballDirZ = (Math.random() > 0.5 ? 0.1 : -0.1); // random direction
 
   renderer.render(scene, camera);
+
 }
 
 

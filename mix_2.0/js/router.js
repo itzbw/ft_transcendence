@@ -29,10 +29,10 @@ const routes = {
     title: "Leaderboard | " + urlPageTitle,
     description: "This is the leaderboard page",
   },
-  "chat": {
-    template: "/pages/chat.html",
-    title: "Chat | " + urlPageTitle,
-    description: "This is the chat page",
+  "tournamentgame": {
+    template: "/pages/tournamentgame.html",
+    title: "Tournament Game | " + urlPageTitle,
+    description: "This is the Tournament Game",
   },
   "pongvsbot": {
     template: "/pages/pongvsbot.html",

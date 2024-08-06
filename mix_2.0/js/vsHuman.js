@@ -365,7 +365,7 @@ function loadPongvsMan() {
   animate();
 }
 
-function loadMan() {
+window.loadMan = function () {
   loadPongvsMan();
   console.log("load Pong vs man");
 }
