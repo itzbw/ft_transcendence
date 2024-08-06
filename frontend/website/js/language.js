@@ -25,7 +25,9 @@ const translations =
 		totalplayed: 'Total played',
 		totalwon: 'Total won',
 		totallost: 'Total lost',
-		winrate: 'Win rate'
+		winrate: 'Win rate',
+		removefriend: 'Remove Friend',
+		addfriend: "Add Friend"
 		
 	},
 	fr: {
@@ -53,7 +55,9 @@ const translations =
 		totalplayed: 'Total joué',
 		totalwon: 'Total gagné',
 		totallost: 'Total perdu',
-		winrate: 'Taux de victoire'
+		winrate: 'Taux de victoire',
+		removefriend: 'Retirer Ami',
+		addfriend: "Ajouter Ami"
 	},
 	ch: {
 		profile: '个人资料',
@@ -80,7 +84,9 @@ const translations =
 		totalplayed: '总场次',
 		totalwon: '总胜场',
 		totallost: '总负场',
-		winrate: '胜率'
+		winrate: '胜率',
+		removefriend: '移除好友',
+		addfriend: "添加好友"
 	},
 	jp: {
 		profile: 'プロフィール',
@@ -107,7 +113,9 @@ const translations =
 		totalplayed: '総プレイ数',
 		totalwon: '総勝利数',
 		totallost: '総敗北数',
-		winrate: '勝率'
+		winrate: '勝率',
+		removefriend: '友達を削除',
+		addfriend: "友達を追加"
 	}
 };
 

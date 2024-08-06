@@ -91,3 +91,12 @@ export function addTestButton(){
 		showUserProfile("toto");		// Change username HERE
 	});
 }
+
+// ------------------------------
+export function setAttribute(elementId, attributeName, attributeValue) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.setAttribute(attributeName, attributeValue);
+		console.log ("set to", elementId, "the attribute", attributeName, "with value", attributeValue);
+    }
+}

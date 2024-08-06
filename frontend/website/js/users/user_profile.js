@@ -2,8 +2,9 @@ import { loadContent, getCookie } from "../tools.js";
 import { applyLanguage } from "../language.js";
 import { checkLoginStatus } from "../auth/status.js";
 import { setupChangeAvatar, showAvatar } from "./handle_avatar.js";
+import { setFriendsBox } from "./friends.js";
 
-async function isProfileOwner(profileUsername) {
+export async function isProfileOwner(profileUsername) {
 	const data = await checkLoginStatus();
 	if (profileUsername == data.username) {
 		return true;
@@ -31,7 +32,7 @@ function setModifyButtons() {
 	// create the delete account button
 	let deleteAccountButton = document.createElement('button');
 	deleteAccountButton.id = 'deleteAccountButton';
-	deleteAccountButton.className = 'm-2 btn btn-danger';
+	deleteAccountButton.className = 'm-2 btn btn-sm btn-outline-danger';
 	deleteAccountButton.textContent = 'Delete Account';
 
 	const buttonContainer = document.getElementById("profileDeleteContainer"); // Adjusted container
@@ -71,13 +72,12 @@ function setOverallStats(data) {
 }
 
 async function updateUsername(oldUsername, newUsername) {
-	const csrftoken = getCookie('csrftoken');
 	try {
 		const response = await fetch(`/api/users/${encodeURIComponent(oldUsername)}/`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
-				'X-CSRFToken': csrftoken
+				'X-CSRFToken': getCookie('csrftoken')
 			},
 			body: `username=${encodeURIComponent(newUsername)}`
 		});
@@ -91,13 +91,12 @@ async function updateUsername(oldUsername, newUsername) {
 }
 
 async function updateEmail(username, newEmail) {
-	const csrftoken = getCookie('csrftoken');
 	try {
 		const response = await fetch(`/api/users/${encodeURIComponent(username)}/`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
-				'X-CSRFToken': csrftoken
+				'X-CSRFToken': getCookie('csrftoken')
 			},
 			body: `email=${encodeURIComponent(newEmail)}`
 		});
@@ -114,7 +113,6 @@ export async function showUserProfile(profileUsername) {
 	const profileUrl = "/api/users/" + profileUsername + "/";
 
 	try {
-		const csrftoken = getCookie('csrftoken');
 		await loadContent('static/users/user_profile.html', 'main-box', applyLanguage);
 
 		try {
@@ -130,6 +128,7 @@ export async function showUserProfile(profileUsername) {
 				const data = await response.json();
 				showAvatar(data.avatar, 'profileAvatar');
 				setOverallStats(data);
+				setFriendsBox(profileUsername);
 				if (await isProfileOwner(profileUsername) == true) {
 					setInformations(data, true);
 					setModifyButtons();
