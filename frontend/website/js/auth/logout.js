@@ -12,7 +12,7 @@ function doLogout() {
 	const csrftoken = getCookie('csrftoken');
 
 	// send a disconnection request
-	fetch('/authentication/logout/', {
+	fetch('/api/authentication/logout/', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',

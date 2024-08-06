@@ -1,6 +1,6 @@
 export async function checkLoginStatus() {
 	try {
-		const response = await fetch('/authentication/status/', {
+		const response = await fetch('/api/authentication/status/', {
 			method: 'GET',
 			credentials: 'include'
 		});

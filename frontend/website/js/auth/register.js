@@ -54,7 +54,7 @@ async function doRegister() {
 			const data = { username, email, password };
 
 			try {
-				const response = await fetch('/authentication/register/', {
+				const response = await fetch('/api/authentication/register/', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',

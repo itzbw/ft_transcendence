@@ -20,6 +20,6 @@ from django.urls import path, include
 
 urlpatterns = [
 	path('admin/', admin.site.urls),	#Delete when project is finished **TO_REMOVE**
-	path('authentication/', include('authentication.urls')),
-	path('users/', include('users.urls')),
+	path('api/authentication/', include('authentication.urls')),
+	path('api/users/', include('users.urls')),
 ]

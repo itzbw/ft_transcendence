@@ -84,7 +84,7 @@ async function changeAvatar(username){
                 formData.append('avatar', selectedFile);
                 
                 try {
-                    const response = await fetch(`/users/upload_avatar/${username}/`, {
+                    const response = await fetch(`/api/users/upload_avatar/${username}/`, {
                         method: 'POST',
                         body: formData,
                         headers: {

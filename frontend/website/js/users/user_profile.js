@@ -73,7 +73,7 @@ function setOverallStats(data) {
 async function updateUsername(oldUsername, newUsername) {
 	const csrftoken = getCookie('csrftoken');
 	try {
-		const response = await fetch(`/users/${encodeURIComponent(oldUsername)}/`, {
+		const response = await fetch(`/api/users/${encodeURIComponent(oldUsername)}/`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
@@ -93,7 +93,7 @@ async function updateUsername(oldUsername, newUsername) {
 async function updateEmail(username, newEmail) {
 	const csrftoken = getCookie('csrftoken');
 	try {
-		const response = await fetch(`/users/${encodeURIComponent(username)}/`, {
+		const response = await fetch(`/api/users/${encodeURIComponent(username)}/`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
@@ -111,7 +111,7 @@ async function updateEmail(username, newEmail) {
 }
 
 export async function showUserProfile(profileUsername) {
-	const profileUrl = "/users/" + profileUsername + "/";
+	const profileUrl = "/api/users/" + profileUsername + "/";
 
 	try {
 		const csrftoken = getCookie('csrftoken');
@@ -204,7 +204,7 @@ function SetUserProfileEvents(username) {
 
 async function deleteAccount(username) {
 	try {
-		const response = await fetch(`/users/${encodeURIComponent(username)}/`, {
+		const response = await fetch(`/api/users/${encodeURIComponent(username)}/`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json',
