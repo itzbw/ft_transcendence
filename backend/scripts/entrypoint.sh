@@ -15,7 +15,7 @@ if [ -f /logs/gunicorn.log ]; then
 fi
 
 echo "\e[33mCreating migration files\e[0m"
-python manage.py makemigrations
+python manage.py makemigrations users
 
 echo "\e[33mApplying database migrations\e[0m"
 python manage.py migrate
