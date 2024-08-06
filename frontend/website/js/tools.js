@@ -1,4 +1,5 @@
-
+// User profile (kept for TEST) ** TO_REMOVE **
+import { showUserProfile } from './users/user_profile.js';
 
 // ---------- START executeScript() ---------------- 
 export function executeScripts(node) {
@@ -73,3 +74,20 @@ export function getCookie(name) {
 	return cookieValue;
 }
 // ------------------------------
+
+
+
+
+
+
+
+// ------------------------------
+// ** TO_REMOVE **
+export function addTestButton(){
+	// FOR TESTS ONLY  ** TO_REMOVE **
+	// create a button to see another account's profile
+	const test = document.getElementById('testButton');
+	test.addEventListener('click', function(){
+		showUserProfile("toto");		// Change username HERE
+	});
+}

@@ -148,16 +148,6 @@ export async function showUserProfile(profileUsername) {
 	}
 }
 
-// Will listen click on the profile button
-export function setupProfile(username) {
-	const profileButton = document.getElementById('profileButton');
-	if (profileButton) {
-		profileButton.addEventListener('click', () => showUserProfile(username));
-	} else {
-		console.log('no profile button found');
-	}
-}
-
 function SetUserProfileEvents(username) {
 	setupChangeAvatar(username);
 

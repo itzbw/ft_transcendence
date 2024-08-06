@@ -1,6 +1,6 @@
 import { getCookie } from "../tools.js";
 
-function doLogout() {
+export function doLogout() {
 
 	// Asks for confirmation
     const confirmed = window.confirm('Are you sure you want to log out?');
@@ -9,14 +9,12 @@ function doLogout() {
         return;
     }
 
-	const csrftoken = getCookie('csrftoken');
-
 	// send a disconnection request
 	fetch('/api/authentication/logout/', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
-			'X-CSRFToken': csrftoken,
+			'X-CSRFToken': getCookie('csrftoken'),
 		},
 	})
 	.then(response => {
@@ -34,13 +32,4 @@ function doLogout() {
 	})
 		// Error handling
 		.catch(error => console.error('Error:', error));
-}
-
-export function setupLogout(){
-	const logoutButton = document.getElementById('logoutButton');
-	if (logoutButton) {
-		logoutButton.addEventListener('click', doLogout);
-	} else {
-		console.log("logout button not found");
-	}
 }
