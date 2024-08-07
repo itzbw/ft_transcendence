@@ -19,7 +19,7 @@ if [ -f /logs/gunicorn_error.log ]; then
 	echo "\n----------- SERVER LAUNCH ------------\n" >> /logs/gunicorn_error.log
 fi
 
-python manage.py makemigrations
+python manage.py makemigrations users
 python manage.py migrate
 # python manage.py runserver 0.0.0.0:$BACK_PORT
 

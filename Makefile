@@ -4,7 +4,7 @@ G			=	"\e[32m"
 X			=	"\e[0m"
 BOLD		=	"\e[1m"
 
-DC = docker-compose
+DC = docker compose
 DOC = docker
 BACK = trans_back
 FRONT = trans_front
