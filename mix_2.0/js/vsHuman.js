@@ -2,19 +2,29 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import dat from 'https://cdn.skypack.dev/dat.gui';
 
+
+const url = new URL(window.location.href);
+const playersRaw = url.searchParams.get("players")
+const players = JSON.parse(playersRaw)
+const leftScoreElement = document.createElement('div');
+const rightScoreElement = document.createElement('div');
+const winnerElement = document.createElement('div');
+let scene = null;
+let animFrameId = null;
+
 function loadPongvsMan() {
   // Create the scene
-  const scene = new THREE.Scene();
+  scene = new THREE.Scene();
 
   // Create a camera
   const camera = new THREE.PerspectiveCamera(
-    75, // Field of view
+    60, // Field of view
     window.innerWidth / window.innerHeight, // Aspect ratio
     0.1, // Near clipping plane
     1000 // Far clipping plane
   );
-  camera.position.z = 5;
-  camera.position.y = 5;
+  camera.position.z = 8;
+  camera.position.y = 8;
   camera.lookAt(0, 0, 0);
 
   // Create a renderer
@@ -27,7 +37,7 @@ function loadPongvsMan() {
   canvasman.appendChild(renderer.domElement);
 
   // Create a point light
-  const light = new THREE.AmbientLight(0xffffff, 1, 100);
+  const light = new THREE.AmbientLight(0xffffff, 20, 20);
   // for rotation only
   //const light = new THREE.PointLight(0xffffff, 0.8);
   light.position.set(10, 10, 10);
@@ -74,7 +84,7 @@ function loadPongvsMan() {
     widthSegments: 32,
     heightSegments: 32
   }
-  const sphereGeometry = new THREE.SphereGeometry(sphereData.radius, sphereData.widthSegments, sphereData.heightSegments); // Radius, width segments, height segments
+  const sphereGeometry = new THREE.SphereGeometry(sphereData.radius); // Radius, width segments, height segments
   const sphereMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000, wireframe: true }); // Red color for the sphere
   const ball = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
@@ -93,7 +103,7 @@ function loadPongvsMan() {
   const scoreLimit = 7;
 
   /////////////////// HTML Score Showing /////////////////////
-  const leftScoreElement = document.createElement('div');
+  // const leftScoreElement = document.createElement('div');
   leftScoreElement.style.position = 'absolute';
   leftScoreElement.style.top = '50%';
   leftScoreElement.style.left = '10px';
@@ -102,7 +112,7 @@ function loadPongvsMan() {
   leftScoreElement.innerHTML = 'Left: 0';
   document.body.appendChild(leftScoreElement);
 
-  const rightScoreElement = document.createElement('div');
+  // const rightScoreElement = document.createElement('div');
   rightScoreElement.style.position = 'absolute';
   rightScoreElement.style.top = '50%';
   rightScoreElement.style.right = '10px';
@@ -111,9 +121,9 @@ function loadPongvsMan() {
   rightScoreElement.innerHTML = 'Right: 0';
   document.body.appendChild(rightScoreElement);
 
-  const winnerElement = document.createElement('div');
+  // const winnerElement = document.createElement('div');
   winnerElement.style.position = 'absolute';
-  winnerElement.style.top = '35%';
+  winnerElement.style.top = '50%';
   winnerElement.style.left = '50%';
   winnerElement.style.transform = 'translate(-50%, -50%)';
   winnerElement.style.color = 'white';
@@ -122,13 +132,22 @@ function loadPongvsMan() {
   document.body.appendChild(winnerElement);
 
   /// GUI Panel ///
-  const gui = new dat.GUI({ autoPlace: false });
+  const gui = new dat.GUI({ autoPlace: false, width: 300 });
   gui.close();
   gui.domElement.id = 'gui';
   gui_container.appendChild(gui.domElement);
 
   ///Paddle Size Change//
   gui.add(groupPaddle.scale, 'z', 0.2, 0.75).name('Paddle Size');
+  // Ball Size chnage
+  gui
+    .add(sphereData, 'radius', 0.3, 1)
+    .name('Ball size')
+    .onChange(redraw)
+    .onFinishChange(() => console.dir(ball.geometry))
+
+  // Board wireframe
+  gui.add(board.material, 'wireframe').name('Board Wireframe');
 
   //Paddle Color Change //
   const materialLeftPaddle = {
@@ -156,27 +175,19 @@ function loadPongvsMan() {
   const materialBoard = {
     boardColor: board.material.color.getHex(),
   }
-  gui.add(board.material, 'wireframe').name('Board Wireframe');
+
   gui
     .addColor(materialBoard, 'boardColor')
     .onChange((value) => board.material.color.set(value));
 
+  function redraw() {
+    let newGeometry = new THREE.SphereGeometry(
+      sphereData.radius,
+    )
+    ball.geometry.dispose()
+    ball.geometry = newGeometry
+  }
 
-
-
-  // Add event listener for resizing the window
-  // window.addEventListener('resize', () => {
-  //   camera.aspect = window.innerWidth / window.innerHeight;
-  //   camera.updateProjectionMatrix();
-  //   renderer.setSize(window.innerWidth, window.innerHeight);
-  // });
-  // var resizeRenderer = () => {
-  //   camera.aspect = window.innerWidth / window.innerHeight;
-
-  //   camera.updateProjectionMatrix();
-  //   renderer.setSize(window.innerWidth, window.innerHeight);
-  // };
-  // resizeRenderer();
 
   var resizeRenderer = () => {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -257,7 +268,11 @@ function loadPongvsMan() {
 
   // Render the scene from the perspective of the camera
   function animate() {
-    requestAnimationFrame(animate);
+    animFrameId = requestAnimationFrame(animate);
+
+    function showNextMatch() {
+      return "<br/> <button onmousedown='loadNextMatch(); '>Retry</button > ";
+    }
 
     // check winner
     if (leftScore >= scoreLimit) {
@@ -308,19 +323,21 @@ function loadPongvsMan() {
       if (ballRotationSpd.x) {
         ballRotationSpd.y = ballRotationSpd.x;
         ballRotationSpd.x = 0;
+        ballDirZ *= 1.5;
       } else if (ballRotationSpd.y) {
         ballRotationSpd.z = ballRotationSpd.y;
         ballRotationSpd.y = 0;
       } else if (ballRotationSpd.z) {
         ballRotationSpd.x = ballRotationSpd.z;
         ballRotationSpd.z = 0;
+        ballDirZ *= 1.5;
       }
     }
 
     // Right paddle
     if ((ball.position.x > rightPaddle.position.x - paddleWidth / 2 && ball.position.x < rightPaddle.position.x + paddleWidth / 2) &&
       ball.position.z > rightPaddle.position.z - paddleHalfDepth && ball.position.z < rightPaddle.position.z + paddleHalfDepth) {
-      // onCollide();
+      onCollide();
       ballDirX = -ballDirX;
     }
 
@@ -328,8 +345,19 @@ function loadPongvsMan() {
     //Left Paddle
     if ((ball.position.x < leftPaddle.position.x + paddleWidth / 2 && ball.position.x > leftPaddle.position.x - paddleWidth / 2) &&
       ball.position.z > leftPaddle.position.z - paddleHalfDepth && ball.position.z < leftPaddle.position.z + paddleHalfDepth) {
-      // onCollide();
+      onCollide();
       ballDirX = -ballDirX;
+    }
+
+    function onGoal() {
+      const leftWon = leftScore >= scoreLimit;
+      const rightWon = rightScore >= scoreLimit;
+      if (leftWon || rightWon) {
+        destroy()
+        winnerElement.innerHTML = `${leftWon ? 'Left Player' : 'Right Player'}  Win(s)!`;
+        winnerElement.innerHTML += showNextMatch();
+        winnerElement.style.display = 'block';
+      }
     }
 
 
@@ -340,24 +368,19 @@ function loadPongvsMan() {
       leftScore += 1;
       leftScoreElement.innerHTML = `Left: ${leftScore}`;
       resetBall();
+      onGoal();
 
     } else if (ball.position.x < (-boardWidth / 2 - sphereData.radius)) {
       // Right player scores
       rightScore += 1;
       rightScoreElement.innerHTML = `Right: ${rightScore}`;
       resetBall();
+      onGoal();
     }
 
     // ball self rotation
     ball.rotation.x += 0.01;
     ball.rotation.y += 0.01;
-
-    // light rotation
-    // light.position.x = 500 * Math.sin(Date.now() / 240);
-    // light.position.z = 500 * Math.cos(Date.now() / 240);
-
-    // ballDirX = (Math.random() > 0.5 ? 0.1 : -0.1); // random direction
-    // ballDirZ = (Math.random() > 0.5 ? 0.1 : -0.1); // random direction
 
     renderer.render(scene, camera);
   }
@@ -365,9 +388,21 @@ function loadPongvsMan() {
   animate();
 }
 
-function loadMan() {
-  loadPongvsMan();
-  console.log("load Pong vs man");
+window.destroy = function () {
+  rightScoreElement.innerHTML = "";
+  leftScoreElement.innerHTML = "";
+  winnerElement.innerHTML = "";
+  winnerElement.style.display = 'none';
+  scene.remove.apply(scene, scene.children)
+  cancelAnimationFrame(animFrameId)
+  gui.parentElement.removeChild(gui)
+  console.log("destroy");
+
 }
 
-loadMan();
+window.loadNextMatch = function () {
+  loadPongvsMan();
+  console.log("load next Pong vs man");
+}
+
+loadPongvsMan();

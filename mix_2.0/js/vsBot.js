@@ -40,7 +40,7 @@ function loadVsBotGame() {
   canvas.appendChild(renderer.domElement);
 
   // Create a point light
-  const light = new THREE.AmbientLight(0xffffff, 1, 100);
+  const light = new THREE.AmbientLight(0xffffff, 20, 20);
   // for rotation only
   //const light = new THREE.PointLight(0xffffff, 0.8);
   light.position.set(10, 10, 10);
