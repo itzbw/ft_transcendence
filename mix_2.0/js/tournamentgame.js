@@ -22,13 +22,13 @@ function loadGameTournament(leftPlayer, rightPlayer) {
 
     // Create a camera
     const camera = new THREE.PerspectiveCamera(
-        75, // Field of view
+        60, // Field of view
         window.innerWidth / window.innerHeight, // Aspect ratio
         0.1, // Near clipping plane
         1000 // Far clipping plane
     );
-    camera.position.z = 5;
-    camera.position.y = 5;
+    camera.position.z = 8;
+    camera.position.y = 8;
     camera.lookAt(0, 0, 0);
 
     // Create a renderer
@@ -41,7 +41,7 @@ function loadGameTournament(leftPlayer, rightPlayer) {
     canvasman.appendChild(renderer.domElement);
 
     // Create a point light
-    const light = new THREE.AmbientLight(0xffffff, 1, 100);
+    const light = new THREE.AmbientLight(0xffffff, 20, 20);
     // for rotation only
     //const light = new THREE.PointLight(0xffffff, 0.8);
     light.position.set(10, 10, 10);
@@ -88,7 +88,7 @@ function loadGameTournament(leftPlayer, rightPlayer) {
         widthSegments: 32,
         heightSegments: 32
     }
-    const sphereGeometry = new THREE.SphereGeometry(sphereData.radius, sphereData.widthSegments, sphereData.heightSegments); // Radius, width segments, height segments
+    const sphereGeometry = new THREE.SphereGeometry(sphereData.radius); // Radius, width segments, height segments
     const sphereMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000, wireframe: true }); // Red color for the sphere
     const ball = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
@@ -104,7 +104,7 @@ function loadGameTournament(leftPlayer, rightPlayer) {
     // Score
     let leftScore = 0
     let rightScore = 0;
-    const scoreLimit = 1;
+    const scoreLimit = 7;
 
     /////////////////// HTML Score Showing /////////////////////
 
@@ -142,8 +142,19 @@ function loadGameTournament(leftPlayer, rightPlayer) {
     gui.domElement.id = 'gui';
     gui_container.appendChild(gui.domElement);
 
+
     ///Paddle Size Change//
     gui.add(groupPaddle.scale, 'z', 0.2, 0.75).name('Paddle Size');
+
+    // Ball Size chnage
+    gui
+        .add(sphereData, 'radius', 0.3, 1)
+        .name('Ball size')
+        .onChange(redraw)
+        .onFinishChange(() => console.dir(ball.geometry))
+
+    // Board wireframe
+    gui.add(board.material, 'wireframe').name('Board Wireframe');
 
     //Paddle Color Change //
     const materialLeftPaddle = {
@@ -171,10 +182,17 @@ function loadGameTournament(leftPlayer, rightPlayer) {
     const materialBoard = {
         boardColor: board.material.color.getHex(),
     }
-    gui.add(board.material, 'wireframe').name('Board Wireframe');
     gui
         .addColor(materialBoard, 'boardColor')
         .onChange((value) => board.material.color.set(value));
+
+    function redraw() {
+        let newGeometry = new THREE.SphereGeometry(
+            sphereData.radius,
+        )
+        ball.geometry.dispose()
+        ball.geometry = newGeometry
+    }
 
     var resizeRenderer = () => {
         camera.aspect = window.innerWidth / window.innerHeight;
@@ -297,12 +315,14 @@ function loadGameTournament(leftPlayer, rightPlayer) {
             if (ballRotationSpd.x) {
                 ballRotationSpd.y = ballRotationSpd.x;
                 ballRotationSpd.x = 0;
+                ballDirX *= 1.5;
             } else if (ballRotationSpd.y) {
                 ballRotationSpd.z = ballRotationSpd.y;
                 ballRotationSpd.y = 0;
             } else if (ballRotationSpd.z) {
                 ballRotationSpd.x = ballRotationSpd.z;
                 ballRotationSpd.z = 0;
+                ballDirZ *= 1.5;
             }
         }
 
@@ -381,6 +401,7 @@ window.loadTournament = function () {
 
 
     loadGameTournament(players[leftPlayerIndex], players[rightPlayerIndex]);
+
     // console.log("load Tournement");
 
     console.log("player length: " + players.length);
@@ -402,8 +423,12 @@ window.loadNextMatch = function () {
     let nexLeftMatchPlayer = leftPlayerIndex + 2;
     let nextRightMatchPlayer = rightPlayerIndex + 2;
 
-
-    loadGameTournament(players[nexLeftMatchPlayer], players[nextRightMatchPlayer]);
+    if (nextRightMatchPlayer < players.length) {
+        loadGameTournament(players[nexLeftMatchPlayer], players[nextRightMatchPlayer]);
+    }
+    else {
+        alert("Signle player Left!")
+    }
 
 
     console.log("load Next Match");
@@ -415,12 +440,3 @@ window.loadNextMatch = function () {
 
 
 loadTournament();
-
-
-
-
-
-
-
-
-
