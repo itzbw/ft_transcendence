@@ -1,7 +1,7 @@
 import os
 from rest_framework.views import APIView
 from rest_framework.response import Response
-# from rest_framework import status
+from rest_framework import status
 
 from django.conf import settings   # upload_avatar
 from django.core.files.storage import default_storage  # upload_avatar
@@ -108,24 +108,62 @@ def upload_avatar(request, profile_username):
 	return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
-class AddFriend(APIView):
-	def post(self, request):
-		username = request.data.get('username')
-		friend = get_object_or_404(SiteUser, username=username)
+class CheckFriendshipView(APIView):
+	def get(self, request, username):
+		user = request.user
+		if not user.is_authenticated:
+			return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+
 		try:
-			request.user.addFriend(friend)
-			return Response({ 'status': 'success' }, status=200)
-		except ValueError:
-			return Response({ 'status': 'error' }, status=400)
+			friend = SiteUser.objects.get(username=username)
+			if friend in user.friends.all():
+				return Response({'is_friend': True}, status=status.HTTP_200_OK)
+			return Response({'is_friend': False}, status=status.HTTP_200_OK)
+		except SiteUser.DoesNotExist:
+			return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
-class RemoveFriend(APIView):
+class FriendsListView(APIView):
+	def get(self, request):
+		user = request.user
+		if user.is_authenticated:
+			friends_list = [{'username': friend.username} for friend in user.friends.all()]
+			return Response(friends_list, status=status.HTTP_200_OK)
+		return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class AddFriendView(APIView):
 	def post(self, request):
+		user = request.user
+		if not user.is_authenticated:
+			return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+
 		username = request.data.get('username')
-		friend = get_object_or_404(SiteUser, username=username)
 		try:
-			request.user.removeFriend(friend)
-			return Response({ 'status': 'success' }, status=200)
-		except ValueError:
-			return Response({ 'status': 'error' }, status=400)
-		
+			friend = SiteUser.objects.get(username=username)
+			if friend != user and friend not in user.friends.all():
+				user.friends.add(friend)
+				user.save()
+				return Response({'message': 'Friend added successfully'}, status=status.HTTP_201_CREATED)
+			return Response({'error': 'Invalid friend'}, status=status.HTTP_400_BAD_REQUEST)
+		except SiteUser.DoesNotExist:
+			return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class RemoveFriendView(APIView):
+    def delete(self, request):
+        user = request.user
+        if not user.is_authenticated:
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        username = request.data.get('username')
+        try:
+            friend = SiteUser.objects.get(username=username)
+            if friend in user.friends.all():
+                user.friends.remove(friend)
+                user.save()
+                return Response({'message': 'Friend removed successfully'}, status=status.HTTP_200_OK)
+            return Response({'error': 'Friend not found'}, status=status.HTTP_404_NOT_FOUND)
+        except SiteUser.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+

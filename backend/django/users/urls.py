@@ -1,10 +1,19 @@
 from django.urls import path
-from .views import UserProfileView, upload_avatar, AddFriend, RemoveFriend
+from .views import (
+	UserProfileView,
+	upload_avatar,
+	FriendsListView,
+	AddFriendView,
+	RemoveFriendView,
+	CheckFriendshipView
+)
+
 
 urlpatterns = [
 	path('upload_avatar/<str:profile_username>/', upload_avatar, name='upload-avatar'),
-	path('add_friend/', AddFriend.as_view(), name="add-friend"),
-	path('remove_friend/', RemoveFriend.as_view(), name="add-friend"),
+	path('check_friendship/<str:username>/', CheckFriendshipView.as_view(), name="check-friendship"),
+	path('get_friends_list/', FriendsListView.as_view(), name='frieds-list'),
+	path('add_friend/', AddFriendView.as_view(), name="add-friend"),
+	path('remove_friend/', RemoveFriendView.as_view(), name="remove-friend"),
 	path('<str:profile_username>/', UserProfileView.as_view(), name='user-profile'),
-
 ]
