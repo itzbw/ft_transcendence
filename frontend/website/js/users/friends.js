@@ -51,7 +51,15 @@ async function handleAddRemoveEvents(event, username) {
 
 // display the Add Friend button or the Remove Friend button
 function showAddRemoveFriendButton(event, friendsBox) {
-	console.log("entering showRemoveFriendButton");
+
+	// check if button already exists and remove it
+	const nonevent = event == 'add'? 'remove' : 'add';
+	const existingButton = document.getElementById( nonevent + 'FriendButton');
+    if (existingButton) {
+        friendsBox.removeChild(existingButton);
+    }
+
+	// create the button and display it
 	const button = document.createElement('button');
 	button.id = event + "FriendButton";
 	if (event == 'add') {
