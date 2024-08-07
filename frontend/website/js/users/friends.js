@@ -28,6 +28,7 @@ async function isAlreadyFriend(username) {
 
 async function handleAddRemoveEvents(event, username) {
 	const button = document.getElementById(event + 'FriendButton');
+	console.log(button);
 	button.addEventListener('click', async function() {
 		try {
 			const data = { username };
@@ -48,30 +49,45 @@ async function handleAddRemoveEvents(event, username) {
 	});
 }
 
-// OK
-// set the RemoveFriendsButton
-function showRemoveFriendButton(friendsBox) {
+// display the Add Friend button or the Remove Friend button
+function showAddRemoveFriendButton(event, friendsBox) {
 	console.log("entering showRemoveFriendButton");
 	const button = document.createElement('button');
-	button.id = "removeFriendButton";
-	button.className = "btn btn-outline-danger";
+	button.id = event + "FriendButton";
+	if (event == 'add') {
+		button.className = "btn btn-success";
+	} else {
+		button.className = "btn btn-outline-danger";
+	}
 	friendsBox.appendChild(button);
-	setAttribute(button.id, "data-translate", "removefriend");
+	setAttribute(button.id, "data-translate", event + "friend");
 	applyLanguage();
 }
 
-// OK
-// set the AddFriendsButton
-function showAddFriendButton(friendsBox) {
-	friendsBox.innerHtml = "";
-	console.log("entering addRemoveFriendButton");
-	const button = document.createElement('button');
-	button.id = "addFriendButton";
-	button.className = "btn btn-success";
-	friendsBox.innerHtml(button);
-	setAttribute(button.id, "data-translate", "addfriend");
-	applyLanguage();
-}
+// // OK
+// // set the RemoveFriendsButton
+// function showRemoveFriendButton(friendsBox) {
+// 	console.log("entering showRemoveFriendButton");
+// 	const button = document.createElement('button');
+// 	button.id = "removeFriendButton";
+// 	button.className = "btn btn-outline-danger";
+// 	friendsBox.appendChild(button);
+// 	setAttribute(button.id, "data-translate", "removefriend");
+// 	applyLanguage();
+// }
+
+// // OK
+// // set the AddFriendsButton
+// function showAddFriendButton(friendsBox) {
+// 	friendsBox.innerHtml = "";
+// 	console.log("entering addRemoveFriendButton");
+// 	const button = document.createElement('button');
+// 	button.id = "addFriendButton";
+// 	button.className = "btn btn-success";
+// 	friendsBox.innerHtml(button);
+// 	setAttribute(button.id, "data-translate", "addfriend");
+// 	applyLanguage();
+// }
 
 
 // Load friends.html & click the modal
@@ -126,21 +142,15 @@ export async function setFriendsBox(username){
 			if (await isProfileOwner(username) == true) {
 				// setFriendsList(friendsBox);
 			} else {
-		
-				// already in friendsList
-				if (isAlreadyFriend(username)) {
-					console.log(username,"is your friend");
-					// showRemoveFriendButton(friendsBox, username);
-					// handleAddRemoveEvents('remove', username);
-		
-				// not a friend
+				let event;
+				if (await isAlreadyFriend(username) == true) {
+					event = 'remove';
 				} else {
-					console.log(username,"is NOT your friend");
-					// showAddFriendButton(friendsBox, username);
-					// handleAddRemoveEvents('add', username);
+					event = 'add';
 				}
+				showAddRemoveFriendButton(event, friendsBox);
+				handleAddRemoveEvents(event, username);
 			}
-
 		} catch (error) {
 			console.error("An error occurred:", error);
 			// Optionally display a user-friendly message or take other actions

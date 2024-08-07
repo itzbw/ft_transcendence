@@ -151,7 +151,7 @@ class AddFriendView(APIView):
 
 
 class RemoveFriendView(APIView):
-    def delete(self, request):
+    def post(self, request):
         user = request.user
         if not user.is_authenticated:
             return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
