@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import dat from 'https://cdn.skypack.dev/dat.gui';
 
+
 const url = new URL(window.location.href);
 const playersRaw = url.searchParams.get("players")
 const players = JSON.parse(playersRaw)
@@ -86,7 +87,9 @@ function loadVsBotGame() {
     widthSegments: 32,
     heightSegments: 32
   }
-  const sphereGeometry = new THREE.SphereGeometry(sphereData.radius, sphereData.widthSegments, sphereData.heightSegments); // Radius, width segments, height segments
+
+  // const sphereGeometry = new THREE.SphereGeometry(sphereData.radius, sphereData.widthSegments, sphereData.heightSegments); // Radius, width segments, height segments
+  const sphereGeometry = new THREE.SphereGeometry(sphereData.radius);
   const sphereMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000, wireframe: true }); // Red color for the sphere
   const ball = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
@@ -94,15 +97,17 @@ function loadVsBotGame() {
   ball.position.set(0, 0.1, 0); // Position it at the center of the board
   scene.add(ball);
 
-  // variable for ball movement
-  let ballDirX = 0.1;
-  let ballDirZ = 0.1;
+
+
+  // variable for ball movement speed
+  let ballDirX = 0.1; // width speed
+  let ballDirZ = 0.1; // vertical speed
   var ballRotationSpd = { x: 0.2, y: 0, z: 0 }
 
   // Score
   let leftScore = 0
   let rightScore = 0;
-  const scoreLimit = 1;
+  const scoreLimit = 7;
 
 
 
@@ -137,13 +142,23 @@ function loadVsBotGame() {
 
 
   /// GUI Panel ///
-  const gui = new dat.GUI({ autoPlace: false });
+  const gui = new dat.GUI({ autoPlace: false, width: 300 });
   gui.close();
   gui.domElement.id = 'gui';
   gui_container.appendChild(gui.domElement);
 
   ///Paddle Size Change//
-  gui.add(groupPaddle.scale, 'z', 0.2, 0.75).name('Paddle Size');
+  gui.add(groupPaddle.scale, 'z', 0.5, 1).name('Paddle Size');
+
+  // Ball Size chnage
+  gui
+    .add(sphereData, 'radius', 0.3, 1)
+    .name('Ball size')
+    .onChange(redraw)
+    .onFinishChange(() => console.dir(ball.geometry))
+
+  // Board wireframe
+  gui.add(board.material, 'wireframe').name('Board Wireframe');
 
   //Paddle Color Change //
   const materialLeftPaddle = {
@@ -171,19 +186,25 @@ function loadVsBotGame() {
   const materialBoard = {
     boardColor: board.material.color.getHex(),
   }
-  gui.add(board.material, 'wireframe').name('Board Wireframe');
+
   gui
     .addColor(materialBoard, 'boardColor')
     .onChange((value) => board.material.color.set(value));
 
 
 
-  // Add event listener for resizing the window
-  // window.addEventListener('resize', () => {
-  //   camera.aspect = window.innerWidth / window.innerHeight;
-  //   camera.updateProjectionMatrix();
-  //   renderer.setSize(window.innerWidth, window.innerHeight);
-  // });
+
+  function redraw() {
+    let newGeometry = new THREE.SphereGeometry(
+      sphereData.radius,
+    )
+    ball.geometry.dispose()
+    ball.geometry = newGeometry
+  }
+
+
+
+
   var resizeRenderer = () => {
     camera.aspect = window.innerWidth / window.innerHeight;
 
@@ -320,8 +341,8 @@ function loadVsBotGame() {
     leftPaddle.position.z = THREE.MathUtils.clamp(leftPaddle.position.z, -boardHeight + (boardHeight / 2 + paddleLength / 2), boardHeight - (boardHeight / 2 + paddleLength / 2));
 
     // ball movement
-    ball.position.x += ballDirX * 0.5;
-    ball.position.z += ballDirZ * 0.5;
+    ball.position.x += ballDirX; // speed
+    ball.position.z += ballDirZ; // speed
 
     // ball collision with top and bottom all
     if (ball.position.z > boardLength / 2 || ball.position.z < -boardLength / 2)
@@ -332,12 +353,14 @@ function loadVsBotGame() {
       if (ballRotationSpd.x) {
         ballRotationSpd.y = ballRotationSpd.x;
         ballRotationSpd.x = 0;
+        ballDirX *= 1.5; // increase speed when collide with paddle
       } else if (ballRotationSpd.y) {
         ballRotationSpd.z = ballRotationSpd.y;
         ballRotationSpd.y = 0;
       } else if (ballRotationSpd.z) {
         ballRotationSpd.x = ballRotationSpd.z;
         ballRotationSpd.z = 0;
+        ballDirZ *= 1.5; //increase speed when collide with paddle
       }
     }
     // Right paddle
@@ -359,7 +382,7 @@ function loadVsBotGame() {
       const rightWon = rightScore >= scoreLimit;
       if (leftWon || rightWon) {
         destroy()
-        winnerElement.innerHTML = `${leftWon ? 'You' : 'Bot'}  Wins!`;
+        winnerElement.innerHTML = `${leftWon ? 'You' : 'Marvin'}  Win(s)!`;
         winnerElement.innerHTML += showNextMatch();
         winnerElement.style.display = 'block';
       }
@@ -386,12 +409,7 @@ function loadVsBotGame() {
     ball.rotation.x += 0.01;
     ball.rotation.y += 0.01;
 
-    // light rotation
-    // light.position.x = 500 * Math.sin(Date.now() / 240);
-    // light.position.z = 500 * Math.cos(Date.now() / 240);
 
-    // ballDirX = (Math.random() > 0.5 ? 0.1 : -0.1); // random direction
-    // ballDirZ = (Math.random() > 0.5 ? 0.1 : -0.1); // random direction
 
     renderer.render(scene, camera);
   }
@@ -424,13 +442,5 @@ window.loadNextMatch = function () {
 
 }
 
+
 loadVsBotGame();
-
-
-
-
-
-
-
-
-
