@@ -9,6 +9,7 @@ const players = JSON.parse(playersRaw)
 const leftScoreElement = document.createElement('div');
 const rightScoreElement = document.createElement('div');
 const winnerElement = document.createElement('div');
+const instructionElement = document.createElement('div');
 let scene = null;
 let animFrameId = null;
 
@@ -40,7 +41,7 @@ function loadVsBotGame() {
   canvas.appendChild(renderer.domElement);
 
   // Create a point light
-  const light = new THREE.AmbientLight(0xffffff, 20, 20);
+  const light = new THREE.AmbientLight(0xffffff, 3);
   // for rotation only
   //const light = new THREE.PointLight(0xffffff, 0.8);
   light.position.set(10, 10, 10);
@@ -90,7 +91,7 @@ function loadVsBotGame() {
 
   // const sphereGeometry = new THREE.SphereGeometry(sphereData.radius, sphereData.widthSegments, sphereData.heightSegments); // Radius, width segments, height segments
   const sphereGeometry = new THREE.SphereGeometry(sphereData.radius);
-  const sphereMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000, wireframe: true }); // Red color for the sphere
+  const sphereMaterial = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load("../img/moon.jpg"), color: 0xffaaff }); // Red color for the sphere
   const ball = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
   // Add the sphere to the scene
@@ -107,7 +108,7 @@ function loadVsBotGame() {
   // Score
   let leftScore = 0
   let rightScore = 0;
-  const scoreLimit = 7;
+  const scoreLimit = 1;
 
 
 
@@ -127,8 +128,11 @@ function loadVsBotGame() {
   rightScoreElement.style.right = '10px';
   rightScoreElement.style.color = 'white';
   rightScoreElement.style.fontSize = '24px';
-  rightScoreElement.innerHTML = 'Right: 0';
+  rightScoreElement.innerHTML = 'Marvin: 0';
   document.body.appendChild(rightScoreElement);
+
+  instructionElement.style.position = 'absolute';
+
 
   // const winnerElement = document.createElement('vsbotcontent');
   winnerElement.style.position = 'absolute';
@@ -283,11 +287,12 @@ function loadVsBotGame() {
 
   }
 
-
+  const clock = new THREE.Clock();
 
   // Render the scene from the perspective of the camera
   function animate() {
     animFrameId = requestAnimationFrame(animate);
+    const delta = clock.getDelta();
 
     function showNextMatch() {
       return "<br/> <button onmousedown='loadNextMatch(); '>Retry</button > ";
@@ -308,29 +313,36 @@ function loadVsBotGame() {
       return;
     }
 
-    // AI paddle movement speed
-    const aiPaddleSpeed = 0.2;
+
 
     // Paddle movement based on key states
-    const paddleSpeed = 0.2;
+    const paddleSpeed = 10;
     if (keys.ArrowUp) {
-      leftPaddle.position.z -= paddleSpeed;
+      leftPaddle.position.z -= paddleSpeed * delta;
     }
     if (keys.ArrowDown) {
-      leftPaddle.position.z += paddleSpeed;
+      leftPaddle.position.z += paddleSpeed * delta;
     }
     if (keys.KeyW) {
-      leftPaddle.position.z -= paddleSpeed;
+      leftPaddle.position.z -= paddleSpeed * delta;
     }
     if (keys.KeyS) {
-      leftPaddle.position.z += paddleSpeed;
+      leftPaddle.position.z += paddleSpeed * delta;
     }
 
     // AI paddle movement
+
+    // AI paddle movement speed
+    //  determines how quickly the paddle responds to the ball's movement.
+    const aiPaddleSpeed = 10;
+
+
+    //checks if the ball is currently "below" the paddle on the Z-axis
+    // makes the AI paddle follow the ball along the Z-axis. The paddle moves up or down based on the ball's vertical position
     if (ball.position.z > rightPaddle.position.z) {
-      rightPaddle.position.z += aiPaddleSpeed;
+      rightPaddle.position.z += aiPaddleSpeed * delta;
     } else if (ball.position.z < rightPaddle.position.z) {
-      rightPaddle.position.z -= aiPaddleSpeed;
+      rightPaddle.position.z -= aiPaddleSpeed * delta;
     }
 
     // Clamp paddle position within board boundaries
@@ -340,9 +352,11 @@ function loadVsBotGame() {
     rightPaddle.position.z = THREE.MathUtils.clamp(rightPaddle.position.z, -boardHeight + (boardHeight / 2 + paddleLength / 2), boardHeight - (boardHeight / 2 + paddleLength / 2));
     leftPaddle.position.z = THREE.MathUtils.clamp(leftPaddle.position.z, -boardHeight + (boardHeight / 2 + paddleLength / 2), boardHeight - (boardHeight / 2 + paddleLength / 2));
 
+    const ballSpeed = 20;
+
     // ball movement
-    ball.position.x += ballDirX; // speed
-    ball.position.z += ballDirZ; // speed
+    ball.position.x += ballDirX * ballSpeed * delta; // speed
+    ball.position.z += ballDirZ * ballSpeed * delta; // speed
 
     // ball collision with top and bottom all
     if (ball.position.z > boardLength / 2 || ball.position.z < -boardLength / 2)
@@ -363,19 +377,26 @@ function loadVsBotGame() {
         ballDirZ *= 1.5; //increase speed when collide with paddle
       }
     }
+
+
     // Right paddle
-    if ((ball.position.x > rightPaddle.position.x - paddleWidth / 2 && ball.position.x < rightPaddle.position.x + paddleWidth / 2) &&
-      ball.position.z > rightPaddle.position.z - paddleHalfDepth && ball.position.z < rightPaddle.position.z + paddleHalfDepth) {
+    if (((ball.position.x + sphereData.radius) > rightPaddle.position.x - paddleWidth / 2 &&
+      (ball.position.z + sphereData.radius) > rightPaddle.position.z - paddleDepth / 2 && (ball.position.z - sphereData.radius) < rightPaddle.position.z + paddleDepth / 2)) {
       onCollide();
       ballDirX = -ballDirX;
     }
 
+
     //Left Paddle
-    if ((ball.position.x < leftPaddle.position.x + paddleWidth / 2 && ball.position.x > leftPaddle.position.x - paddleWidth / 2) &&
-      ball.position.z > leftPaddle.position.z - paddleHalfDepth && ball.position.z < leftPaddle.position.z + paddleHalfDepth) {
+    if (((ball.position.x - sphereData.radius) < leftPaddle.position.x + paddleWidth / 2 &&
+      (ball.position.z + sphereData.radius) > leftPaddle.position.z - paddleHalfDepth && (ball.position.z - sphereData.radius) < leftPaddle.position.z + paddleHalfDepth)) {
       onCollide();
       ballDirX = -ballDirX;
     }
+
+
+
+
 
     function onGoal() {
       const leftWon = leftScore >= scoreLimit;
@@ -389,25 +410,26 @@ function loadVsBotGame() {
     }
 
 
-    // if ball goes beyond letf or right edeg, score ++
-    if (ball.position.x > (boardWidth / 2 + sphereData.radius)) {
+
+    // if ball goes beyond letf or right edeg, score ++ 
+    if (ball.position.x + sphereData.radius > boardWidth / 2) {
       // Left player scores
       leftScore += 1;
       leftScoreElement.innerHTML = `Left: ${leftScore}`;
       resetBall();
       onGoal();
 
-    } else if (ball.position.x < (-boardWidth / 2 - sphereData.radius)) {
+    } else if (ball.position.x - sphereData.radius < -boardWidth / 2) {
       // Right player scores
       rightScore += 1;
-      rightScoreElement.innerHTML = `Right: ${rightScore}`;
+      rightScoreElement.innerHTML = `Marvin : ${rightScore}`;
       resetBall();
       onGoal();
     }
 
     // ball self rotation
-    ball.rotation.x += 0.01;
-    ball.rotation.y += 0.01;
+    ball.rotation.x += 0.01 * delta;
+    ball.rotation.y += 0.01 * delta;
 
 
 

@@ -37,7 +37,7 @@ function loadPongvsMan() {
   canvasman.appendChild(renderer.domElement);
 
   // Create a point light
-  const light = new THREE.AmbientLight(0xffffff, 20, 20);
+  const light = new THREE.AmbientLight(0xffffff, 3);
   // for rotation only
   //const light = new THREE.PointLight(0xffffff, 0.8);
   light.position.set(10, 10, 10);
@@ -85,7 +85,7 @@ function loadPongvsMan() {
     heightSegments: 32
   }
   const sphereGeometry = new THREE.SphereGeometry(sphereData.radius); // Radius, width segments, height segments
-  const sphereMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000, wireframe: true }); // Red color for the sphere
+  const sphereMaterial = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load("../img/moon.jpg"), color: 0xffaaff }); // Red color for the sphere
   const ball = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
   // Add the sphere to the scene
@@ -100,7 +100,7 @@ function loadPongvsMan() {
   // Score
   let leftScore = 0
   let rightScore = 0;
-  const scoreLimit = 7;
+  const scoreLimit = 1;
 
   /////////////////// HTML Score Showing /////////////////////
   // const leftScoreElement = document.createElement('div');
@@ -140,11 +140,11 @@ function loadPongvsMan() {
   ///Paddle Size Change//
   gui.add(groupPaddle.scale, 'z', 0.2, 0.75).name('Paddle Size');
   // Ball Size chnage
-  gui
-    .add(sphereData, 'radius', 0.3, 1)
-    .name('Ball size')
-    .onChange(redraw)
-    .onFinishChange(() => console.dir(ball.geometry))
+  // gui
+  //   .add(sphereData, 'radius', 0.3, 1)
+  //   .name('Ball size')
+  //   .onChange(redraw)
+  //   .onFinishChange(() => console.dir(ball.geometry))
 
   // Board wireframe
   gui.add(board.material, 'wireframe').name('Board Wireframe');
@@ -266,9 +266,11 @@ function loadPongvsMan() {
 
   }
 
+  const clock = new THREE.Clock();
   // Render the scene from the perspective of the camera
   function animate() {
     animFrameId = requestAnimationFrame(animate);
+    const delta = clock.getDelta();
 
     function showNextMatch() {
       return "<br/> <button onmousedown='loadNextMatch(); '>Retry</button > ";
@@ -289,18 +291,18 @@ function loadPongvsMan() {
 
 
     // Paddle movement based on key states
-    const paddleSpeed = 0.2;
+    const paddleSpeed = 10;
     if (keys.ArrowUp) {
-      rightPaddle.position.z -= paddleSpeed;
+      rightPaddle.position.z -= paddleSpeed * delta;
     }
     if (keys.ArrowDown) {
-      rightPaddle.position.z += paddleSpeed;
+      rightPaddle.position.z += paddleSpeed * delta;
     }
     if (keys.KeyW) {
-      leftPaddle.position.z -= paddleSpeed;
+      leftPaddle.position.z -= paddleSpeed * delta;
     }
     if (keys.KeyS) {
-      leftPaddle.position.z += paddleSpeed;
+      leftPaddle.position.z += paddleSpeed * delta;
     }
 
     // Clamp paddle position within board boundaries
@@ -310,9 +312,11 @@ function loadPongvsMan() {
     rightPaddle.position.z = THREE.MathUtils.clamp(rightPaddle.position.z, -boardHeight + (boardHeight / 2 + paddleLength / 2), boardHeight - (boardHeight / 2 + paddleLength / 2));
     leftPaddle.position.z = THREE.MathUtils.clamp(leftPaddle.position.z, -boardHeight + (boardHeight / 2 + paddleLength / 2), boardHeight - (boardHeight / 2 + paddleLength / 2));
 
+
+    const ballSpeed = 20;
     // ball movement
-    ball.position.x += ballDirX * 0.5;
-    ball.position.z += ballDirZ * 0.5;
+    ball.position.x += ballDirX * ballSpeed * delta;
+    ball.position.z += ballDirZ * ballSpeed * delta;
 
     // ball collision with top and bottom all
     if (ball.position.z > boardLength / 2 || ball.position.z < -boardLength / 2)
@@ -335,16 +339,16 @@ function loadPongvsMan() {
     }
 
     // Right paddle
-    if ((ball.position.x > rightPaddle.position.x - paddleWidth / 2 && ball.position.x < rightPaddle.position.x + paddleWidth / 2) &&
-      ball.position.z > rightPaddle.position.z - paddleHalfDepth && ball.position.z < rightPaddle.position.z + paddleHalfDepth) {
+    if (((ball.position.x + sphereData.radius) > rightPaddle.position.x - paddleWidth / 2 &&
+      (ball.position.z + sphereData.radius) > rightPaddle.position.z - paddleDepth / 2 && (ball.position.z - sphereData.radius) < rightPaddle.position.z + paddleDepth / 2)) {
       onCollide();
       ballDirX = -ballDirX;
     }
 
 
     //Left Paddle
-    if ((ball.position.x < leftPaddle.position.x + paddleWidth / 2 && ball.position.x > leftPaddle.position.x - paddleWidth / 2) &&
-      ball.position.z > leftPaddle.position.z - paddleHalfDepth && ball.position.z < leftPaddle.position.z + paddleHalfDepth) {
+    if (((ball.position.x - sphereData.radius) < leftPaddle.position.x + paddleWidth / 2 &&
+      (ball.position.z + sphereData.radius) > leftPaddle.position.z - paddleHalfDepth && (ball.position.z - sphereData.radius) < leftPaddle.position.z + paddleHalfDepth)) {
       onCollide();
       ballDirX = -ballDirX;
     }
@@ -363,14 +367,14 @@ function loadPongvsMan() {
 
 
     // if ball goes beyond letf or right edeg, score ++
-    if (ball.position.x > (boardWidth / 2 + sphereData.radius)) {
+    if (ball.position.x + sphereData.radius > boardWidth / 2) {
       // Left player scores
       leftScore += 1;
       leftScoreElement.innerHTML = `Left: ${leftScore}`;
       resetBall();
       onGoal();
 
-    } else if (ball.position.x < (-boardWidth / 2 - sphereData.radius)) {
+    } else if (ball.position.x - sphereData.radius < -boardWidth / 2) {
       // Right player scores
       rightScore += 1;
       rightScoreElement.innerHTML = `Right: ${rightScore}`;
@@ -379,8 +383,8 @@ function loadPongvsMan() {
     }
 
     // ball self rotation
-    ball.rotation.x += 0.01;
-    ball.rotation.y += 0.01;
+    ball.rotation.x += 0.01 * delta;
+    ball.rotation.y += 0.01 * delta;
 
     renderer.render(scene, camera);
   }
