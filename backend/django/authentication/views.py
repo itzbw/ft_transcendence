@@ -5,6 +5,7 @@ from rest_framework import status
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
+from users.models import SiteUser   # used for RegisterView
 
 
 class LoginView(APIView):
@@ -56,4 +57,3 @@ class RegisterView(APIView):
 		user.save()
 
 		return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
-
