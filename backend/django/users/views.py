@@ -168,7 +168,7 @@ class RemoveFriendView(APIView):
 
 
 def leaderboard(request):
-	users = SiteUser.objects.all().order_by('-totalWon')  # sorted by total won
+	users = SiteUser.objects.all().order_by('-totalWon')[:20]  # sorted by total won, max 20
 	data = [
 		{
 			'username': user.username,
