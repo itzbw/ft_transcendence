@@ -2,6 +2,7 @@ import { loadContent } from "../tools.js";
 import { applyLanguage } from "../language.js";
 import { doLogout } from "../auth/logout.js";
 import { showUserProfile } from "../users/user_profile.js";
+import { leaderboard } from "../leaderboard.js";
 
 
 // Sets events listeners for the header's buttons
@@ -19,7 +20,12 @@ function setHeaderEvents(username){
 
 
 	// Leaderboard button
-	
+	const leaderboardButton = document.getElementById('leaderboardButton');
+	if (leaderboardButton) {
+		leaderboardButton.addEventListener('click', leaderboard);
+	} else {
+		console.log("leaderboard button not found");
+	}
 
 	// Logout button
 	const logoutButton = document.getElementById('logoutButton');
