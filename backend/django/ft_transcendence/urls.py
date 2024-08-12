@@ -24,4 +24,5 @@ urlpatterns = [
 	path('authentication/', include('authentication.urls')),
 	path('users/', include('users.urls')),
     path('', include(tf_urls)),
+    
 ]
