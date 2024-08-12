@@ -53,22 +53,24 @@ function makeLeaderboardRow(user) {
 	
 	row.appendChild(avatarCell(user.avatar, user.username));
 	row.appendChild(usernameCell(user.username));
+
+	console.log(user);
+
+	const wonCell = document.createElement('td');
+	wonCell.textContent = user.totalWon;
+	wonCell.classList.add("text-center");
+	
+	const lostCell = document.createElement('td');
+	lostCell.textContent = user.totalLost;
+	lostCell.classList.add("text-center");
 	
 	const playedCell = document.createElement('td');
 	playedCell.textContent = user.totalPlayed;
 	playedCell.classList.add("text-center");
 
-	const wonCell = document.createElement('td');
-	wonCell.textContent = user.totalWon;
-	wonCell.classList.add("text-center");
-
-	const lostCell = document.createElement('td');
-	lostCell.textContent = user.totalLost;
-	lostCell.classList.add("text-center");
-
-	row.appendChild(playedCell);
 	row.appendChild(wonCell);
 	row.appendChild(lostCell);
+	row.appendChild(playedCell);
 	
 	return(row);
 }
