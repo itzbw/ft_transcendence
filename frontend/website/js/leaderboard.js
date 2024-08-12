@@ -54,8 +54,6 @@ function makeLeaderboardRow(user) {
 	row.appendChild(avatarCell(user.avatar, user.username));
 	row.appendChild(usernameCell(user.username));
 
-	console.log(user);
-
 	const wonCell = document.createElement('td');
 	wonCell.textContent = user.totalWon;
 	wonCell.classList.add("text-center");
