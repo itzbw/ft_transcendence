@@ -50,6 +50,13 @@ INSTALLED_APPS = [
 	'rest_framework',
 	'rest_framework_simplejwt',
 	# 'channels',						# for websockets
+    'django_otp',
+    'django_otp.plugins.otp_static',
+    'django_otp.plugins.otp_totp',
+    'django_otp.plugins.otp_email',  # <- if you want email capability.
+    'two_factor',
+    'two_factor.plugins.phonenumber',  # <- if you want phone number capability.
+    'two_factor.plugins.email',  # <- if you want email capability.
 ]
 
 MIDDLEWARE = [
@@ -61,6 +68,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_otp.middleware.OTPMiddleware',
 ]
 
 ROOT_URLCONF = 'ft_transcendence.urls'
@@ -185,3 +194,7 @@ LOGGING = {
         'level': 'DEBUG',
     },
 }
+LOGIN_URL = 'two_factor:login'
+
+# this one is optional
+LOGIN_REDIRECT_URL = 'two_factor:profile'

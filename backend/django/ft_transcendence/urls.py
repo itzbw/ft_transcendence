@@ -16,10 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin # Delete when project is finished **TO_REMOVE**
 from django.urls import path, include
+from two_factor.urls import urlpatterns as tf_urls
 
 
 urlpatterns = [
 	path('admin/', admin.site.urls),	#Delete when project is finished **TO_REMOVE**
 	path('authentication/', include('authentication.urls')),
 	path('users/', include('users.urls')),
+    path('', include(tf_urls)),
 ]

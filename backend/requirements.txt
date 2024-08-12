@@ -1,5 +1,8 @@
 Django
 django-cors-headers
+django-two-factor-auth
+django-otp
+phonenumbers
 
 #In order to use Postgresql
 psycopg[c]
