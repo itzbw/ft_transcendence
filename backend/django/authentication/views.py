@@ -1,3 +1,4 @@
+import os
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -54,6 +55,7 @@ class RegisterView(APIView):
 			return Response({"error": "Email already exists"}, status=status.HTTP_400_BAD_REQUEST)
 	
 		user = SiteUser.objects.create_user(username=username, password=password, email=email)
+		user.avatar = os.getenv("DEFAULT_AVATAR_URL")
 		user.save()
 
 		return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)

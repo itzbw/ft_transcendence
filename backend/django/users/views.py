@@ -16,8 +16,6 @@ class UserProfileView(View):
 
 	def get_user(self, profile_username):
 		user = get_object_or_404(SiteUser, username=profile_username)
-		if not user.avatar:
-			user.avatar = os.getenv("DEFAULT_AVATAR_URL")
 		return user
 
 	def get(self, request, profile_username):
@@ -168,3 +166,17 @@ class RemoveFriendView(APIView):
         except SiteUser.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
+
+def leaderboard(request):
+	users = SiteUser.objects.all().order_by('-totalWon')  # sorted by total won
+	data = [
+		{
+			'username': user.username,
+			'avatar': user.avatar,
+			'totalPlayed': user.totalPlayed,
+			'totalWon': user.totalWon,
+			'totalLost': user.totalLost
+		}
+		for user in users
+	]
+	return JsonResponse(data, safe=False)

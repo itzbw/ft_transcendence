@@ -5,7 +5,8 @@ from .views import (
 	FriendsListView,
 	AddFriendView,
 	RemoveFriendView,
-	CheckFriendshipView
+	CheckFriendshipView,
+	leaderboard
 )
 
 
@@ -15,5 +16,6 @@ urlpatterns = [
 	path('get_friends_list/', FriendsListView.as_view(), name='frieds-list'),
 	path('add_friend/', AddFriendView.as_view(), name="add-friend"),
 	path('remove_friend/', RemoveFriendView.as_view(), name="remove-friend"),
+	path('leaderboard/', leaderboard, name='leaderboard'),
 	path('<str:profile_username>/', UserProfileView.as_view(), name='user-profile'),
 ]
