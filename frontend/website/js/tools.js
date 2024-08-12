@@ -36,7 +36,6 @@ function nodeScriptIs(node) {
 // Load html file's content and insert it in the div:
 export async function loadContent(file, elementID, callback) {
 	const element = document.getElementById(elementID);
-
 	try {
 		const response = await fetch(file)
 		if (!response.ok) {
@@ -55,6 +54,18 @@ export async function loadContent(file, elementID, callback) {
 		console.error('Error fetching content:', error);
 	}
 }
+
+// Unused for now
+export async function cleanContent(elementID){
+	const element = document.getElementById(elementID);
+
+	if (element) {
+		element.innerHTML = '';
+	} else {
+		console.warn(`Element with ID ${elementID} not found.`);
+	}
+}
+
 // -------------------------- 
 
 // ---------- getCookie() --------------------
@@ -77,10 +88,6 @@ export function getCookie(name) {
 
 
 
-
-
-
-
 // ------------------------------
 // ** TO_REMOVE **
 export function addTestButton(){
@@ -88,7 +95,7 @@ export function addTestButton(){
 	// create a button to see another account's profile
 	const test = document.getElementById('testButton');
 	test.addEventListener('click', function(){
-		showUserProfile("toto");		// Change username HERE
+		showUserProfile("tata");		// Change username HERE
 	});
 }
 
@@ -97,6 +104,5 @@ export function setAttribute(elementId, attributeName, attributeValue) {
     const element = document.getElementById(elementId);
     if (element) {
         element.setAttribute(attributeName, attributeValue);
-		console.log ("set to", elementId, "the attribute", attributeName, "with value", attributeValue);
     }
 }

@@ -1,6 +1,6 @@
 import { applyLanguage } from '../language.js';
-import { getCookie, loadContent, setAttribute } from '../tools.js'
-import { isProfileOwner } from './user_profile.js';
+import { getCookie, loadContent, setAttribute} from '../tools.js'
+import { isProfileOwner, showUserProfile} from './user_profile.js';
 
 // check if the user is already in friends list
 async function isAlreadyFriend(username) {
@@ -18,7 +18,6 @@ async function isAlreadyFriend(username) {
 		}
 
 		const data = await response.json();
-		console.log(data);
 		return data.is_friend;
 	} catch (error) {
 		console.error('An error occurred:', error);
@@ -26,9 +25,9 @@ async function isAlreadyFriend(username) {
 	}
 }
 
+
 async function handleAddRemoveEvents(event, username) {
 	const button = document.getElementById(event + 'FriendButton');
-	console.log(button);
 	button.addEventListener('click', async function() {
 		try {
 			const data = { username };
@@ -48,6 +47,7 @@ async function handleAddRemoveEvents(event, username) {
 		}
 	});
 }
+
 
 // display the Add Friend button or the Remove Friend button
 function showAddRemoveFriendButton(event, friendsBox) {
@@ -72,71 +72,94 @@ function showAddRemoveFriendButton(event, friendsBox) {
 	applyLanguage();
 }
 
-// // OK
-// // set the RemoveFriendsButton
-// function showRemoveFriendButton(friendsBox) {
-// 	console.log("entering showRemoveFriendButton");
-// 	const button = document.createElement('button');
-// 	button.id = "removeFriendButton";
-// 	button.className = "btn btn-outline-danger";
-// 	friendsBox.appendChild(button);
-// 	setAttribute(button.id, "data-translate", "removefriend");
-// 	applyLanguage();
-// }
 
-// // OK
-// // set the AddFriendsButton
-// function showAddFriendButton(friendsBox) {
-// 	friendsBox.innerHtml = "";
-// 	console.log("entering addRemoveFriendButton");
-// 	const button = document.createElement('button');
-// 	button.id = "addFriendButton";
-// 	button.className = "btn btn-success";
-// 	friendsBox.innerHtml(button);
-// 	setAttribute(button.id, "data-translate", "addfriend");
-// 	applyLanguage();
-// }
+function addFriendItem(username) {
+	let div = document.createElement('div');
+	div.textContent = username;
 
-
-// Load friends.html & click the modal
-async function showFriendsList(friendsBox) {
-	console.log("entering showFriendsList");
-	// await loadContent('static/users/friends.html', 'friendsContainer', applyLanguage);
-
-	//Fully Fill the content
-
-	//Open the modal
-	// const modal = document.getElementById('profileAvatarModal');
-	// if (modal) {
-	// 	modal.click();
-	// }
+	div.addEventListener('click', async function() {
+		showUserProfile(username);
+	});
+	return div;
 }
 
 
-async function setFriendsList() {
-	console.log("entering setFriendsList");
-//////  *-------------------------
+function fillFriendsList(data) {
+	const friendsListBody = document.getElementById('friendsListBody');
+
+	if (friendsListBody) {
+		friendsListBody.innerHTML = '';
+
+		// if no friends found
+		if (data.length === 0) {
+			const noFriendsMessage = document.createElement('p');
+			noFriendsMessage.textContent = 'No friends found.';
+			friendsListBody.appendChild(noFriendsMessage);
+		
+		// if friends found, show them
+		} else {
+			const ul = document.createElement('ul');
+			ul.classList.add('list-group'); // class for design
+
+			data.forEach(friend => {
+				const li = document.createElement('li');
+				li.classList.add('list-group-item'); // class for design
+				li.append(addFriendItem(friend.username));
+				ul.appendChild(li);
+			});
+
+			friendsListBody.appendChild(ul);
+		}
+	} else {
+		console.error('Element with id "friendsListBody" not found.');
+	}
+}
+
+
+async function handleFriendsList(){
+	await loadContent('static/users/friends.html', 'emptyModal', applyLanguage);
+	const modal = document.getElementById('friendsListModal');
+	if (modal){
+		modal.click();
+		console.log("opening friends list");
+	}
+
 	try {
-		const response = await fetch('/api/users/get_friends_list/', {
+		const response = await fetch("/api/users/get_friends_list/", {
 			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRFToken': getCookie('csrftoken'),
+			}
 		});
+
 		if (response.ok) {
-			const result = await response.json();
-			console.log("HERE:", result);
+			const data = await response.json();
+			fillFriendsList(data);
+		} else {
+			console.log('invalid response for friends list:', response.statusText);
 		}
 	} catch (error) {
-		console.error('Failed');
-	}
-//////  *-------------------------
-	const friendsLit = document.getElementById('profileFriendsList');
-	if (friendsLit){
-		friendsLit.addEventListener('click', () => showFriendsList());
-	} else {
-		console.log('no friendsLit button found');
-	}
+		console.log('An error while trying to get friends list:', error);
+	} 
 }
 
-// OK
+
+async function showFriendsListButton(friendsBox) {
+	// Button creation
+	const button = document.createElement('button');
+	button.classList.add('btn', 'btn-primary');
+	button.textContent = 'Friends';
+
+	// Insert the button into the html
+	friendsBox.innerHTML = "";
+	friendsBox.appendChild(button);
+
+	// Listen for the click
+	button.addEventListener('click', handleFriendsList);
+}
+
+
 export async function setFriendsBox(username){
 	
 	// get the container here to avoid copy/paste
@@ -148,7 +171,7 @@ export async function setFriendsBox(username){
 		try {
 			// User own the profile page
 			if (await isProfileOwner(username) == true) {
-				// setFriendsList(friendsBox);
+				showFriendsListButton(friendsBox);
 			} else {
 				let event;
 				if (await isAlreadyFriend(username) == true) {

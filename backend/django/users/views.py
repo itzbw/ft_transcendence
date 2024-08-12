@@ -1,7 +1,7 @@
 import os
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, permissions
 
 from django.conf import settings   # upload_avatar
 from django.core.files.storage import default_storage  # upload_avatar
@@ -124,12 +124,13 @@ class CheckFriendshipView(APIView):
 
 
 class FriendsListView(APIView):
+
+	permission_classes = [permissions.IsAuthenticated]
+
 	def get(self, request):
 		user = request.user
-		if user.is_authenticated:
-			friends_list = [{'username': friend.username} for friend in user.friends.all()]
-			return Response(friends_list, status=status.HTTP_200_OK)
-		return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+		friends_list = [{'username': friend.username} for friend in user.friends.all()]
+		return Response(friends_list, status=status.HTTP_200_OK)
 
 
 class AddFriendView(APIView):

@@ -26,6 +26,7 @@ const translations =
 		totalwon: 'Total won',
 		totallost: 'Total lost',
 		winrate: 'Win rate',
+		friendslist: 'Friends List',
 		removefriend: 'Remove Friend',
 		addfriend: "Add Friend"
 		
@@ -56,6 +57,7 @@ const translations =
 		totalwon: 'Total gagné',
 		totallost: 'Total perdu',
 		winrate: 'Taux de victoire',
+		friendslist: 'Liste d\'amis',
 		removefriend: 'Retirer Ami',
 		addfriend: "Ajouter Ami"
 	},
@@ -85,6 +87,7 @@ const translations =
 		totalwon: '总胜场',
 		totallost: '总负场',
 		winrate: '胜率',
+		friendslist: '好友列表',
 		removefriend: '移除好友',
 		addfriend: "添加好友"
 	},
@@ -114,6 +117,7 @@ const translations =
 		totalwon: '総勝利数',
 		totallost: '総敗北数',
 		winrate: '勝率',
+		friendslist: '友達リスト',
 		removefriend: '友達を削除',
 		addfriend: "友達を追加"
 	}

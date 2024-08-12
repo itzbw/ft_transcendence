@@ -26,7 +26,7 @@ async function changeAvatar(username){
 	if (modal) {
 		modal.click();
 	}
-	console.log(username, "requested a change of avatar");
+	
 
 	// load the confirm button and set it as disabled
 	const confirmButton = document.getElementById('changeAvatarConfirmButton');
@@ -78,32 +78,32 @@ async function changeAvatar(username){
 
 	// Handle the confirm button click
 	if (confirmButton) {
-        confirmButton.addEventListener('click', async function(){
-            if (selectedFile) {
-                const formData = new FormData();
-                formData.append('avatar', selectedFile);
-                
-                try {
-                    const response = await fetch(`/api/users/upload_avatar/${username}/`, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRFToken': getCookie('csrftoken')
-                        }
-                    });
-                    
-                    if (response.ok) {
-                        console.log('Avatar uploaded successfully!');
+		confirmButton.addEventListener('click', async function(){
+			if (selectedFile) {
+				const formData = new FormData();
+				formData.append('avatar', selectedFile);
+				
+				try {
+					const response = await fetch(`/api/users/upload_avatar/${username}/`, {
+						method: 'POST',
+						body: formData,
+						headers: {
+							'X-CSRFToken': getCookie('csrftoken')
+						}
+					});
+					
+					if (response.ok) {
+						console.log('Avatar uploaded successfully!');
 						showUserProfile(username);
-                    } else {
-                        console.error('Failed to upload avatar');
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-            }
-        });
-    }
+					} else {
+						console.error('Failed to upload avatar');
+					}
+				} catch (error) {
+					console.error('Error:', error);
+				}
+			}
+		});
+	}
 }
 
 
