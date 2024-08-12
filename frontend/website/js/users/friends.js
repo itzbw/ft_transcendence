@@ -26,6 +26,7 @@ async function isAlreadyFriend(username) {
 }
 
 
+// Handle the events when click on the ADD button or REMOVE button
 async function handleAddRemoveEvents(event, username) {
 	const button = document.getElementById(event + 'FriendButton');
 	button.addEventListener('click', async function() {
@@ -73,6 +74,7 @@ function showAddRemoveFriendButton(event, friendsBox) {
 }
 
 
+// create a div for a friend and listen for click on it
 function addFriendItem(username) {
 	let div = document.createElement('div');
 	div.textContent = username;
@@ -84,6 +86,7 @@ function addFriendItem(username) {
 }
 
 
+// Get friends list from backend and insert it into the modal
 function fillFriendsList(data) {
 	const friendsListBody = document.getElementById('friendsListBody');
 
@@ -116,6 +119,7 @@ function fillFriendsList(data) {
 }
 
 
+// Handle the click on the Friends button
 async function handleFriendsList(){
 	await loadContent('static/users/friends.html', 'emptyModal', applyLanguage);
 	const modal = document.getElementById('friendsListModal');
@@ -145,6 +149,7 @@ async function handleFriendsList(){
 }
 
 
+// Display the "Friends" button
 async function showFriendsListButton(friendsBox) {
 	// Button creation
 	const button = document.createElement('button');
