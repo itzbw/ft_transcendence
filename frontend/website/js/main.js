@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 	
 	// load the header
 	await setHeader(status);
-
+	history.pushState({ page: '' }, '', '');
 	// if not authenticated, load the login page
 	if (!status.isAuthenticated) {
 		setupLogin('init');
@@ -28,4 +28,3 @@ document.addEventListener('DOMContentLoaded', async function() {
 		setInterval(PingServer, 60000);  // ping every 60 sec
 	}
 });
-

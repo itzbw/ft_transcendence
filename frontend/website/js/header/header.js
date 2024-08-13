@@ -11,7 +11,10 @@ function setHeaderEvents(username){
 	// Profile button
 	const profileButton = document.getElementById('profileButton');
 	if (profileButton) {
-		profileButton.addEventListener('click', () => showUserProfile(username));
+		profileButton.addEventListener('click', () => {
+			showUserProfile(username);
+			history.pushState({ page: 'profile', username: username }, '', '#profile');
+		});
 	} else {
 		console.log('no profile button found');
 	}
@@ -22,7 +25,10 @@ function setHeaderEvents(username){
 	// Leaderboard button
 	const leaderboardButton = document.getElementById('leaderboardButton');
 	if (leaderboardButton) {
-		leaderboardButton.addEventListener('click', leaderboard);
+		leaderboardButton.addEventListener('click', () => {
+			history.pushState({ page: 'leaderboard' }, '', '#leaderboard');
+			leaderboard();
+		});
 	} else {
 		console.log("leaderboard button not found");
 	}
@@ -45,3 +51,26 @@ export async function setHeader(status){
 		await loadContent('static/header/header_mini.html', 'header', applyLanguage)
 	}
 }
+
+// Handling popstate
+window.addEventListener('popstate', (event) => {
+	if (event.state) {
+		const page = event.state.page;
+		const username = event.state.username;
+
+		switch(page) {
+			case 'profile':
+				if (username) {
+					showUserProfile(username);  // assuming username is stored somewhere globally
+				} else {
+					console.log("no user found with this name");
+				}
+				break;
+			case 'leaderboard':
+				leaderboard();
+				break;
+			default:
+				document.getElementById('main-box').innerHTML = ''; // Default to main menu
+		}
+	}
+});
