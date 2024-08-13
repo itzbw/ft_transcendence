@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import dat from 'https://cdn.skypack.dev/dat.gui';
+// import dat from 'https://cdn.skypack.dev/dat.gui';
+import dat from "./lib/dat.gui.js"
 
 
 const url = new URL(window.location.href);
@@ -8,6 +9,7 @@ const playersRaw = url.searchParams.get("players")
 const players = JSON.parse(playersRaw)
 const leftScoreElement = document.createElement('div');
 const rightScoreElement = document.createElement('div');
+const instructionElement = document.createElement('div');
 const winnerElement = document.createElement('div');
 let scene = null;
 let animFrameId = null;
@@ -100,7 +102,7 @@ function loadPongvsMan() {
   // Score
   let leftScore = 0
   let rightScore = 0;
-  const scoreLimit = 1;
+  const scoreLimit = 7;
 
   /////////////////// HTML Score Showing /////////////////////
   // const leftScoreElement = document.createElement('div');
@@ -121,6 +123,14 @@ function loadPongvsMan() {
   rightScoreElement.innerHTML = 'Right: 0';
   document.body.appendChild(rightScoreElement);
 
+  instructionElement.style.position = "absolute";
+  instructionElement.style.top = "80%";
+  instructionElement.style.left = "40%";
+  instructionElement.style.color = "white";
+  instructionElement.style.fontSize = "18px";
+  instructionElement.innerHTML = "use W & S or ⬆ & ⬇ to control <br\> First score 7 to win ";
+  document.body.appendChild(instructionElement);
+
   // const winnerElement = document.createElement('div');
   winnerElement.style.position = 'absolute';
   winnerElement.style.top = '50%';
@@ -140,11 +150,11 @@ function loadPongvsMan() {
   ///Paddle Size Change//
   gui.add(groupPaddle.scale, 'z', 0.2, 0.75).name('Paddle Size');
   // Ball Size chnage
-  // gui
-  //   .add(sphereData, 'radius', 0.3, 1)
-  //   .name('Ball size')
-  //   .onChange(redraw)
-  //   .onFinishChange(() => console.dir(ball.geometry))
+  gui
+    .add(sphereData, 'radius', 0.3, 1)
+    .name('Ball size')
+    .onChange(redraw)
+    .onFinishChange(() => console.dir(ball.geometry))
 
   // Board wireframe
   gui.add(board.material, 'wireframe').name('Board Wireframe');

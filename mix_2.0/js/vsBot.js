@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import dat from 'https://cdn.skypack.dev/dat.gui';
-
+// import dat from 'https://cdn.skypack.dev/dat.gui';
+import dat from "./lib/dat.gui.js"
 
 const url = new URL(window.location.href);
 const playersRaw = url.searchParams.get("players")
@@ -108,7 +108,7 @@ function loadVsBotGame() {
   // Score
   let leftScore = 0
   let rightScore = 0;
-  const scoreLimit = 1;
+  const scoreLimit = 7;
 
 
 
@@ -131,7 +131,13 @@ function loadVsBotGame() {
   rightScoreElement.innerHTML = 'Marvin: 0';
   document.body.appendChild(rightScoreElement);
 
-  instructionElement.style.position = 'absolute';
+  instructionElement.style.position = "absolute";
+  instructionElement.style.top = "80%";
+  instructionElement.style.left = "40%";
+  instructionElement.style.color = "white";
+  instructionElement.style.fontSize = "18px";
+  instructionElement.innerHTML = "use W & S or ⬆ & ⬇ to control <br\> First score 7 to win ";
+  document.body.appendChild(instructionElement);
 
 
   // const winnerElement = document.createElement('vsbotcontent');
@@ -146,7 +152,7 @@ function loadVsBotGame() {
 
 
   /// GUI Panel ///
-  const gui = new dat.GUI({ autoPlace: false, width: 300 });
+  const gui = new dat.GUI({ autoPlace: false });
   gui.close();
   gui.domElement.id = 'gui';
   gui_container.appendChild(gui.domElement);
@@ -159,7 +165,7 @@ function loadVsBotGame() {
     .add(sphereData, 'radius', 0.3, 1)
     .name('Ball size')
     .onChange(redraw)
-    .onFinishChange(() => console.dir(ball.geometry))
+  // .onFinishChange(() => console.dir(ball.geometry))
 
   // Board wireframe
   gui.add(board.material, 'wireframe').name('Board Wireframe');
@@ -449,10 +455,11 @@ window.destroy = function () {
   leftScoreElement.innerHTML = "";
   winnerElement.innerHTML = "";
   winnerElement.style.display = 'none';
+  instructionElement.parentElement.removeChild(instructionElement);
   scene.remove.apply(scene, scene.children)
   cancelAnimationFrame(animFrameId)
   gui.parentElement.removeChild(gui)
-  console.log("destroy");
+  // console.log("destroy");
 
 }
 
@@ -460,7 +467,7 @@ window.loadNextMatch = function () {
 
   loadVsBotGame();
 
-  console.log("load Next Match");
+  // console.log("load Next Match");
 
 }
 

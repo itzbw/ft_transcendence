@@ -1,6 +1,7 @@
-import dat from "https://cdn.skypack.dev/dat.gui";
+// import dat from "https://cdn.skypack.dev/dat.gui";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import dat from "./lib/dat.gui.js"
 
 const url = new URL(window.location.href);
 const playersRaw = url.searchParams.get("players");
@@ -13,7 +14,7 @@ let scene = null;
 let animFrameId = null;
 let leftScore = 0;
 let rightScore = 0;
-const scoreLimit = 1;
+const scoreLimit = 7;
 let leftPlayer = null;
 let rightPlayer = null;
 
@@ -140,7 +141,7 @@ function loadGameTournament() {
     instructionElement.style.left = "40%";
     instructionElement.style.color = "white";
     instructionElement.style.fontSize = "18px";
-    instructionElement.innerHTML = "use W & S | ⬆ & ⬇ to control";
+    instructionElement.innerHTML = "use W & S or ⬆ & ⬇ to control <br\> First score 7 to win ";
     document.body.appendChild(instructionElement);
 
     leftScoreElement.style.position = "absolute";
