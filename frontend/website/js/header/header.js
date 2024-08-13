@@ -1,8 +1,8 @@
-import { loadContent } from "../tools.js";
-import { applyLanguage } from "../language.js";
+import { loadContent } from "../tools/tools.js";
+import { applyLanguage } from "../tools/language.js";
 import { doLogout } from "../auth/logout.js";
 import { showUserProfile } from "../users/user_profile.js";
-import { leaderboard } from "../leaderboard.js";
+import { leaderboard } from "../game/leaderboard.js";
 
 
 // Sets events listeners for the header's buttons
@@ -35,11 +35,6 @@ function setHeaderEvents(username){
 		console.log("logout button not found");
 	}
 }
-
-
-
-
-
 
 // Load the correct header
 export async function setHeader(status){

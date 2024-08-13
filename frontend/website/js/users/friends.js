@@ -1,5 +1,5 @@
-import { applyLanguage } from '../language.js';
-import { getCookie, loadContent, setAttribute} from '../tools.js'
+import { applyLanguage } from '../tools/language.js';
+import { getCookie, loadContent, setAttribute} from '../tools/tools.js'
 import { isProfileOwner, showUserProfile} from './user_profile.js';
 
 // check if the user is already in friends list

@@ -1,6 +1,6 @@
-import { loadContent, getCookie } from './tools.js';
-import { applyLanguage } from './language.js';
-import { showUserProfile } from './users/user_profile.js';
+import { loadContent, getCookie } from '../tools/tools.js';
+import { applyLanguage } from '../tools/language.js';
+import { showUserProfile } from '../users/user_profile.js';
 
 async function getRawLeaderboardData() {
 	const response = await fetch('/api/users/leaderboard/', {

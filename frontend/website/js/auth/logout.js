@@ -1,4 +1,4 @@
-import { getCookie } from "../tools.js";
+import { getCookie } from "../tools/tools.js";
 
 export function doLogout() {
 

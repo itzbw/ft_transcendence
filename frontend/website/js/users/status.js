@@ -1,4 +1,4 @@
-import { applyLanguage } from "../language.js";
+import { applyLanguage } from "../tools/language.js";
 
 export function showUserStatus(status) {
 	const icon = document.createElement('i');

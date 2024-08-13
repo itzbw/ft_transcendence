@@ -15,26 +15,11 @@ const routes = {
 		title: "Front | " + urlPageTitle,
 		description: "This is the home page",
 	},
-	"profile": {
-		template: "/templates/profile.html",
-		title: "Profile | " + urlPageTitle,
-		description: "This is the Profile page",
-	},
 	"gamemenu": {
 		template: "/templates/gamemenu.html",
 		title: "Game Menu | " + urlPageTitle,
 		description: "This is the leaderboard page",
-	},
-	"leaderboard": {
-		template: "/templates/leaderboard.html",
-		title: "Leaderboard | " + urlPageTitle,
-		description: "This is the leaderboard page",
-	},
-	"chat": {
-		template: "/templates/chat.html",
-		title: "Chat | " + urlPageTitle,
-		description: "This is the chat page",
-	},
+	}
 	"pongvsbot": {
 		template: "/templates/pongvsbot.html",
 		title: "Pong vs Bot | " + urlPageTitle,
@@ -75,7 +60,7 @@ export const locationHandler = async () => {
 	// set the description of the document to the description of the route
 	document
 		.querySelector('meta[name="description"]')
-		.setAttribute("main-window", route.description);
+		.setAttribute("main-box", route.description);
 };
 
 

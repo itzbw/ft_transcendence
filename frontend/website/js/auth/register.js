@@ -1,5 +1,5 @@
-import { loadContent, getCookie } from "../tools.js";
-import { applyLanguage } from "../language.js";
+import { loadContent, getCookie } from "../tools/tools.js";
+import { applyLanguage } from "../tools/language.js";
 import { setupLogin } from "./login.js"; 
 
 // Check if fields are correctly filled
