@@ -1,3 +1,6 @@
+// tools
+import { PingServer } from './tools.js';
+
 // header
 import { setHeader } from './header/header.js';
 
@@ -17,8 +20,12 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 	// if not authenticated, load the login page
 	if (!status.isAuthenticated) {
-		console.log("no user authenticated");
 		setupLogin('init');
+
+	// if authenticated, ping server frequently
+	} else {
+		PingServer();  // immediate ping after login
+		setInterval(PingServer, 60000);  // ping every 60 sec
 	}
 });
 

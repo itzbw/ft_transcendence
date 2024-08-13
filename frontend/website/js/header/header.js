@@ -49,5 +49,4 @@ export async function setHeader(status){
 	} else {
 		await loadContent('static/header/header_mini.html', 'header', applyLanguage)
 	}
-	console.log("header loaded");
 }

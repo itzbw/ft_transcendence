@@ -106,3 +106,21 @@ export function setAttribute(elementId, attributeName, attributeValue) {
         element.setAttribute(attributeName, attributeValue);
     }
 }
+
+
+export async function PingServer() {
+	try {
+		const response = await fetch('/api/users/update_status', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRFToken': getCookie('csrftoken')  // Assure-toi d'avoir une fonction getCookie qui fonctionne
+			}
+		});
+		if (!response.ok) {
+			console.error('Failed to update status');
+		}
+	} catch (error) {
+		console.error('Error during status update:', error);
+	}
+}
