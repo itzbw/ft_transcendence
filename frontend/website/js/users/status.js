@@ -4,7 +4,6 @@ export function showUserStatus(status) {
 	const icon = document.createElement('i');
 	const text = document.createElement('div');
 	
-	console.log("is online?", status);
 	if (status) {
 		icon.classList.add('bi', 'bi-circle-fill', 'text-success');
 		text.classList.add('text-success', 'text-uppercase');

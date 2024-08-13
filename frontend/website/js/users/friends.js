@@ -125,7 +125,6 @@ async function handleFriendsList(){
 	const modal = document.getElementById('friendsListModal');
 	if (modal){
 		modal.click();
-		console.log("opening friends list");
 	}
 
 	try {
