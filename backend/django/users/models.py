@@ -17,6 +17,9 @@ class SiteUser(AbstractUser):
 	# Friends
 	friends = models.ManyToManyField('self', symmetrical=False, blank=True)
 
+	# Field to track last activity
+	last_active = models.DateTimeField(null=True, blank=True)
+
 	# Override SiteUser.save() to get the date creation
 	def save(self, *args, **kwargs):
 		if not self.id:  # If user is new
@@ -38,3 +41,11 @@ class SiteUser(AbstractUser):
 			self.save()
 		else:
 			raise ValueError("This user is not in your friends list")
+		
+	def is_online(self):
+		if self.last_active:
+			now = timezone.now()
+			# Considered online if last activity was within 60 seconds
+			return (now - self.last_active).total_seconds() < 60
+		return False
+

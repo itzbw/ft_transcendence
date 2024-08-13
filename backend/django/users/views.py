@@ -6,6 +6,8 @@ from rest_framework import status, permissions
 from django.conf import settings   # upload_avatar
 from django.core.files.storage import default_storage  # upload_avatar
 from django.core.exceptions import ValidationError  # UserProfileView -> post
+from django.contrib.auth.decorators import login_required # Regular ping
+from django.utils import timezone # Regular ping
 from django.views import View
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -29,6 +31,7 @@ class UserProfileView(View):
 			"totalPlayed": user.totalPlayed,
 			"totalWon": user.totalWon,
 			"totalLost": user.totalLost,
+			"is_online": user.is_online(),
 		}
 		return JsonResponse(data)
 
@@ -180,3 +183,12 @@ def leaderboard(request):
 		for user in users
 	]
 	return JsonResponse(data, safe=False)
+
+
+@login_required
+def update_last_active(request):
+	user = request.user
+	user.last_active = timezone.now()
+	user.save()
+	return JsonResponse({'status': 'success', 'last_active': user.last_active})
+

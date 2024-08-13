@@ -3,6 +3,7 @@ import { applyLanguage } from "../language.js";
 import { checkLoginStatus } from "../auth/status.js";
 import { setupChangeAvatar, showAvatar } from "./handle_avatar.js";
 import { setFriendsBox } from "./friends.js";
+import { showUserStatus } from "./status.js";
 
 export async function isProfileOwner(profileUsername) {
 	const data = await checkLoginStatus();
@@ -127,6 +128,7 @@ export async function showUserProfile(profileUsername) {
 			if (response.ok) {
 				const data = await response.json();
 				showAvatar(data.avatar, 'profileAvatar');
+				showUserStatus(data.is_online);
 				setOverallStats(data);
 				setFriendsBox(profileUsername);
 				if (await isProfileOwner(profileUsername) == true) {

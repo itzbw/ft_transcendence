@@ -42,7 +42,6 @@ function usernameCell(username) {
 
 	element.addEventListener('click', async function() {
 		showUserProfile(username);
-		console.log("click");
 	});
 	return element;
 }
