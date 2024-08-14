@@ -91,7 +91,7 @@ function loadPongvsMan() {
   const ball = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
   // Add the sphere to the scene
-  ball.position.set(0, 0.1, 0); // Position it at the center of the board
+  ball.position.set(0, 0.3, 0); // Position it at the center of the board
   scene.add(ball);
 
   // variable for ball movement
@@ -259,7 +259,7 @@ function loadPongvsMan() {
 
   // reset ball
   function resetBall() {
-    ball.position.set(0, 0.1, 0);
+    ball.position.set(0, 0.3, 0);
     ballDirX = (Math.random() > 0.5 ? 0.1 : -0.1); // random direction
     ballDirZ = (Math.random() - 0.5) * 0.2;; // random direction
   }
@@ -287,17 +287,17 @@ function loadPongvsMan() {
     }
 
     // check winner
-    if (leftScore >= scoreLimit) {
-      winnerElement.innerHTML = 'Left Player Wins!';
-      winnerElement.style.display = 'block';
-      //setTimeout(resetGame, 3000);
-      return;
-    } else if (rightScore >= scoreLimit) {
-      winnerElement.innerHTML = 'Right Player Wins!';
-      winnerElement.style.display = 'block';
-      //setTimeout(resetGame, 3000);
-      return;
-    }
+    // if (leftScore >= scoreLimit) {
+    //   winnerElement.innerHTML = 'Left Player Wins!';
+    //   winnerElement.style.display = 'block';
+    //   //setTimeout(resetGame, 3000);
+    //   return;
+    // } else if (rightScore >= scoreLimit) {
+    //   winnerElement.innerHTML = 'Right Player Wins!';
+    //   winnerElement.style.display = 'block';
+    //   //setTimeout(resetGame, 3000);
+    //   return;
+    // }
 
 
     // Paddle movement based on key states

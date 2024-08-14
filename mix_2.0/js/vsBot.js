@@ -95,7 +95,7 @@ function loadVsBotGame() {
   const ball = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
   // Add the sphere to the scene
-  ball.position.set(0, 0.1, 0); // Position it at the center of the board
+  ball.position.set(0, 0.3, 0); // Position it at the center of the board
   scene.add(ball);
 
 
@@ -276,7 +276,7 @@ function loadVsBotGame() {
 
   // reset ball
   function resetBall() {
-    ball.position.set(0, 0.1, 0);
+    ball.position.set(0, 0.3, 0);
     ballDirX = (Math.random() > 0.5 ? 0.1 : -0.1); // random direction
     ballDirZ = (Math.random() - 0.5) * 0.2;; // random direction
   }
@@ -304,20 +304,20 @@ function loadVsBotGame() {
       return "<br/> <button onmousedown='loadNextMatch(); '>Retry</button > ";
     }
 
-    // check winner
-    if (leftScore >= scoreLimit) {
-      winnerElement.innerHTML = 'Left Player Wins!';
-      winnerElement.style.display = 'block';
-      //setTimeout(resetGame, 3000);
-      //resetGame();
-      return;
-    } else if (rightScore >= scoreLimit) {
-      winnerElement.innerHTML = 'Right Player Wins!';
-      winnerElement.style.display = 'block';
-      //setTimeout(resetGame, 3000);
-      //resetGame();
-      return;
-    }
+    ////// check winner /////
+    // if (leftScore >= scoreLimit) {
+    //   winnerElement.innerHTML = 'Left Player Wins!';
+    //   winnerElement.style.display = 'block';
+    //   //setTimeout(resetGame, 3000);
+    //   //resetGame();
+    //   return;
+    // } else if (rightScore >= scoreLimit) {
+    //   winnerElement.innerHTML = 'Right Player Wins!';
+    //   winnerElement.style.display = 'block';
+    //   //setTimeout(resetGame, 3000);
+    //   //resetGame();
+    //   return;
+    // }
 
 
 
@@ -403,7 +403,7 @@ function loadVsBotGame() {
 
 
 
-
+// this function to show the user who won the match and the score
     function onGoal() {
       const leftWon = leftScore >= scoreLimit;
       const rightWon = rightScore >= scoreLimit;
@@ -417,7 +417,7 @@ function loadVsBotGame() {
 
 
 
-    // if ball goes beyond letf or right edeg, score ++ 
+    // if ball goes beyond letf or right edge, score ++ 
     if (ball.position.x + sphereData.radius > boardWidth / 2) {
       // Left player scores
       leftScore += 1;
