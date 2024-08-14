@@ -1,8 +1,6 @@
 import { loadContent } from "../tools/tools.js";
 import { applyLanguage } from "../tools/language.js";
 import { doLogout } from "../auth/logout.js";
-import { showUserProfile } from "../users/user_profile.js";
-import { leaderboard } from "../users/leaderboard.js";
 
 
 // Sets events listeners for the header's buttons (profile and logout)
