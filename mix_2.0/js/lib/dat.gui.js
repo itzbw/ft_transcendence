@@ -1192,7 +1192,7 @@ var FunctionController = function (_Controller) {
         _this2.__button = document.createElement("div");
         _this2.__button.innerHTML = text === void 0 ? "Fire" : text;
         dom.bind(_this2.__button, "click", function (e) {
-            e.preventDefault();
+            // e.preventDefault();
             _this.fire();
             return false;
         });
@@ -1368,7 +1368,7 @@ var ColorController = function (_Controller) {
         _this2.updateDisplay();
         function setSV(e) {
             if (e.type.indexOf("touch") === -1) {
-                e.preventDefault();
+                // e.preventDefault();
             }
             var fieldRect = _this.__saturation_field.getBoundingClientRect();
             var _ref = e.touches && e.touches[0] || e, clientX = _ref.clientX, clientY = _ref.clientY;
@@ -1391,7 +1391,7 @@ var ColorController = function (_Controller) {
         }
         function setH(e) {
             if (e.type.indexOf("touch") === -1) {
-                e.preventDefault();
+                // e.preventDefault();
             }
             var fieldRect = _this.__hue_field.getBoundingClientRect();
             var _ref2 = e.touches && e.touches[0] || e, clientY = _ref2.clientY;
@@ -1797,7 +1797,7 @@ var GUI = function GUI2(pars) {
         dom.addClass(titleRowName, "controller-name");
         titleRow = addRow(_this, titleRowName);
         var onClickTitle = function onClickTitle2(e) {
-            e.preventDefault();
+            // e.preventDefault();
             _this.closed = !_this.closed;
             return false;
         };
@@ -2370,7 +2370,7 @@ function addResizeHandle(gui2) {
         position: "absolute"
     });
     function drag(e) {
-        e.preventDefault();
+        // e.preventDefault();
         gui2.width += pmouseX - e.clientX;
         gui2.onResize();
         pmouseX = e.clientX;
@@ -2382,7 +2382,7 @@ function addResizeHandle(gui2) {
         dom.unbind(window, "mouseup", dragStop);
     }
     function dragStart(e) {
-        e.preventDefault();
+        // e.preventDefault();
         pmouseX = e.clientX;
         dom.addClass(gui2.__closeButton, GUI.CLASS_DRAG);
         dom.bind(window, "mousemove", drag);
