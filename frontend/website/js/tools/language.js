@@ -30,8 +30,11 @@ const translations =
 		winrate: 'Win rate',
 		friendslist: 'Friends List',
 		removefriend: 'Remove Friend',
-		addfriend: "Add Friend"
-		
+		addfriend: "Add Friend",
+		selectgamemode: 'Select game mode',
+		versusbot: 'Versus Bot',
+		versushuman: 'Versus Human',
+		tournament: 'Tournament'
 	},
 	fr: {
 		profile: 'Profil',
@@ -63,7 +66,11 @@ const translations =
 		winrate: 'Taux de victoire',
 		friendslist: 'Liste d\'amis',
 		removefriend: 'Retirer Ami',
-		addfriend: "Ajouter Ami"
+		addfriend: "Ajouter Ami",
+		selectgamemode: 'Sélectionner le mode de jeu',
+		versusbot: 'Contre un bot',
+		versushuman: 'Contre un humain',
+		tournament: 'Tournoi'
 	},
 	ch: {
 		profile: '个人资料',
@@ -95,7 +102,11 @@ const translations =
 		winrate: '胜率',
 		friendslist: '好友列表',
 		removefriend: '移除好友',
-		addfriend: "添加好友"
+		addfriend: "添加好友",
+		selectgamemode: '选择游戏模式',
+		versusbot: '对战机器人',
+		versushuman: '对战真人',
+		tournament: '锦标赛'
 	},
 	jp: {
 		profile: 'プロフィール',
@@ -127,7 +138,11 @@ const translations =
 		winrate: '勝率',
 		friendslist: '友達リスト',
 		removefriend: '友達を削除',
-		addfriend: "友達を追加"
+		addfriend: "友達を追加",
+		selectgamemode: 'ゲームモードを選択',
+		versusbot: 'ボット対戦',
+		versushuman: '人間対戦',
+		tournament: 'トーナメント'
 	}
 };
 

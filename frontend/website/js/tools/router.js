@@ -1,6 +1,6 @@
 import { showUserProfile } from "../users/user_profile.js";
 import { leaderboard } from "../users/leaderboard.js";
-
+import { setGameModeSelection } from "../game/select_game_mode.js";
 
 
 // when hash is changed, will launch the concerned page
@@ -11,14 +11,37 @@ export function router() {
 		const hash = window.location.hash;
 	
 		switch (true) {
+
+			// profile
 			case hash.startsWith('#profile/'):
 				const prefixLength = '#profile/'.length;
 				const username = hash.substring(prefixLength);
 				showUserProfile(username);
 				break;
+
+			// leaderboard
 			case hash === '#leaderboard':
 				leaderboard();
 				break;
+
+			// game mode selection
+			case hash === '#game-menu':
+				setGameModeSelection();
+				break;
+
+			// pong VS bot
+			case hash === "#pongvsbot":
+				break;
+
+			// pong VS man
+			case hash === "#pongvsman":
+				break;
+
+			// tournament
+			case hash === "#pongvsman":
+				break;
+
+			// default
 			default:
 				document.getElementById('main-box').innerHTML = ''; // Default to main menu
 		}
