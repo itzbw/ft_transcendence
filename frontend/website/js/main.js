@@ -1,6 +1,9 @@
 // tools
 import { PingServer } from './tools/tools.js';
 
+// router
+import { router } from './tools/router.js'
+
 // header
 import { setHeader } from './header/header.js';
 
@@ -14,10 +17,13 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 	// check if user is authenticated
 	const status = await checkLoginStatus();
-	
+
 	// load the header
 	await setHeader(status);
-	history.pushState({ page: '' }, '', '');
+
+	// launch the routing
+	router();
+
 	// if not authenticated, load the login page
 	if (!status.isAuthenticated) {
 		setupLogin('init');
@@ -28,3 +34,4 @@ document.addEventListener('DOMContentLoaded', async function() {
 		setInterval(PingServer, 60000);  // ping every 60 sec
 	}
 });
+

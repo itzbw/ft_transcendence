@@ -114,6 +114,7 @@ export async function showUserProfile(profileUsername) {
 	const profileUrl = "/api/users/" + profileUsername + "/";
 
 	try {
+		// load the template
 		await loadContent('static/users/user_profile.html', 'main-box', applyLanguage);
 
 		try {

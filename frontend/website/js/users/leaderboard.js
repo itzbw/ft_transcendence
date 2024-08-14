@@ -41,6 +41,8 @@ function usernameCell(username) {
 	element.classList.add("text-center");
 
 	element.addEventListener('click', async function() {
+		// set the history state
+		history.pushState({ page: 'profile'}, '', `#profile/${username}`);
 		showUserProfile(username);
 	});
 	return element;
@@ -81,8 +83,8 @@ async function fillLeaderboard(data) {
 	});
 }
 
-
 export async function leaderboard() {
+
 	await loadContent('/static/leaderboard.html', 'main-box', applyLanguage);
 	try {
 		const data = await getRawLeaderboardData();
