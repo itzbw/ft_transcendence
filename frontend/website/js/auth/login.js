@@ -16,14 +16,13 @@ async function doLogin() {
 				
 				const username = document.getElementById('username').value;
 				const password = document.getElementById('password').value;
-				const csrftoken = getCookie('csrftoken');
 				
 				try {
 					const response = await fetch('/api/authentication/login/', {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json',
-							'X-CSRFToken': csrftoken,
+							'X-CSRFToken': getCookie('csrftoken'),
 						},
 						body: JSON.stringify({ username, password }),
 					});

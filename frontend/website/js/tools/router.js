@@ -39,7 +39,7 @@ export function router() {
 				break;
 
 			// tournament
-			case hash === "#pongvsman":
+			case hash === "#tournament":
 				break;
 
 			// default

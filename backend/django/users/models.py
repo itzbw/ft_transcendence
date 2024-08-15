@@ -49,3 +49,16 @@ class SiteUser(AbstractUser):
 			return (now - self.last_active).total_seconds() < 60
 		return False
 
+
+class Game(models.Model):
+	player1 = models.ForeignKey(SiteUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='games_as_player1')
+	player1_name = models.CharField(max_length=100, blank=True)  # store the name if player1 is None
+	player1_score = models.IntegerField()
+	
+	player2 = models.ForeignKey(SiteUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='games_as_player2')
+	player2_name = models.CharField(max_length=100, blank=True)  # store the name if player2 is None
+	player2_score = models.IntegerField()
+
+	# Stores the date the game was played
+	date_played = models.DateTimeField(auto_now_add=True)
+

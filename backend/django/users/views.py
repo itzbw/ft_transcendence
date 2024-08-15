@@ -11,7 +11,7 @@ from django.utils import timezone # Regular ping
 from django.views import View
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from .models import SiteUser
+from .models import SiteUser, Game
 
 
 class UserProfileView(View):
@@ -32,6 +32,7 @@ class UserProfileView(View):
 			"totalWon": user.totalWon,
 			"totalLost": user.totalLost,
 			"is_online": user.is_online(),
+			# "games": user.games(),
 		}
 		return JsonResponse(data)
 
@@ -192,3 +193,33 @@ def update_last_active(request):
 	user.save()
 	return JsonResponse({'status': 'success', 'last_active': user.last_active})
 
+
+class SaveGameView(APIView):
+	def post(self, request):
+		data = request.data
+
+		# Extract data from the request
+		player1_name = data.get('player1Name')
+		player1_score = data.get('player1Score')
+		player2_name = data.get('player2Name')
+		player2_score = data.get('player2Score')
+
+		# Check if users exist
+		player1 = SiteUser.objects.filter(username=player1_name).first()
+		player2 = SiteUser.objects.filter(username=player2_name).first()
+
+		# If no existing user, saving game is not needed
+		if not player1 and not player2:
+			return Response({'message': data}, status=status.HTTP_201_CREATED)
+
+		# Create and save the "Game"
+		game = Game.objects.create(
+			player1=player1,
+			player1_name=player1_name if not player1 else '',
+			player1_score=player1_score,
+			player2=player2,
+			player2_name=player2_name if not player2 else '',
+			player2_score=player2_score
+		)
+
+		return Response({'message': 'Game saved successfully!'}, status=status.HTTP_201_CREATED)

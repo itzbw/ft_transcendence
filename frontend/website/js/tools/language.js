@@ -34,7 +34,9 @@ const translations =
 		selectgamemode: 'Select game mode',
 		versusbot: 'Versus Bot',
 		versushuman: 'Versus Human',
-		tournament: 'Tournament'
+		tournament: 'Tournament',
+		playagain: 'Play again',
+		wins: ' wins this game !'
 	},
 	fr: {
 		profile: 'Profil',
@@ -70,7 +72,9 @@ const translations =
 		selectgamemode: 'Sélectionner le mode de jeu',
 		versusbot: 'Contre un bot',
 		versushuman: 'Contre un humain',
-		tournament: 'Tournoi'
+		tournament: 'Tournoi',
+		playagain: 'Rejouer',
+		wins: ' remporte cette partie !',
 	},
 	ch: {
 		profile: '个人资料',
@@ -106,7 +110,9 @@ const translations =
 		selectgamemode: '选择游戏模式',
 		versusbot: '对战机器人',
 		versushuman: '对战真人',
-		tournament: '锦标赛'
+		tournament: '锦标赛',
+		playagain: '再玩一次',
+		wins: ' 赢得了这场比赛！'
 	},
 	jp: {
 		profile: 'プロフィール',
@@ -142,7 +148,9 @@ const translations =
 		selectgamemode: 'ゲームモードを選択',
 		versusbot: 'ボット対戦',
 		versushuman: '人間対戦',
-		tournament: 'トーナメント'
+		tournament: 'トーナメント',
+		playagain: 'もう一度プレイ',
+		wins: ' このゲームに勝ちました！'
 	}
 };
 
