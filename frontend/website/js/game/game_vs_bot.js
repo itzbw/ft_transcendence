@@ -414,6 +414,7 @@ export async function loadVsBotGame() {
 	renderer.render(scene, camera);
 	}
 
+	// Avoid the game to still be running if we go on another page (like Profile)
 	window.addEventListener('hashchange', function () {
 		destroy();
 	});
