@@ -14,7 +14,6 @@ import { setupProfile, showUserProfile } from './users/user_profile.js';
 document.addEventListener('DOMContentLoaded', async function () {
 
 	const isLoggedIn = await checkLoginStatus();
-	console.log({ isLoggedIn })
 
 	if (isLoggedIn.isAuthenticated) {
 		await loadContent('static/header/header_full.html', 'header', applyLanguage)

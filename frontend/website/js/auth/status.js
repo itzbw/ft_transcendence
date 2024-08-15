@@ -4,7 +4,7 @@ export async function checkLoginStatus() {
 		const response = await fetch('https://localhost:8000/authentication/status/', {
 			method: 'GET',
 			headers: {
-				Authorization: `Bearer ${jwt}`
+				Authorization: jwt ? `Bearer ${jwt}` : undefined,
 			}
 		});
 
