@@ -4,10 +4,16 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from users.models import SiteUser
+from django.views import View
+from rest_framework_simplejwt.authentication import JWTAuthentication
+import jwt
+from users.models import SiteUser
+
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
@@ -20,20 +26,19 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         
         return data
 
-class LoginView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
-
-@csrf_exempt
-def login_status(request):
-    if request.user.is_authenticated:
-        return JsonResponse({
-            'isAuthenticated': True,
-            'username': request.user.username
-        })
-    else:
-        return JsonResponse({
-            'isAuthenticated': False,
-            'username': None
+class LoginView(View):
+    # serializer_class = CustomTokenObtainPairSerializer
+    @csrf_exempt
+    def get(self, request):
+        if request.user.is_authenticated:
+            return JsonResponse({
+                'isAuthenticated': True,
+                'username': request.user.username
+            })
+        else:
+            return JsonResponse({
+                'isAuthenticated': False,
+                'username': None
         })
 
 def logout_view(request):

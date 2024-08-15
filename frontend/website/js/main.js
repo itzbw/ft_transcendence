@@ -1,7 +1,7 @@
 import { loadContent } from './router.js';
 
 // Translation
-import { applyLanguage} from './language.js';
+import { applyLanguage } from './language.js';
 
 // authentification
 import { checkLoginStatus } from './auth/status.js';
@@ -11,14 +11,16 @@ import { setupLogout } from './auth/logout.js';
 // User profile
 import { setupProfile, showUserProfile } from './users/user_profile.js';
 
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', async function () {
 
 	const isLoggedIn = await checkLoginStatus();
-	
+	console.log({ isLoggedIn })
+
 	if (isLoggedIn.isAuthenticated) {
 		await loadContent('static/header/header_full.html', 'header', applyLanguage)
 		setupLogout();
 		setupProfile(isLoggedIn.username);
+		showUserProfile(isLoggedIn.username);
 	} else {
 		await loadContent('static/header/header_mini.html', 'header', applyLanguage)
 		await setupLogin("init");
@@ -29,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 	// FOR TESTS ONLY  ** TO_REMOVE **
 	// create a button to see another account's profile
 	const test = document.getElementById('testButton');
-	test.addEventListener('click', function(){
+	test.addEventListener('click', function () {
 		showUserProfile("toto");		// Change username HERE
 	});
 });

@@ -1,8 +1,11 @@
 export async function checkLoginStatus() {
+	const jwt = localStorage.getItem('access_token')
 	try {
-		const response = await fetch('/authentication/status/', {
+		const response = await fetch('https://localhost:8000/authentication/status/', {
 			method: 'GET',
-			credentials: 'include'
+			headers: {
+				Authorization: `Bearer ${jwt}`
+			}
 		});
 
 		if (response.ok) {
