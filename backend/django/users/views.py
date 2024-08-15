@@ -32,7 +32,7 @@ class UserProfileView(View):
 			"totalWon": user.totalWon,
 			"totalLost": user.totalLost,
 			"is_online": user.is_online(),
-			# "games": user.games(),
+			"games": user.games(),
 		}
 		return JsonResponse(data)
 

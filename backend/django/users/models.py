@@ -49,6 +49,24 @@ class SiteUser(AbstractUser):
 			return (now - self.last_active).total_seconds() < 60
 		return False
 
+	def games(self):
+
+		games_as_player1 = self.games_as_player1.all()
+		games_as_player2 = self.games_as_player2.all()
+		
+		all_games = games_as_player1.union(games_as_player2).order_by('-date_played')
+
+		games_list = []
+		for game in all_games:
+			games_list.append({
+				'player1_name': game.player1_name if game.player1 is None else game.player1.username,
+				'player1_score': game.player1_score,
+				'player2_name': game.player2_name if game.player2 is None else game.player2.username,
+				'player2_score': game.player2_score,
+				'date_played': game.date_played.strftime('%Y-%m-%d %H:%M:%S')
+			})
+		return games_list
+
 
 class Game(models.Model):
 	player1 = models.ForeignKey(SiteUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='games_as_player1')
