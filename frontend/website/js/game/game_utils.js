@@ -67,7 +67,6 @@ async function saveGameResult(playerOneName, playerOneScore, playerTwoName, play
 			throw new Error('Failed to save game result');
 		}
 		const data = await response.json();
-		console.log(data.message);
 	} catch (error) {
 		console.log('Error when sending score:', error);
 	}

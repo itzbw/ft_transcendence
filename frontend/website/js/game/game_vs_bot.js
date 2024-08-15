@@ -289,7 +289,6 @@ export async function loadVsBotGame() {
 
 	// Render the scene from the perspective of the camera
 	function animate(player) {
-		console.log('Inside player value:', player);
 		animFrameId = requestAnimationFrame(() => animate(player));
 		const delta = clock.getDelta();
 	
@@ -415,23 +414,23 @@ export async function loadVsBotGame() {
 	renderer.render(scene, camera);
 	}
 
+	window.addEventListener('hashchange', function () {
+		destroy();
+	});
+
 	animate(player);
 }
 
 
 
 window.destroy = function () {
-	scene.remove.apply(scene, scene.children)
-	cancelAnimationFrame(animFrameId)
+	scene.remove.apply(scene, scene.children);
+	cancelAnimationFrame(animFrameId);
 	// gui.parentElement.removeChild(gui)
 }
 
 window.loadNextMatch = function () {
-
 	loadVsBotGame();
-
-	// console.log("load Next Match");
-
 }
 
 
