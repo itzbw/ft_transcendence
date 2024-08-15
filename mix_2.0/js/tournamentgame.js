@@ -17,6 +17,8 @@ let rightScore = 0;
 const scoreLimit = 7;
 let leftPlayer = null;
 let rightPlayer = null;
+// Variables to control the animation loop
+let isAnimating = false;
 
 function loadGameTournament() {
     // console.log(url.toString(), "->", playersRaw, "->", players)
@@ -171,12 +173,36 @@ function loadGameTournament() {
 
     /// GUI Panel ///
     const gui = new dat.GUI({ autoPlace: false });
+    const controls = {
+        Start: function () {
+            if (!isAnimating) {
+                // Calculate how much time has passed since the animation was paused
+                clock.start();
+                clock.elapsedTime = pausedTime;
+                isAnimating = true;
+                console.log('Animation started or resumed');
+                animate();  // Start the animation loop
+            }
+        },
+        Pause: function () {
+            if (isAnimating) {
+                isAnimating = false;  // This pauses the animation loop
+                pausedTime = clock.getElapsedTime(); // Store the elapsed time
+                clock.stop();
+                console.log('Animation paused');
+            }
+        }
+    };
+
     gui.close();
     gui.domElement.id = "gui";
     gui_container.appendChild(gui.domElement);
 
+    gui.add(controls, 'Start');
+    gui.add(controls, 'Pause');
+
     ///Paddle Size Change//
-    gui.add(groupPaddle.scale, "z", 0.2, 0.75).name("Paddle Size");
+    gui.add(groupPaddle.scale, "z", 0.5, 1).name("Paddle Size");
 
     // Ball Size chnage
     gui
@@ -245,7 +271,7 @@ function loadGameTournament() {
         mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
     }
 
-    const controls = new OrbitControls(camera, renderer.domElement);
+    const orbitControl = new OrbitControls(camera, renderer.domElement);
 
     // Key states for paddle movement
     const keys = {
@@ -296,134 +322,138 @@ function loadGameTournament() {
     }
 
     const clock = new THREE.Clock();
+    let pausedTime = 0;
 
     // Render the scene from the perspective of the camera
     function animate() {
-        animFrameId = requestAnimationFrame(animate);
-        const delta = clock.getDelta();
+        if (isAnimating) {
+            animFrameId = requestAnimationFrame(animate);
+            const delta = clock.getDelta();
+            const elapsedTime = clock.getElapsedTime();
 
-        function showNextMatch() {
-            return `<br/> <button onmousedown='loadNextMatch(); '> Next Match: ${leftPlayer} vs ${rightPlayer}</button >`;
-        }
-
-        // Paddle movement based on key states
-        const paddleSpeed = 10;
-        if (keys.ArrowUp) {
-            rightPaddle.position.z -= paddleSpeed * delta;
-        }
-        if (keys.ArrowDown) {
-            rightPaddle.position.z += paddleSpeed * delta;
-        }
-        if (keys.KeyW) {
-            leftPaddle.position.z -= paddleSpeed * delta;
-        }
-        if (keys.KeyS) {
-            leftPaddle.position.z += paddleSpeed * delta;
-        }
-
-        // Clamp paddle position within board boundaries
-        const boardHeight = 5;
-        const paddleLength = 1; // Half of the paddle's height for boundary calculation
-        const paddleHalfDepth = paddleDepth / 2;
-        rightPaddle.position.z = THREE.MathUtils.clamp(
-            rightPaddle.position.z,
-            -boardHeight + (boardHeight / 2 + paddleLength / 2),
-            boardHeight - (boardHeight / 2 + paddleLength / 2)
-        );
-        leftPaddle.position.z = THREE.MathUtils.clamp(
-            leftPaddle.position.z,
-            -boardHeight + (boardHeight / 2 + paddleLength / 2),
-            boardHeight - (boardHeight / 2 + paddleLength / 2)
-        );
-
-        const ballSpeed = 20;
-        // ball movement
-        ball.position.x += ballDirX * ballSpeed * delta;
-        ball.position.z += ballDirZ * ballSpeed * delta;
-        // ball self rotation
-        ball.rotation.x += 1 * delta;
-        ball.rotation.y += 1 * delta;
-
-        // ball collision with top and bottom all
-        if (ball.position.z > boardLength / 2 || ball.position.z < -boardLength / 2)
-            ballDirZ = -ballDirZ;
-
-        // ball collision with the paddle
-        const onCollide = () => {
-            if (ballRotationSpd.x) {
-                ballRotationSpd.y = ballRotationSpd.x;
-                ballRotationSpd.x = 0;
-                ballDirX *= 1.2;
-            } else if (ballRotationSpd.y) {
-                ballRotationSpd.z = ballRotationSpd.y;
-                ballRotationSpd.y = 0;
-            } else if (ballRotationSpd.z) {
-                ballRotationSpd.x = ballRotationSpd.z;
-                ballRotationSpd.z = 0;
-                ballDirZ *= 1.2;
+            function showNextMatch() {
+                return `<br/> <button onmousedown='loadNextMatch(); '> Next Match: ${leftPlayer} vs ${rightPlayer}</button >`;
             }
-        };
 
-        // Right paddle
-        if (
-            ball.position.x + sphereData.radius >
-            rightPaddle.position.x - paddleWidth / 2 &&
-            ball.position.z + sphereData.radius >
-            rightPaddle.position.z - paddleDepth / 2 &&
-            ball.position.z - sphereData.radius <
-            rightPaddle.position.z + paddleDepth / 2
-        ) {
-            onCollide();
-            ballDirX = -ballDirX;
-        }
+            // Paddle movement based on key states
+            const paddleSpeed = 10;
+            if (keys.ArrowUp) {
+                rightPaddle.position.z -= paddleSpeed * delta;
+            }
+            if (keys.ArrowDown) {
+                rightPaddle.position.z += paddleSpeed * delta;
+            }
+            if (keys.KeyW) {
+                leftPaddle.position.z -= paddleSpeed * delta;
+            }
+            if (keys.KeyS) {
+                leftPaddle.position.z += paddleSpeed * delta;
+            }
 
-        //Left Paddle
-        if (
-            ball.position.x - sphereData.radius <
-            leftPaddle.position.x + paddleWidth / 2 &&
-            ball.position.z + sphereData.radius >
-            leftPaddle.position.z - paddleHalfDepth &&
-            ball.position.z - sphereData.radius <
-            leftPaddle.position.z + paddleHalfDepth
-        ) {
-            onCollide();
-            ballDirX = -ballDirX;
-        }
+            // Clamp paddle position within board boundaries
+            const boardHeight = 5;
+            const paddleLength = 1; // Half of the paddle's height for boundary calculation
+            const paddleHalfDepth = paddleDepth / 2;
+            rightPaddle.position.z = THREE.MathUtils.clamp(
+                rightPaddle.position.z,
+                -boardHeight + (boardHeight / 2 + paddleLength / 2),
+                boardHeight - (boardHeight / 2 + paddleLength / 2)
+            );
+            leftPaddle.position.z = THREE.MathUtils.clamp(
+                leftPaddle.position.z,
+                -boardHeight + (boardHeight / 2 + paddleLength / 2),
+                boardHeight - (boardHeight / 2 + paddleLength / 2)
+            );
 
-        function onGoal() {
-            const leftWon = leftScore >= scoreLimit;
-            const rightWon = rightScore >= scoreLimit;
-            if (leftWon || rightWon) {
-                destroy();
+            const ballSpeed = 20;
+            // ball movement
+            ball.position.x += ballDirX * ballSpeed * delta;
+            ball.position.z += ballDirZ * ballSpeed * delta;
+            // ball self rotation
+            ball.rotation.x += 1 * delta;
+            ball.rotation.y += 1 * delta;
 
-                const winner = leftWon ? leftPlayer : rightPlayer;
-                makeMatchmaking();
-                winnerElement.innerHTML = `${winner}  Wins!`;
-                winnerElement.innerHTML += showNextMatch();
-                winnerElement.style.display = "block";
+            // ball collision with top and bottom all
+            if (ball.position.z > boardLength / 2 || ball.position.z < -boardLength / 2)
+                ballDirZ = -ballDirZ;
 
-                if (players.length === 1) {
-                    winnerElement.innerHTML = `${winner} won the tournament! 😱👏`;
+            // ball collision with the paddle
+            const onCollide = () => {
+                if (ballRotationSpd.x) {
+                    ballRotationSpd.y = ballRotationSpd.x;
+                    ballRotationSpd.x = 0;
+                    ballDirX *= 1.2;
+                } else if (ballRotationSpd.y) {
+                    ballRotationSpd.z = ballRotationSpd.y;
+                    ballRotationSpd.y = 0;
+                } else if (ballRotationSpd.z) {
+                    ballRotationSpd.x = ballRotationSpd.z;
+                    ballRotationSpd.z = 0;
+                    ballDirZ *= 1.2;
+                }
+            };
+
+            // Right paddle
+            if (
+                ball.position.x + sphereData.radius >
+                rightPaddle.position.x - paddleWidth / 2 &&
+                ball.position.z + sphereData.radius >
+                rightPaddle.position.z - paddleDepth / 2 &&
+                ball.position.z - sphereData.radius <
+                rightPaddle.position.z + paddleDepth / 2
+            ) {
+                onCollide();
+                ballDirX = -ballDirX;
+            }
+
+            //Left Paddle
+            if (
+                ball.position.x - sphereData.radius <
+                leftPaddle.position.x + paddleWidth / 2 &&
+                ball.position.z + sphereData.radius >
+                leftPaddle.position.z - paddleHalfDepth &&
+                ball.position.z - sphereData.radius <
+                leftPaddle.position.z + paddleHalfDepth
+            ) {
+                onCollide();
+                ballDirX = -ballDirX;
+            }
+
+            function onGoal() {
+                const leftWon = leftScore >= scoreLimit;
+                const rightWon = rightScore >= scoreLimit;
+                if (leftWon || rightWon) {
+                    destroy();
+
+                    const winner = leftWon ? leftPlayer : rightPlayer;
+                    makeMatchmaking();
+                    winnerElement.innerHTML = `${winner}  Wins!`;
+                    winnerElement.innerHTML += showNextMatch();
+                    winnerElement.style.display = "block";
+
+                    if (players.length === 1) {
+                        winnerElement.innerHTML = `${winner} won the tournament! 😱👏`;
+                    }
                 }
             }
-        }
 
-        // if ball goes beyond letf or right edeg, score ++
-        if (ball.position.x + sphereData.radius > boardWidth / 2) {
-            // Left player scores
-            leftScore += 1;
-            leftScoreElement.innerHTML = `${leftPlayer}: ${leftScore}`;
-            resetBall();
-            onGoal();
-        } else if (ball.position.x - sphereData.radius < -boardWidth / 2) {
-            // Right player scores
-            rightScore += 1;
-            rightScoreElement.innerHTML = `${rightPlayer}: ${rightScore}`;
-            resetBall();
-            onGoal();
-        }
+            // if ball goes beyond letf or right edeg, score ++
+            if (ball.position.x + sphereData.radius > boardWidth / 2) {
+                // Left player scores
+                leftScore += 1;
+                leftScoreElement.innerHTML = `${leftPlayer}: ${leftScore}`;
+                resetBall();
+                onGoal();
+            } else if (ball.position.x - sphereData.radius < -boardWidth / 2) {
+                // Right player scores
+                rightScore += 1;
+                rightScoreElement.innerHTML = `${rightPlayer}: ${rightScore}`;
+                resetBall();
+                onGoal();
+            }
 
-        renderer.render(scene, camera);
+            renderer.render(scene, camera);
+        }
     }
 
     animate();
