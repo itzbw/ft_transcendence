@@ -4,7 +4,7 @@ import dat from "./dat.gui.js";
 import { loadContent } from '../tools/tools.js';
 import { getPlayerName, handleEndGame } from './game_utils.js';
 
-const MAX_SCORE = 1
+const MAX_SCORE = 5
 
 const leftScoreElement = document.createElement('div');
 const rightScoreElement = document.createElement('div');

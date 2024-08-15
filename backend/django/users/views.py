@@ -222,4 +222,21 @@ class SaveGameView(APIView):
 			player2_score=player2_score
 		)
 
+		# Update the overall stats if the players exist
+		if player1:
+			player1.totalPlayed += 1
+			if player1_score > player2_score:
+				player1.totalWon += 1
+			else:
+				player1.totalLost += 1
+			player1.save()
+
+		if player2:
+			player2.totalPlayed += 1
+			if player2_score > player1_score:
+				player2.totalWon += 1
+			else:
+				player2.totalLost += 1
+			player2.save()
+
 		return Response({'message': 'Game saved successfully!'}, status=status.HTTP_201_CREATED)
