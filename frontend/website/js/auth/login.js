@@ -56,8 +56,35 @@ async function doLogin() {
     }
 }
 
+async function enable2FA() {
+    const csrftoken = getCookie('csrftoken');
+
+    try {
+        const response = await fetch('/authentication/enable-2fa/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({ enable_2fa: true }),
+        });
+
+        const result = await response.json();
+        const messageElem = document.getElementById('login-message');
+        
+        if (response.ok) {
+            messageElem.textContent = "2FA enabled successfully!";
+            // Additional steps if needed after enabling 2FA
+        } else {
+            messageElem.textContent = result.error;
+        }
+    } catch (error) {
+        messageElem.textContent = 'An error occurred while enabling 2FA';
+        console.error('2FA enable error:', error);
+    }
+}
+
 export function setupLogin(type) {
-    // If not defined, no button "login to click", so no doLogin()
     if (type === "init") {
         doLogin();
     } else {
@@ -65,5 +92,10 @@ export function setupLogin(type) {
         if (loginButton) {
             loginButton.addEventListener('click', doLogin);
         }
+    }
+
+    const enable2FAButton = document.getElementById('enable2FAButton');
+    if (enable2FAButton) {
+        enable2FAButton.addEventListener('click', enable2FA);
     }
 }
