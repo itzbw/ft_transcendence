@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 	// check if user is authenticated
 	const status = await checkLoginStatus();
+	console.log("logged:", status);
 
 	// load the header
 	await setHeader(status);

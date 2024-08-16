@@ -8,7 +8,7 @@ async function doLogin() {
 		await loadContent('static/auth/login.html', 'main-box', applyLanguage);
 		const form = document.getElementById('login-form');
 		const messageElem = document.getElementById('login-message');
-		setupRegister()
+		setupRegister();
 		if (form) {
 			form.addEventListener('submit', async (event) => {
 				console.log("Form submitted");
@@ -28,9 +28,13 @@ async function doLogin() {
 					});
 					
 					const result = await response.json();
-					console.log(result);
 					if (response.ok) {
 						messageElem.textContent = result.message;
+
+						// Store JWT tokens in localStorage
+						localStorage.setItem('access_token', result.access);
+						localStorage.setItem('refresh_token', result.refresh);
+
 						location.reload();
 					} else {
 						messageElem.textContent = result.error;

@@ -3,11 +3,14 @@ import { getCookie } from "../tools/tools.js";
 export function doLogout() {
 
 	// Asks for confirmation
-    const confirmed = window.confirm('Are you sure you want to log out?');
-    if (!confirmed) {
-        // If the user cancels, exit the function
-        return;
-    }
+	const confirmed = window.confirm('Are you sure you want to log out?');
+	if (!confirmed) {
+		// If the user cancels, exit the function
+		return;
+	} else { 
+		localStorage.clear();
+		location.reload();
+	}
 
 	// send a disconnection request
 	fetch('/api/authentication/logout/', {
