@@ -150,6 +150,15 @@ export async function showUserProfile(profileUsername) {
 	}
 }
 
+export function setupProfile(username) {
+    const profileButton = document.getElementById('profileButton');
+    if (profileButton) {
+        profileButton.addEventListener('click', () => showUserProfile(username));
+    } else {
+        console.log('no profile button found');
+    }
+}
+
 function SetUserProfileEvents(username) {
 	setupChangeAvatar(username);
 

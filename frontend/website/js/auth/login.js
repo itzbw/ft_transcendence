@@ -1,6 +1,10 @@
 import { loadContent, getCookie } from "../tools/tools.js";
 import { applyLanguage } from "../tools/language.js";
 import { setupRegister } from "./register.js";
+import { setupProfile, showUserProfile } from '../users/user_profile.js';
+import { checkLoginStatus } from '../auth/status.js';
+import { setupLogout } from "./logout.js";
+
 
 
 async function doLogin() {
@@ -13,10 +17,10 @@ async function doLogin() {
 			form.addEventListener('submit', async (event) => {
 				console.log("Form submitted");
 				event.preventDefault();
-				
+
 				const username = document.getElementById('username').value;
 				const password = document.getElementById('password').value;
-				
+
 				try {
 					const response = await fetch('/api/authentication/login/', {
 						method: 'POST',
@@ -26,12 +30,17 @@ async function doLogin() {
 						},
 						body: JSON.stringify({ username, password }),
 					});
-					
+
 					const result = await response.json();
 					console.log(result);
 					if (response.ok) {
-						messageElem.textContent = result.message;
-						location.reload();
+						// Store JWT tokens in localStorage
+						localStorage.setItem('access_token', result.access);
+						localStorage.setItem('refresh_token', result.refresh);
+
+						messageElem.textContent = "Login successful!";
+
+						await bootstrapLogin()
 					} else {
 						messageElem.textContent = result.error;
 					}
@@ -46,16 +55,29 @@ async function doLogin() {
 }
 
 
-export function setupLogin(type)
-{
+export function setupLogin(type) {
 	// If not defined, no button "login to click", so no doLogin()
 	if (type === "init")
 		doLogin()
-	else
-	{
+	else {
 		const loginButton = document.getElementById('loginButton');
 		if (loginButton) {
 			loginButton.addEventListener('click', doLogin);
 		}
+	}
+}
+
+export async function bootstrapLogin() {
+	const isLoggedIn = await checkLoginStatus();
+	console.log({ isLoggedIn })
+
+	if (isLoggedIn.isAuthenticated) {
+		await loadContent('static/header/header_full.html', 'header', applyLanguage)
+		setupLogout();
+		setupProfile(isLoggedIn.username);
+		showUserProfile(isLoggedIn.username);
+	} else {
+		await loadContent('static/header/header_mini.html', 'header', applyLanguage)
+		await setupLogin("init");
 	}
 }

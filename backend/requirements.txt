@@ -13,5 +13,8 @@ gunicorn 	# wsgi server
 
 djangorestframework
 djangorestframework-simplejwt
+pyjwt
+
+
 
 # channels	# websockets
