@@ -37,7 +37,14 @@ function setModifyButtons() {
 
     const buttonContainer = document.getElementById("profileDeleteContainer"); // Adjusted container
     buttonContainer.appendChild(deleteAccountButton);
+
+    const enable2FAButton = document.getElementById('enable2FAButton');
+    if (enable2FAButton) {
+        enable2FAButton.addEventListener('click', enable2FA);
+    }
+
 }
+
 
 function setInformations(data, isProfileOwner) {
     const profileUsername = document.getElementById('profileUsername');
@@ -46,10 +53,13 @@ function setInformations(data, isProfileOwner) {
     const profileMemberSince = document.getElementById('profileMemberSince');
     profileMemberSince.textContent = data.dateCreated;
 
-    // Must be shown only on our own profile
     if (isProfileOwner) {
         const profileEmail = document.getElementById('profileEmail');
         profileEmail.textContent = data.email;
+
+        // Enable the 2FA section for the profile owner
+        const profile2FAContainer = document.getElementById('profile2FAContainer');
+        profile2FAContainer.style.display = 'block';
     }
 }
 
@@ -188,6 +198,37 @@ async function displayFriends(username) {
     }
 }
 
+async function enable2FA() {
+    console.log("Enable 2FA button clicked");
+    const csrftoken = getCookie('csrftoken');
+
+    try {
+        const response = await fetch('/authentication/generate-qrcode/', {
+            method: 'GET',
+            headers: {
+                'X-CSRFToken': csrftoken,
+            },
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log(result);
+
+            // Display the QR code in the qrcodeContainer
+            const qrcodeContainer = document.getElementById('qrcodeContainer');
+            qrcodeContainer.innerHTML = '';  // Clear previous content
+            const qrImage = document.createElement('img');
+            qrImage.src = 'data:image/png;base64,' + result.qrcode;
+            qrImage.alt = 'QR Code for 2FA';
+            qrcodeContainer.appendChild(qrImage);
+        } else {
+            console.error('Failed to generate 2FA QR code:', response.statusText);
+        }
+    } catch (error) {
+        console.error('2FA setup error:', error);
+    }
+}
+
 export async function showUserProfile(profileUsername) {
     const profileUrl = "/users/" + profileUsername + "/";
 
@@ -236,6 +277,8 @@ export function setupProfile(username) {
         console.log('no profile button found');
     }
 }
+
+
 
 function setFriendButton(username) {
     const friendContainer = document.getElementById('friend-container');

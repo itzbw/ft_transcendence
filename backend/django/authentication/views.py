@@ -13,6 +13,32 @@ from django.views import View
 from rest_framework_simplejwt.authentication import JWTAuthentication
 import jwt
 from users.models import SiteUser
+from django.utils.decorators import method_decorator
+import pyotp
+import qrcode
+import base64
+from io import BytesIO
+
+
+class GenerateQRCodeView(View):
+    @method_decorator(csrf_exempt)
+    def get(self, request):
+        user = request.user
+
+        # Use the user's specific key; for simplicity, using a static key here
+        key = "myappkey"  # You should generate and store a unique key for each user
+
+        # Generate the TOTP provisioning URI
+        totp = pyotp.TOTP(key)
+        uri = totp.provisioning_uri(name=user.username, issuer_name="myapp")
+
+        # Generate the QR code
+        img = qrcode.make(uri)
+        buffered = BytesIO()
+        img.save(buffered, format="PNG")
+        img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
+
+        return JsonResponse({'qrcode': img_str})
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
