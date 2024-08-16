@@ -1,10 +1,11 @@
 // max score
-export const scoreLimit = 5;
+export const scoreLimit = 1;
 
 // paddles
 export const paddleWidth = 0.2;
 export const paddleHeight = 0.5;
 export const paddleDepth = 1;
+export const paddleSpeed = 10;
 
 // ball
 export const sphereData = {
