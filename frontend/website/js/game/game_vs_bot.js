@@ -3,25 +3,22 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { loadContent } from '../tools/tools.js';
 import {
 	getPlayerName,
-	handleEndGame,
 	createCamera,
 	createBoard,
 	cleanHTMLElements, showHTMLElements,
 	createPaddle, groupPaddles,
 	createBall,
-	destroy,
-	redraw,
 	setupGUI,
 	setupMouseListeners
 } from './game_utils.js';
-import {
-	scoreLimit,
-	paddleWidth, paddleHeight, paddleDepth,
-	paddleSpeed,
-	sphereData,
-	boardWidth, boardLength,
-	leftScoreElement, rightScoreElement
-} from './game_config.js';
+// import {
+// 	scoreLimit,
+// 	paddleWidth, paddleHeight, paddleDepth,
+// 	paddleSpeed,
+// 	sphereData,
+// 	boardWidth, boardLength,
+// 	leftScoreElement, rightScoreElement
+// } from './game_config.js';
 import { animate } from './animate.js';
 
 

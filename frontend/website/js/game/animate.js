@@ -104,6 +104,10 @@ export function animate(gameData) {
 
         gameData.renderer.render(gameData.scene, gameData.camera);
         gameData.controls.update();
+
+		window.addEventListener('hashchange', function () {
+			destroy(gameData.scene, animFrameId);
+		});
     }
 
     animateLoop();

@@ -261,8 +261,7 @@ export function resetBall(gameData) {
 }
 
 // destroy
-export function destroy(scene, animFrameId, gui) {
+export function destroy(scene, animFrameId) {
 	scene.remove.apply(scene, scene.children);
 	cancelAnimationFrame(animFrameId);
-	// gui.parentElement.removeChild(gui)
 }
