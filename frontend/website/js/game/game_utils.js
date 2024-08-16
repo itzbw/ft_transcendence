@@ -7,11 +7,12 @@ import {
 	scoreLimit,
 	paddleWidth, paddleHeight, paddleDepth,
 	sphereData,
+	boardWidth, boardLength,
 	leftScoreElement,
 	rightScoreElement,
 	instructionElement
 } from "./game_config.js";
-
+import dat from "./dat.gui.js";
 
 // todo : adapt to say "next match" OR "retry", instead of just "retry"
 // Display the winner and the button
@@ -135,6 +136,8 @@ export function showHTMLElements(gameContainer, leftPlayerName, rightPlayerName)
 	gameContainer.appendChild(instructionElement);
 }
 
+// #region Init
+
 // create a paddle
 export function createPaddle(paddleColor) {
 	const paddleGeometry = new THREE.BoxGeometry(paddleWidth, paddleHeight, paddleDepth);
@@ -157,4 +160,109 @@ export function createBall() {
 	const sphereMaterial = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load("../img/moon.jpg"), color: 0xffaaff });
 	const ball = new THREE.Mesh(sphereGeometry, sphereMaterial);
 	return (ball);
+}
+
+// Camera
+export function createCamera() {
+	const camera = new THREE.PerspectiveCamera(
+		60, // Field of view
+		window.innerWidth / window.innerHeight, // Aspect ratio
+		0.1, // Near clipping plane
+		1000 // Far clipping plane
+	);
+	camera.position.z = 8;
+	camera.position.y = 8;
+	camera.lookAt(0, 0, 0);
+	return (camera);
+}
+
+// create the board
+export function createBoard() {
+	const boardGeometry = new THREE.BoxGeometry(boardWidth, 0.2, boardLength, 10, 10, 10); // Width, height (depth), length
+	const boardMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, wireframe: true }); // Brown color for the board
+	const board = new THREE.Mesh(boardGeometry, boardMaterial);
+	board.position.y = -0.1;
+	return (board);
+}
+
+// #endregion
+
+
+// Redraw
+export function redraw(ball) {
+	let newGeometry = new THREE.SphereGeometry(
+	sphereData.radius,
+	)
+	ball.geometry.dispose()
+	ball.geometry = newGeometry
+}
+
+// GUI
+export function setupGUI(gameData) {
+    // GUI Panel
+    const gui = new dat.GUI({ autoPlace: false });
+    gui.close();
+    gui.domElement.id = 'gui';
+    document.getElementById('gui_container').appendChild(gui.domElement);
+
+    // Paddle Size Change
+    gui.add(gameData.groupPaddle.scale, 'z', 0.5, 1).name('Paddle Size');
+    
+    // Ball Size Change
+    gui
+        .add(sphereData, 'radius', 0.3, 1)
+        .name('Ball size')
+        .onChange(() => redraw(gameData.ball));
+    
+    // Board wireframe
+    gui.add(gameData.board.material, 'wireframe').name('Board Wireframe');
+    
+    // Paddle Color Change
+    const materialLeftPaddle = { leftPaddleColor: gameData.leftPaddle.material.color.getHex() };
+    const materialRightPaddle = { rightPaddleColor: gameData.rightPaddle.material.color.getHex() };
+    
+    gui.addColor(materialLeftPaddle, 'leftPaddleColor')
+        .onChange((value) => gameData.leftPaddle.material.color.set(value));
+    gui.addColor(materialRightPaddle, 'rightPaddleColor')
+        .onChange((value) => gameData.rightPaddle.material.color.set(value));
+    
+    // Ball Color Change
+    const materialBall = { ballColor: gameData.ball.material.color.getHex() };
+    gui.addColor(materialBall, 'ballColor')
+        .onChange((value) => gameData.ball.material.color.set(value));
+    
+    // Board color
+    const materialBoard = { boardColor: gameData.board.material.color.getHex() };
+    gui.addColor(materialBoard, 'boardColor')
+        .onChange((value) => gameData.board.material.color.set(value));
+    
+    gameData.gui = gui;
+}
+
+
+// setup events on mouse
+export function setupMouseListeners(gameData) {
+	let mouseX = 0;
+	let mouseY = 0;
+
+	function onDocumentMouseMove(event) {
+		mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+		mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+	}
+
+	document.addEventListener('mousemove', onDocumentMouseMove);
+}
+
+// reset the ball
+export function resetBall(gameData) {
+	gameData.ball.position.set(0, 0.1, 0);
+	gameData.ballDirX = (Math.random() > 0.5 ? 0.1 : -0.1); // random direction
+	gameData.ballDirZ = (Math.random() - 0.5) * 0.2; // random direction
+}
+
+// destroy
+export function destroy(scene, animFrameId, gui) {
+	scene.remove.apply(scene, scene.children);
+	cancelAnimationFrame(animFrameId);
+	// gui.parentElement.removeChild(gui)
 }
