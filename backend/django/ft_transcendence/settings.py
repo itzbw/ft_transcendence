@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os #used for env variables
 
 from pathlib import Path
+from datetime import timedelta	# for JWT
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,9 +27,6 @@ SECRET_KEY = 'django-insecure-bq^l6js&*iwr+e&zpvt3toh*66ol1edrh*3m4x@h#jck7sa#^l
 
 # SECURITY WARNING: don't run with debug turned on in production! **TO_REMOVE**
 DEBUG = True
-
-
-
 
 
 # Application definition
@@ -46,10 +44,8 @@ INSTALLED_APPS = [
 	'users',						# our users application
 
 	'gunicorn',						# wsgi server
-	# 'daphne',						# asgi server
 	'rest_framework',
 	'rest_framework_simplejwt',
-	# 'channels',						# for websockets
 ]
 
 MIDDLEWARE = [
@@ -61,7 +57,17 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+
+	# custom made middleware to handle JWT parsing as
+    # djangorestframework-simplejwt is not working
+	'authentication.middleware.JwtAuthMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
 
 ROOT_URLCONF = 'ft_transcendence.urls'
 
@@ -184,4 +190,15 @@ LOGGING = {
         'handlers': ['console'],
         'level': 'DEBUG',
     },
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': 'django-insecure-bq^l6js&*iwr+e&zpvt3toh*66ol1edrh*3m4x@h#jck7sa#^l',
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
 }
