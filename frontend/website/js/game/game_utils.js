@@ -1,8 +1,20 @@
+import * as THREE from 'three'; 
 import { getCookie } from "../tools/tools.js";
 import { applyLanguage } from "../tools/language.js";
 import { checkLoginStatus } from "../auth/status.js";
 import { loadVsBotGame } from "./game_vs_bot.js";
+import {
+	scoreLimit,
+	paddleWidth, paddleHeight, paddleDepth,
+	sphereData,
+	leftScoreElement,
+	rightScoreElement,
+	instructionElement
+} from "./game_config.js";
 
+
+// todo : adapt to say "next match" OR "retry", instead of just "retry"
+// Display the winner and the button
 function showWinner(winnerName) {
 	const container = document.getElementById('main-box');
 	if (!container) {
@@ -42,7 +54,7 @@ function showWinner(winnerName) {
 	applyLanguage();
 }
 
-
+// Sends the results of the game to the backend server
 async function saveGameResult(playerOneName, playerOneScore, playerTwoName, playerTwoScore) {
 
 	const gameData = {
@@ -72,15 +84,76 @@ async function saveGameResult(playerOneName, playerOneScore, playerTwoName, play
 	}
 }
 
-
+// function to call from game when game is over
 export async function handleEndGame(playerOneName, playerOneScore, playerTwoName, playerTwoScore) {
 	showWinner(playerOneScore > playerTwoScore ? playerOneName : playerTwoName);
 	await saveGameResult(playerOneName, playerOneScore, playerTwoName, playerTwoScore);
 }
 
-
+// returns the username of the connected user
 export async function getPlayerName() {
 	const data = await checkLoginStatus();
 	return (data.username); 
 }
 
+// clean score/instructions HTML elements
+export function cleanHTMLElements() {
+	rightScoreElement.innerHTML = "";
+	leftScoreElement.innerHTML = "";
+	instructionElement.innerHTML = "";
+}
+
+// display the score/instructions HTML elements
+export function showHTMLElements(gameContainer, leftPlayerName, rightPlayerName) {
+
+	// left part
+	leftScoreElement.style.position = 'absolute';
+	leftScoreElement.style.top = '50%';
+	leftScoreElement.style.left = '10px';
+	leftScoreElement.style.color = 'white';
+	leftScoreElement.style.fontSize = '24px';
+	leftScoreElement.innerHTML = leftPlayerName + ': 0';
+	gameContainer.appendChild(leftScoreElement);
+	
+	// right part
+	rightScoreElement.style.position = 'absolute';
+	rightScoreElement.style.top = '50%';
+	rightScoreElement.style.right = '10px';
+	rightScoreElement.style.color = 'white';
+	rightScoreElement.style.fontSize = '24px';
+	rightScoreElement.innerHTML =  rightPlayerName + ': 0';
+	gameContainer.appendChild(rightScoreElement);
+	
+	// control part
+	instructionElement.style.position = "absolute";
+	instructionElement.style.top = "80%";
+	instructionElement.style.left = "40%";
+	instructionElement.style.color = "white";
+	instructionElement.style.fontSize = "18px";
+	instructionElement.innerHTML = "use W & S or ⬆ & ⬇ to control <br\> First score " + scoreLimit + " to win ";
+	gameContainer.appendChild(instructionElement);
+}
+
+// create a paddle
+export function createPaddle(paddleColor) {
+	const paddleGeometry = new THREE.BoxGeometry(paddleWidth, paddleHeight, paddleDepth);
+	const paddleMaterial = new THREE.MeshStandardMaterial({ color: paddleColor });
+	const paddle = new THREE.Mesh(paddleGeometry, paddleMaterial);
+	return (paddle);
+}
+
+// create a group for paddles
+export function groupPaddles(leftPaddle, rightPaddle) {
+	const groupPaddle = new THREE.Group();
+	groupPaddle.add(leftPaddle);
+	groupPaddle.add(rightPaddle);
+	return groupPaddle;
+}
+
+// create a ball
+export function createBall() {
+	const sphereGeometry = new THREE.SphereGeometry(sphereData.radius);
+	const sphereMaterial = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load("../img/moon.jpg"), color: 0xffaaff });
+	const ball = new THREE.Mesh(sphereGeometry, sphereMaterial);
+	return (ball);
+}

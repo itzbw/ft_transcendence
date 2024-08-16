@@ -2,26 +2,32 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import dat from "./dat.gui.js";
 import { loadContent } from '../tools/tools.js';
-import { getPlayerName, handleEndGame } from './game_utils.js';
+import {
+	getPlayerName,
+	handleEndGame,
+	cleanHTMLElements, showHTMLElements,
+	createPaddle, groupPaddles,
+	createBall
+} from './game_utils.js';
+import {
+	scoreLimit,
+	paddleWidth, paddleHeight, paddleDepth,
+	sphereData,
+	boardWidth, boardLength,
+	leftScoreElement, rightScoreElement
+} from './game_config.js';
 
-const MAX_SCORE = 5
 
-const leftScoreElement = document.createElement('div');
-const rightScoreElement = document.createElement('div');
-const instructionElement = document.createElement('div');
 let scene = null;
 let animFrameId = null;
-
 
 export async function loadVsBotGame() {
 
 	// load template
 	await loadContent('static/game/game.html', 'main-box');
 
-	// init values
-	rightScoreElement.innerHTML = "";
-	leftScoreElement.innerHTML = "";
-	instructionElement.innerHTML = "";
+	// clean score and instructions in HTML elements
+	cleanHTMLElements();
 
 	// get player name
 	const player = await getPlayerName();
@@ -43,13 +49,12 @@ export async function loadVsBotGame() {
 	// Create a renderer
 	const renderer = new THREE.WebGLRenderer({ alpha: true });
 	
-	var canvas = document.getElementById('gameContainer');
-	
-	// renderer.setSize(window.innerWidth, window.innerHeight);
-	// document.body.appendChild(renderer.domElement);
-	
-	canvas.innerHTML = ''; // Clear any existing content
-	canvas.appendChild(renderer.domElement);
+	// insert it in the gameContainer
+	const gameContainer = document.getElementById('gameContainer');
+	if (gameContainer) {
+		gameContainer.innerHTML = ''; // Clear any existing content
+		gameContainer.appendChild(renderer.domElement);
+	}
 	
 	// Create a point light
 	const light = new THREE.AmbientLight(0xffffff, 3);
@@ -59,95 +64,45 @@ export async function loadVsBotGame() {
 	scene.add(light);
 	
 	// Main board
-	const boardWidth = 10;
-	const boardLength = 5;
 	const boardGeometry = new THREE.BoxGeometry(boardWidth, 0.2, boardLength, 10, 10, 10); // Width, height (depth), length
 	const boardMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, wireframe: true }); // Brown color for the board
 	const board = new THREE.Mesh(boardGeometry, boardMaterial);
 	board.position.y = -0.1;
 	scene.add(board);
 	
-	// Create paddles
-	const paddleWidth = 0.2;
-	const paddleHeight = 0.5;
-	const paddleDepth = 1;
 	
-	
-	// Left paddle
-	const leftPaddleGeometry = new THREE.BoxGeometry(paddleWidth, paddleHeight, paddleDepth); // Width, height, depth
-	const leftPaddleMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff }); // Blue color for the paddles
-	const leftPaddle = new THREE.Mesh(leftPaddleGeometry, leftPaddleMaterial);
+	// paddles
+	const leftPaddle = createPaddle(0x0000ff);
 	leftPaddle.position.set(-5, 0.15, 0); // Position it on the left edge of the board
-	// scene.add(leftPaddle);
-	
-	// Right paddle
-	const rightPaddleGeometry = new THREE.BoxGeometry(paddleWidth, paddleHeight, paddleDepth); // Width, height, depth
-	const rightPaddleMaterial = new THREE.MeshStandardMaterial({ color: 0x00ffff }); // Blue color for the paddles
-	const rightPaddle = new THREE.Mesh(rightPaddleGeometry, rightPaddleMaterial);
+	const rightPaddle = createPaddle(0x00ffff);
 	rightPaddle.position.set(5, 0.15, 0); // Position it on the right edge of the board
-	// scene.add(rightPaddle);
-	
-	// GROUP PADDLE //
-	const groupPaddle = new THREE.Group();
-	groupPaddle.add(leftPaddle);
-	groupPaddle.add(rightPaddle);
+
+	// Group paddles //
+	const groupPaddle = groupPaddles(leftPaddle, rightPaddle);
 	scene.add(groupPaddle);
-	
-	// Create a sphere geometry
-	const sphereData = {
-		radius: 0.3,
-		widthSegments: 32,
-		heightSegments: 32
-	}
-	
-	// const sphereGeometry = new THREE.SphereGeometry(sphereData.radius, sphereData.widthSegments, sphereData.heightSegments); // Radius, width segments, height segments
-	const sphereGeometry = new THREE.SphereGeometry(sphereData.radius);
-	const sphereMaterial = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load("../img/moon.jpg"), color: 0xffaaff }); // Red color for the sphere
-	const ball = new THREE.Mesh(sphereGeometry, sphereMaterial);
-	
+
+	// #region Ball
+
+	// Create the ball
+	const ball = createBall();
+
 	// Add the sphere to the scene
 	ball.position.set(0, 0.1, 0); // Position it at the center of the board
 	scene.add(ball);
-	
-	
-	
+
 	// variable for ball movement speed
-	let ballDirX = 0.1; // width speed
-	let ballDirZ = 0.1; // vertical speed
+	let ballDirX = 0.1;
+	let ballDirZ = 0.1;
 	var ballRotationSpd = { x: 0.2, y: 0, z: 0 }
-	
+	// #endregion
+
 	// Score
 	let leftScore = 0
 	let rightScore = 0;
-	const scoreLimit = MAX_SCORE;
 	
-	
-	
-	/////////////////// HTML Score Showing /////////////////////
-	leftScoreElement.style.position = 'absolute';
-	leftScoreElement.style.top = '50%';
-	leftScoreElement.style.left = '10px';
-	leftScoreElement.style.color = 'white';
-	leftScoreElement.style.fontSize = '24px';
-	leftScoreElement.innerHTML = player + ': 0';
-	canvas.appendChild(leftScoreElement);
-	
-	// const rightScoreElement = document.createElement('vsbotcontent');
-	rightScoreElement.style.position = 'absolute';
-	rightScoreElement.style.top = '50%';
-	rightScoreElement.style.right = '10px';
-	rightScoreElement.style.color = 'white';
-	rightScoreElement.style.fontSize = '24px';
-	rightScoreElement.innerHTML = 'Marvin: 0';
-	canvas.appendChild(rightScoreElement);
-	
-	instructionElement.style.position = "absolute";
-	instructionElement.style.top = "80%";
-	instructionElement.style.left = "40%";
-	instructionElement.style.color = "white";
-	instructionElement.style.fontSize = "18px";
-	instructionElement.innerHTML = "use W & S or ⬆ & ⬇ to control <br\> First score " + scoreLimit + " to win ";
-	canvas.appendChild(instructionElement);
+	// display the name/score and the control info pannel
+	showHTMLElements(gameContainer, player, 'Marvin');
+
 	
 	/// GUI Panel ///
 	const gui = new dat.GUI({ autoPlace: false });
@@ -408,7 +363,6 @@ export async function loadVsBotGame() {
 	// ball self rotation
 	ball.rotation.x += 0.01 * delta;
 	ball.rotation.y += 0.01 * delta;
-
 
 
 	renderer.render(scene, camera);
