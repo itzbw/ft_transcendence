@@ -9,16 +9,9 @@ import {
 	createPaddle, groupPaddles,
 	createBall,
 	setupGUI,
-	setupMouseListeners
+	setupMouseListeners,
+	setupKeyboardListeners,
 } from './game_utils.js';
-// import {
-// 	scoreLimit,
-// 	paddleWidth, paddleHeight, paddleDepth,
-// 	paddleSpeed,
-// 	sphereData,
-// 	boardWidth, boardLength,
-// 	leftScoreElement, rightScoreElement
-// } from './game_config.js';
 import { animate } from './animate.js';
 
 
@@ -115,34 +108,6 @@ async function initGameData() {
 	return (gameData);
 }
 
-// set events on keyboard (VS BOT)
-function setupKeyboardListeners(gameData) {
-	document.addEventListener('keydown', (event) => {
-		if (event.code === 'ArrowUp') {
-			gameData.keys.ArrowUp = true;
-		} else if (event.code === 'ArrowDown') {
-			gameData.keys.ArrowDown = true;
-		} else if (event.code === 'KeyW') {
-			gameData.keys.KeyW = true;
-		} else if (event.code === 'KeyS') {
-			gameData.keys.KeyS = true;
-		}
-	});
-
-	document.addEventListener('keyup', (event) => {
-		if (event.code === 'ArrowUp') {
-			gameData.keys.ArrowUp = false;
-		} else if (event.code === 'ArrowDown') {
-			gameData.keys.ArrowDown = false;
-		} else if (event.code === 'KeyW') {
-			gameData.keys.KeyW = false;
-		} else if (event.code === 'KeyS') {
-			gameData.keys.KeyS = false;
-		}
-	});
-}
-
-
 export async function loadVsBotGame() {
 
 	// load template
@@ -154,7 +119,7 @@ export async function loadVsBotGame() {
 	// initialize game data
 	const gameData = await initGameData();
 
-	// insert it in the gameContainer
+	// insert renderer in the gameContainer
 	const gameContainer = document.getElementById('gameContainer');
 	if (gameContainer) {
 		gameContainer.innerHTML = ''; // Clear any existing content

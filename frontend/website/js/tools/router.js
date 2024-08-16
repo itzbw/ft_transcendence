@@ -2,6 +2,7 @@ import { showUserProfile } from "../users/user_profile.js";
 import { leaderboard } from "../users/leaderboard.js";
 import { setGameModeSelection } from "../game/select_game_mode.js";
 import { loadVsBotGame } from "../game/game_vs_bot.js";
+import { loadVsHumanGame } from "../game/game_vs_human.js";
 
 // when hash is changed, will launch the concerned page
 export function router() {
@@ -36,6 +37,7 @@ export function router() {
 
 			// pong VS man
 			case hash === "#pongvsman":
+				loadVsHumanGame();
 				break;
 
 			// tournament

@@ -239,7 +239,7 @@ export function setupGUI(gameData) {
     gameData.gui = gui;
 }
 
-
+// #region keyboard and mouse events
 // setup events on mouse
 export function setupMouseListeners(gameData) {
 	let mouseX = 0;
@@ -252,6 +252,35 @@ export function setupMouseListeners(gameData) {
 
 	document.addEventListener('mousemove', onDocumentMouseMove);
 }
+
+// set events on keyboard (VS BOT)
+export function setupKeyboardListeners(gameData) {
+	document.addEventListener('keydown', (event) => {
+		if (event.code === 'ArrowUp') {
+			gameData.keys.ArrowUp = true;
+		} else if (event.code === 'ArrowDown') {
+			gameData.keys.ArrowDown = true;
+		} else if (event.code === 'KeyW') {
+			gameData.keys.KeyW = true;
+		} else if (event.code === 'KeyS') {
+			gameData.keys.KeyS = true;
+		}
+	});
+
+	document.addEventListener('keyup', (event) => {
+		if (event.code === 'ArrowUp') {
+			gameData.keys.ArrowUp = false;
+		} else if (event.code === 'ArrowDown') {
+			gameData.keys.ArrowDown = false;
+		} else if (event.code === 'KeyW') {
+			gameData.keys.KeyW = false;
+		} else if (event.code === 'KeyS') {
+			gameData.keys.KeyS = false;
+		}
+	});
+}
+
+// #endregion
 
 // reset the ball
 export function resetBall(gameData) {
