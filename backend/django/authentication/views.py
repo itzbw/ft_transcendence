@@ -32,6 +32,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         
         return data
 
+
 class LoginView(View):
     # serializer_class = CustomTokenObtainPairSerializer
     @csrf_exempt
@@ -78,14 +79,14 @@ class GenerateQRCodeView(View):
         try:
             if not request.user.is_authenticated:
                 return JsonResponse({'error': 'User is not authenticated'}, status=403)
-
-            key = "django-insecure-bq^l6js&*iwr+e&zpvt3toh*66ol1edrh*3m4x@h#jck7sa#^l"  # Replace this with the actual key generation logic
+            
+            key = "myappkey"
             totp = pyotp.TOTP(key)
             uri = totp.provisioning_uri(name=request.user.username, issuer_name="ft_transcendance")
 
             img = qrcode.make(uri)
             buffered = BytesIO()
-            img.save(buffered, format="PNG")
+            img.save(buffered)
             img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
 
             return JsonResponse({'qrcode': img_str})
