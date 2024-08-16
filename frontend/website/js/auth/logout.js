@@ -7,7 +7,7 @@ export function doLogout() {
 	if (!confirmed) {
 		// If the user cancels, exit the function
 		return;
-	} else { 
+	} else {
 		localStorage.clear();
 		location.reload();
 	}
@@ -20,19 +20,19 @@ export function doLogout() {
 			'X-CSRFToken': getCookie('csrftoken'),
 		},
 	})
-	.then(response => {
-		if (!response.ok){
-			throw new Error('Network response for logout was not ok');
-		}
-		return (response.json());
-	})
-	.then(data => {
-		console.log("User disconnected successfully:", data);
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('Network response for logout was not ok');
+			}
+			return (response.json());
+		})
+		.then(data => {
+			console.log("User disconnected successfully:", data);
 
-		// redirect to homepage
-		window.location.href = '/';
-		location.reload();
-	})
+			// redirect to homepage
+			window.location.href = '/';
+			location.reload();
+		})
 		// Error handling
 		.catch(error => console.error('Error:', error));
 }
