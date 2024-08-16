@@ -1,5 +1,5 @@
 import { applyLanguage } from '../tools/language.js';
-import { getCookie, loadContent, setAttribute} from '../tools/tools.js'
+import { getCookie, loadContent, setAttribute, getAccessToken} from '../tools/tools.js'
 import { isProfileOwner, showUserProfile} from './user_profile.js';
 
 // check if the user is already in friends list
@@ -9,7 +9,8 @@ async function isAlreadyFriend(username) {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
-				'X-CSRFToken': getCookie('csrftoken')
+				'X-CSRFToken': getCookie('csrftoken'),
+				'Authorization': `Bearer ${getAccessToken()}`,
 			}
 		});
 
@@ -36,7 +37,8 @@ async function handleAddRemoveEvents(event, username) {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
-					'X-CSRFToken': getCookie('csrftoken')
+					'X-CSRFToken': getCookie('csrftoken'),
+					'Authorization': `Bearer ${getAccessToken()}`,
 				},
 				body: JSON.stringify(data)
 			});
@@ -133,6 +135,7 @@ async function handleFriendsList(){
 			headers: {
 				'Content-Type': 'application/json',
 				'X-CSRFToken': getCookie('csrftoken'),
+				'Authorization': `Bearer ${getAccessToken()}`,
 			}
 		});
 

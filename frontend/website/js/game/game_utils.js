@@ -1,5 +1,5 @@
 import * as THREE from 'three'; 
-import { getCookie } from "../tools/tools.js";
+import { getCookie, getAccessToken } from "../tools/tools.js";
 import { applyLanguage } from "../tools/language.js";
 import { checkLoginStatus } from "../auth/status.js";
 import { loadVsBotGame } from "./game_vs_bot.js";
@@ -70,7 +70,8 @@ async function saveGameResult(playerOneName, playerOneScore, playerTwoName, play
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				'X-CSRFToken': getCookie('csrftoken')
+				'X-CSRFToken': getCookie('csrftoken'),
+				'Authorization': `Bearer ${getAccessToken()}`,
 			},
 			body: JSON.stringify(gameData),
 		});

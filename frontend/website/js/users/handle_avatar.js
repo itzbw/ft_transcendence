@@ -1,4 +1,4 @@
-import { loadContent, getCookie } from "../tools/tools.js";
+import { loadContent, getCookie, getAccessToken } from "../tools/tools.js";
 import { applyLanguage } from "../tools/language.js";
 import { showUserProfile } from "./user_profile.js";
 
@@ -88,7 +88,8 @@ async function changeAvatar(username){
 						method: 'POST',
 						body: formData,
 						headers: {
-							'X-CSRFToken': getCookie('csrftoken')
+							'X-CSRFToken': getCookie('csrftoken'),
+							'Authorization': `Bearer ${getAccessToken()}`,
 						}
 					});
 					

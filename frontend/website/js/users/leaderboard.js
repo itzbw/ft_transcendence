@@ -1,4 +1,4 @@
-import { loadContent, getCookie } from '../tools/tools.js';
+import { loadContent, getCookie, getAccessToken } from '../tools/tools.js';
 import { applyLanguage } from '../tools/language.js';
 import { showUserProfile } from './user_profile.js';
 
@@ -7,7 +7,8 @@ async function getRawLeaderboardData() {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
-			'X-CSRFToken': getCookie('csrftoken')
+			'X-CSRFToken': getCookie('csrftoken'),
+			'Authorization': `Bearer ${getAccessToken()}`,
 		}
 	});
 

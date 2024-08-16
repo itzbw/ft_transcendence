@@ -1,4 +1,4 @@
-import { loadContent, getCookie } from "../tools/tools.js";
+import { loadContent, getCookie, getAccessToken } from "../tools/tools.js";
 import { applyLanguage } from "../tools/language.js";
 import { checkLoginStatus } from "../auth/status.js";
 import { setupChangeAvatar, showAvatar } from "./handle_avatar.js";
@@ -78,7 +78,8 @@ async function updateUsername(oldUsername, newUsername) {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
-				'X-CSRFToken': getCookie('csrftoken')
+				'X-CSRFToken': getCookie('csrftoken'),
+				'Authorization': `Bearer ${getAccessToken()}`,
 			},
 			body: `username=${encodeURIComponent(newUsername)}`
 		});
@@ -97,7 +98,8 @@ async function updateEmail(username, newEmail) {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
-				'X-CSRFToken': getCookie('csrftoken')
+				'X-CSRFToken': getCookie('csrftoken'),
+				'Authorization': `Bearer ${getAccessToken()}`,
 			},
 			body: `email=${encodeURIComponent(newEmail)}`
 		});
@@ -123,6 +125,7 @@ export async function showUserProfile(profileUsername) {
 				headers: {
 					'Content-Type': 'application/json',
 					'X-CSRFToken': getCookie('csrftoken'),
+					'Authorization': `Bearer ${getAccessToken()}`,
 				}
 			});
 
@@ -200,7 +203,8 @@ async function deleteAccount(username) {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json',
-				'X-CSRFToken': getCookie('csrftoken')
+				'X-CSRFToken': getCookie('csrftoken'),
+				'Authorization': `Bearer ${getAccessToken()}`,
 			}
 		});
 		if (response.ok) {

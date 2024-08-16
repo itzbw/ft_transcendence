@@ -1,33 +1,33 @@
 
-// ---------- START executeScript() ---------------- 
-export function executeScripts(node) {
-	if (nodeScriptIs(node) === true) {
-		node.parentNode.replaceChild(nodeScriptClone(node), node);
-	}
-	else {
-		var i = -1, children = node.childNodes;
-		while (++i < children.length) {
-			executeScripts(children[i]);
-		}
-	}
+// // ---------- START executeScript() ---------------- 
+// export function executeScripts(node) {
+// 	if (nodeScriptIs(node) === true) {
+// 		node.parentNode.replaceChild(nodeScriptClone(node), node);
+// 	}
+// 	else {
+// 		var i = -1, children = node.childNodes;
+// 		while (++i < children.length) {
+// 			executeScripts(children[i]);
+// 		}
+// 	}
 
-	return node;
-}
+// 	return node;
+// }
 
-function nodeScriptClone(node) {
-	var script = document.createElement("script");
-	script.text = node.innerHTML;
+// function nodeScriptClone(node) {
+// 	var script = document.createElement("script");
+// 	script.text = node.innerHTML;
 
-	var i = -1, attrs = node.attributes, attr;
-	while (++i < attrs.length) {
-		script.setAttribute((attr = attrs[i]).name, attr.value);
-	}
-	return script;
-}
+// 	var i = -1, attrs = node.attributes, attr;
+// 	while (++i < attrs.length) {
+// 		script.setAttribute((attr = attrs[i]).name, attr.value);
+// 	}
+// 	return script;
+// }
 
-function nodeScriptIs(node) {
-	return node.tagName === 'SCRIPT';
-}
+// function nodeScriptIs(node) {
+// 	return node.tagName === 'SCRIPT';
+// }
 // -------------------------- 
 
 // ---------- loadContent () ---------------- 
@@ -82,6 +82,11 @@ export function getCookie(name) {
 	}
 	return cookieValue;
 }
+
+export function getAccessToken() {
+    return localStorage.getItem('access_token');
+}
+
 // ------------------------------
 
 
@@ -96,13 +101,12 @@ export function setAttribute(elementId, attributeName, attributeValue) {
 
 export async function PingServer() {
 	try {
-		const accessToken = localStorage.getItem('access_token');  // Récupère le token d'accès
 		const response = await fetch('/api/users/update_status/', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 				'X-CSRFToken': getCookie('csrftoken'),
-				'Authorization': `Bearer ${accessToken}`,  // Ajoute le token JWT
+				'Authorization': `Bearer ${getAccessToken()}`,
 			},
 		});
 		if (!response.ok) {
