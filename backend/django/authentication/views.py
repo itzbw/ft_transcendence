@@ -81,7 +81,7 @@ class GenerateQRCodeView(View):
 
             key = "django-insecure-bq^l6js&*iwr+e&zpvt3toh*66ol1edrh*3m4x@h#jck7sa#^l"  # Replace this with the actual key generation logic
             totp = pyotp.TOTP(key)
-            uri = totp.provisioning_uri(name=request.user.username, issuer_name="transcendance")
+            uri = totp.provisioning_uri(name=request.user.username, issuer_name="ft_transcendance")
 
             img = qrcode.make(uri)
             buffered = BytesIO()
@@ -94,4 +94,4 @@ class GenerateQRCodeView(View):
             # Log the error message for debugging
             print(f"Error generating QR code: {e}")
             return JsonResponse({'error': 'Internal Server Error'}, status=500)
-
+        
