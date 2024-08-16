@@ -20,26 +20,6 @@ import base64
 from io import BytesIO
 
 
-class GenerateQRCodeView(View):
-    @method_decorator(csrf_exempt)
-    def get(self, request):
-        user = request.user
-
-        # Use the user's specific key; for simplicity, using a static key here
-        key = "myappkey"  # You should generate and store a unique key for each user
-
-        # Generate the TOTP provisioning URI
-        totp = pyotp.TOTP(key)
-        uri = totp.provisioning_uri(name=user.username, issuer_name="myapp")
-
-        # Generate the QR code
-        img = qrcode.make(uri)
-        buffered = BytesIO()
-        img.save(buffered, format="PNG")
-        img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
-
-        return JsonResponse({'qrcode': img_str})
-
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
@@ -90,3 +70,28 @@ class RegisterView(APIView):
         user.save()
 
         return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
+
+
+
+class GenerateQRCodeView(View):
+    def get(self, request):
+        try:
+            if not request.user.is_authenticated:
+                return JsonResponse({'error': 'User is not authenticated'}, status=403)
+
+            key = "django-insecure-bq^l6js&*iwr+e&zpvt3toh*66ol1edrh*3m4x@h#jck7sa#^l"  # Replace this with the actual key generation logic
+            totp = pyotp.TOTP(key)
+            uri = totp.provisioning_uri(name=request.user.username, issuer_name="transcendance")
+
+            img = qrcode.make(uri)
+            buffered = BytesIO()
+            img.save(buffered, format="PNG")
+            img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
+
+            return JsonResponse({'qrcode': img_str})
+
+        except Exception as e:
+            # Log the error message for debugging
+            print(f"Error generating QR code: {e}")
+            return JsonResponse({'error': 'Internal Server Error'}, status=500)
+
