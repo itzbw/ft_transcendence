@@ -3,6 +3,7 @@ import { getCookie, getAccessToken } from "../tools/tools.js";
 import { applyLanguage } from "../tools/language.js";
 import { checkLoginStatus } from "../auth/status.js";
 import { loadVsBotGame } from "./game_vs_bot.js";
+import { vsHumanGame } from './game_vs_human.js';
 import {
 	scoreLimit,
 	paddleWidth, paddleHeight, paddleDepth,
@@ -16,7 +17,7 @@ import dat from "./dat.gui.js";
 
 // todo : adapt to say "next match" OR "retry", instead of just "retry"
 // Display the winner and the button
-function showWinner(winnerName) {
+function showWinner(winnerName, playerTwoName) {
 	const container = document.getElementById('main-box');
 	if (!container) {
 		console.log("main-box not found");
@@ -42,7 +43,11 @@ function showWinner(winnerName) {
 	const retryButton = document.createElement('button');
 	retryButton.setAttribute('data-translate', 'playagain');
 	retryButton.id = 'retryButton';
-	retryButton.addEventListener('click', loadVsBotGame);
+	if (window.location.hash === '#pongvsbot') {
+		retryButton.addEventListener('click', loadVsBotGame);
+	} else if (window.location.hash === '#pongvsman') {
+		retryButton.addEventListener('click', () => vsHumanGame(playerTwoName));
+	}
 
 	// add text & button to div
 	div.appendChild(p);
@@ -80,7 +85,6 @@ async function saveGameResult(playerOneName, playerOneScore, playerTwoName, play
 		if (!response.ok) {
 			throw new Error('Failed to save game result');
 		}
-		const data = await response.json();
 	} catch (error) {
 		console.log('Error when sending score:', error);
 	}
@@ -88,7 +92,7 @@ async function saveGameResult(playerOneName, playerOneScore, playerTwoName, play
 
 // function to call from game when game is over
 export async function handleEndGame(playerOneName, playerOneScore, playerTwoName, playerTwoScore) {
-	showWinner(playerOneScore > playerTwoScore ? playerOneName : playerTwoName);
+	showWinner(playerOneScore > playerTwoScore ? playerOneName : playerTwoName, playerTwoName);
 	await saveGameResult(playerOneName, playerOneScore, playerTwoName, playerTwoScore);
 }
 

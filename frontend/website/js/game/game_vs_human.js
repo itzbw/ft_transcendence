@@ -12,7 +12,7 @@ import {
 	setupMouseListeners,
 	setupKeyboardListeners,
 } from './game_utils.js';
-import { animate } from './animate.js';
+import { animate_vs_bot, animate_vs_human } from './animate.js';
 import { getChallenger } from './game_challengers.js'
 
 // will create needed variables, store them and return an object
@@ -110,7 +110,6 @@ async function initGameData(challengerName) {
 	return (gameData);
 }
 
-
 export async function vsHumanGame(challengerName) {
 
 		// load template
@@ -129,7 +128,6 @@ export async function vsHumanGame(challengerName) {
 			gameContainer.appendChild(gameData.renderer.domElement);
 		}
 
-// HERE
 		// display the name/score and the control info panel
 		showHTMLElements(gameContainer, gameData.player, gameData.challenger);
 	
@@ -149,107 +147,8 @@ export async function vsHumanGame(challengerName) {
 		setupMouseListeners(gameData);
 		setupKeyboardListeners(gameData);
 
-		// Render the scene from the perspective of the camera
-		function animate() {
-		  requestAnimationFrame(animate);
-
-		  // check winner
-		  if (leftScore >= scoreLimit) {
-			winnerElement.innerHTML = 'Left Player Wins!';
-			winnerElement.style.display = 'block';
-			//setTimeout(resetGame, 3000);
-			return;
-		  } else if (rightScore >= scoreLimit) {
-			winnerElement.innerHTML = 'Right Player Wins!';
-			winnerElement.style.display = 'block';
-			//setTimeout(resetGame, 3000);
-			return;
-		  }
-	  
-	  
-		  // Paddle movement based on key states
-		  const paddleSpeed = 0.2;
-		  if (keys.ArrowUp) {
-			rightPaddle.position.z -= paddleSpeed;
-		  }
-		  if (keys.ArrowDown) {
-			rightPaddle.position.z += paddleSpeed;
-		  }
-		  if (keys.KeyW) {
-			leftPaddle.position.z -= paddleSpeed;
-		  }
-		  if (keys.KeyS) {
-			leftPaddle.position.z += paddleSpeed;
-		  }
-	  
-		  // Clamp paddle position within board boundaries
-		  const boardHeight = 5;
-		  const paddleLength = 1; // Half of the paddle's height for boundary calculation
-		  const paddleHalfDepth = paddleDepth / 2;
-		  rightPaddle.position.z = THREE.MathUtils.clamp(rightPaddle.position.z, -boardHeight + (boardHeight / 2 + paddleLength / 2), boardHeight - (boardHeight / 2 + paddleLength / 2));
-		  leftPaddle.position.z = THREE.MathUtils.clamp(leftPaddle.position.z, -boardHeight + (boardHeight / 2 + paddleLength / 2), boardHeight - (boardHeight / 2 + paddleLength / 2));
-	  
-		  // ball movement
-		  ball.position.x += ballDirX * 0.5;
-		  ball.position.z += ballDirZ * 0.5;
-	  
-		  // ball collision with top and bottom all
-		  if (ball.position.z > boardLength / 2 || ball.position.z < -boardLength / 2)
-			ballDirZ = -ballDirZ;
-	  
-		  // ball collision with the paddle
-		  const onCollide = () => {
-			if (ballRotationSpd.x) {
-			  ballRotationSpd.y = ballRotationSpd.x;
-			  ballRotationSpd.x = 0;
-			} else if (ballRotationSpd.y) {
-			  ballRotationSpd.z = ballRotationSpd.y;
-			  ballRotationSpd.y = 0;
-			} else if (ballRotationSpd.z) {
-			  ballRotationSpd.x = ballRotationSpd.z;
-			  ballRotationSpd.z = 0;
-			}
-		  }
-	  
-		  // Right paddle
-		  if ((ball.position.x > rightPaddle.position.x - paddleWidth / 2 && ball.position.x < rightPaddle.position.x + paddleWidth / 2) &&
-			ball.position.z > rightPaddle.position.z - paddleHalfDepth && ball.position.z < rightPaddle.position.z + paddleHalfDepth) {
-			// onCollide();
-			ballDirX = -ballDirX;
-		  }
-	  
-	  
-		  //Left Paddle
-		  if ((ball.position.x < leftPaddle.position.x + paddleWidth / 2 && ball.position.x > leftPaddle.position.x - paddleWidth / 2) &&
-			ball.position.z > leftPaddle.position.z - paddleHalfDepth && ball.position.z < leftPaddle.position.z + paddleHalfDepth) {
-			// onCollide();
-			ballDirX = -ballDirX;
-		  }
-	  
-	  
-	  
-		  // if ball goes beyond letf or right edeg, score ++
-		  if (ball.position.x > (boardWidth / 2 + sphereData.radius)) {
-			// Left player scores
-			leftScore += 1;
-			leftScoreElement.innerHTML = `Left: ${leftScore}`;
-			resetBall();
-	  
-		  } else if (ball.position.x < (-boardWidth / 2 - sphereData.radius)) {
-			// Right player scores
-			rightScore += 1;
-			rightScoreElement.innerHTML = `Right: ${rightScore}`;
-			resetBall();
-		  }
-	  
-		  // ball self rotation
-		  ball.rotation.x += 0.01;
-		  ball.rotation.y += 0.01;
-	  
-		  renderer.render(scene, camera);
-		}
-	  
-		animate();
+		// launch the game animation loop
+		animate_vs_human(gameData);
 }
 
 export async function loadVsHumanGame() {

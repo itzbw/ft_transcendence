@@ -12,7 +12,7 @@ import {
 	setupMouseListeners,
 	setupKeyboardListeners,
 } from './game_utils.js';
-import { animate } from './animate.js';
+import { animate_vs_bot } from './animate.js';
 
 
 // will create needed variables, store them and return an object
@@ -145,5 +145,5 @@ export async function loadVsBotGame() {
 	setupMouseListeners(gameData);
 	setupKeyboardListeners(gameData);
 
-	animate(gameData);
+	animate_vs_bot(gameData);
 }
