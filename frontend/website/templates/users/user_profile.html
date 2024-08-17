@@ -41,13 +41,17 @@
 				<div id="profileDeleteContainer" class="d-flex align-items-center"></div>
 			</div>
 
-			<!-- Add as a friend / Friend List (depends if self profile or other's) -->
-			<div class="col-12 col-md-1 d-flex align-items-center">
-				<div id="profileFriendsContainer"></div>
+			<!-- Friends and Match History -->
+			<div class = "col-12 col-md-1">
+				<!-- Add as a friend / Friend List (depends if self profile or other's) -->
+				<div class="d-flex align-items-center p-2">
+					<div id="profileFriendsContainer"></div>
+				</div>
+				<!-- Match history -->
+				<div id="profileMatchHistory" class="text-center p-2"></div>
 			</div>
 		</div>
 	</div>
-
 	<!-- Overall scores (Wins, Losses, leaderboard rank,...) -->
 	 <div class="container row mt-3 border border-white rounded">
 		<div class="row justify-content-center">
@@ -68,16 +72,17 @@
 				<div data-translate="totallost"></div>
 				<div id="profileTotalLost">1</div>
 			</div>
-			<div class="col">
+
+		</div>
+		<div class="row text-center">
+			<div class="col justify-content-center">
+				<canvas id="my_pie_charts"></canvas>
 				<div data-translate="winrate"></div>
 				<div id="profileWinRate">66%</div>
 			</div>
 		</div>
 	</div>
 
-
-	<!-- Match history button will be here (will open a modal ?)-->
-	<div id="profileMatchHistory"></div>
 </div>
 
 <!-- END of User Profile Template -->

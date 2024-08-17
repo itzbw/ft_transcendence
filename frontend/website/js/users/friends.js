@@ -155,12 +155,13 @@ async function handleFriendsList(){
 async function showFriendsListButton(friendsBox) {
 	// Button creation
 	const button = document.createElement('button');
-	button.classList.add('btn', 'btn-primary');
-	button.textContent = 'Friends';
+	button.classList.add('btn', 'btn-light');
+	button.setAttribute('data-translate', 'friendslist');
 
 	// Insert the button into the html
 	friendsBox.innerHTML = "";
 	friendsBox.appendChild(button);
+	applyLanguage();
 
 	// Listen for the click
 	button.addEventListener('click', handleFriendsList);
