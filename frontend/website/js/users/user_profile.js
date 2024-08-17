@@ -35,10 +35,11 @@ function setModifyButtons() {
 	let deleteAccountButton = document.createElement('button');
 	deleteAccountButton.id = 'deleteAccountButton';
 	deleteAccountButton.className = 'm-2 btn btn-sm btn-outline-danger';
-	deleteAccountButton.textContent = 'Delete Account';
+	deleteAccountButton.setAttribute('data-translate', 'deleteaccount');
 
 	const buttonContainer = document.getElementById("profileDeleteContainer"); // Adjusted container
 	buttonContainer.appendChild(deleteAccountButton);
+	applyLanguage();
 }
 
 function setInformations(data, isProfileOwner) {
@@ -172,7 +173,6 @@ export async function showUserProfile(profileUsername) {
 				setOverallStats(data);
 				matchHistory(data.games);
 				setFriendsBox(profileUsername);
-				applyLanguage();
 				if (await isProfileOwner(profileUsername) == true) {
 					setInformations(data, true);
 					setModifyButtons();
