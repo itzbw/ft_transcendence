@@ -61,7 +61,7 @@ function showWinner(winnerName, playerTwoName) {
 }
 
 // Sends the results of the game to the backend server
-async function saveGameResult(playerOneName, playerOneScore, playerTwoName, playerTwoScore) {
+export async function saveGameResult(playerOneName, playerOneScore, playerTwoName, playerTwoScore) {
 
 	const gameData = {
 		player1Name: playerOneName,

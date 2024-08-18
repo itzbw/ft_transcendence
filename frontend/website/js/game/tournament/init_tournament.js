@@ -3,8 +3,9 @@ import { loadContent } from "../../tools/tools.js";
 import { getPlayerName } from "../game_utils.js";
 import { startTournament } from "./process_tournament.js";
 
+
 // sets Match Brackets
-function initBrackets(tournamentData) {
+export function initBrackets(tournamentData) {
 	tournamentData.nextMatch = 1;
 	tournamentData.match1 = {
 		player1: tournamentData.players.player1,
@@ -25,7 +26,7 @@ function initBrackets(tournamentData) {
 
 
 // shuffle players to avoid to know who start against who
-function shufflePlayers(players) {
+export function shufflePlayers(players) {
 
     // Extract players ignoring keys
     const playersArray = Object.values(players);
@@ -75,7 +76,8 @@ function isNameValid(input, players) {
 		return (false);
 	}
 	// name must have a correct length
-	if (input.length < 3 || input.length > 29) {
+	if (input.length < 3 
+|| input.length > 29) {
 		return (false);
 	}
 	// verify that the name has not already been given

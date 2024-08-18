@@ -1,8 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { loadContent } from '../tools/tools.js';
+import { loadContent } from '../../tools/tools.js';
 import {
-	getPlayerName,
 	createCamera,
 	createBoard,
 	cleanHTMLElements, showHTMLElements,
@@ -11,16 +10,15 @@ import {
 	setupGUI,
 	setupMouseListeners,
 	setupKeyboardListeners,
-} from './game_utils.js';
-import { animate_vs_human } from './animate.js';
-import { getChallenger } from './game_challengers.js'
+} from '../game_utils.js';
+import { animate_tournament } from './animate_tournament.js';
 
 // will create needed variables, store them and return an object
-async function initGameData(challengerName) {
+async function initGameData(player1, player2) {
 
 	// get player name
-	const player = await getPlayerName();
-	const challenger = challengerName;
+	const player = player1;
+	const challenger = player2;
 
 	// Score
 	let leftScore = 0
@@ -110,7 +108,7 @@ async function initGameData(challengerName) {
 	return (gameData);
 }
 
-export async function vsHumanGame(challengerName) {
+async function tournamentGame(gameData, tournamentData) {
 
 		// load template
 		await loadContent('static/game/game.html', 'main-box');
@@ -118,9 +116,6 @@ export async function vsHumanGame(challengerName) {
 		// clean score and instructions in HTML elements
 		cleanHTMLElements();
 	
-		// initialize game data
-		const gameData = await initGameData(challengerName);
-
 		// insert renderer in the gameContainer
 		const gameContainer = document.getElementById('gameContainer');
 		if (gameContainer) {
@@ -148,10 +143,10 @@ export async function vsHumanGame(challengerName) {
 		setupKeyboardListeners(gameData);
 
 		// launch the game animation loop
-		animate_vs_human(gameData);
+		animate_tournament(gameData, tournamentData);
 }
 
-export async function loadVsHumanGame() {
-	// get the name of the second player	
-	await getChallenger();
+export async function startTournamentMatch(tournamentData, match) {
+	const gameData = await initGameData(match.player1, match.player2);
+	tournamentGame(gameData, tournamentData);
 }
