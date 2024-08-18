@@ -8,12 +8,12 @@ import {
 	cleanHTMLElements, showHTMLElements,
 	createPaddle, groupPaddles,
 	createBall,
-	setupGUI,
 	setupMouseListeners,
 	setupKeyboardListeners,
 } from './game_utils.js';
 import { animate_vs_human } from './animate.js';
 import { getChallenger } from './game_challengers.js'
+import { setupGUI } from './setup_gui.js';
 
 // will create needed variables, store them and return an object
 async function initGameData(challengerName) {

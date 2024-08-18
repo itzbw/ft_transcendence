@@ -8,12 +8,11 @@ import {
 	cleanHTMLElements, showHTMLElements,
 	createPaddle, groupPaddles,
 	createBall,
-	setupGUI,
 	setupMouseListeners,
 	setupKeyboardListeners,
 } from './game_utils.js';
 import { animate_vs_bot } from './animate.js';
-
+import { setupGUI } from './setup_gui.js';
 
 // will create needed variables, store them and return an object
 async function initGameData() {

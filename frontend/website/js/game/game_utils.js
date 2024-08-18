@@ -13,9 +13,7 @@ import {
 	rightScoreElement,
 	instructionElement
 } from "./game_config.js";
-import dat from "./dat.gui.js";
 
-// todo : adapt to say "next match" OR "retry", instead of just "retry"
 // Display the winner and the button
 function showWinner(winnerName, playerTwoName) {
 	const container = document.getElementById('main-box');
@@ -199,48 +197,6 @@ export function redraw(ball) {
 	)
 	ball.geometry.dispose()
 	ball.geometry = newGeometry
-}
-
-// GUI
-export function setupGUI(gameData) {
-    // GUI Panel
-    const gui = new dat.GUI({ autoPlace: false });
-    gui.close();
-    gui.domElement.id = 'gui';
-    document.getElementById('gui_container').appendChild(gui.domElement);
-
-    // Paddle Size Change
-    gui.add(gameData.groupPaddle.scale, 'z', 0.5, 1).name('Paddle Size');
-    
-    // Ball Size Change
-    gui
-        .add(sphereData, 'radius', 0.3, 1)
-        .name('Ball size')
-        .onChange(() => redraw(gameData.ball));
-    
-    // Board wireframe
-    gui.add(gameData.board.material, 'wireframe').name('Board Wireframe');
-    
-    // Paddle Color Change
-    const materialLeftPaddle = { leftPaddleColor: gameData.leftPaddle.material.color.getHex() };
-    const materialRightPaddle = { rightPaddleColor: gameData.rightPaddle.material.color.getHex() };
-    
-    gui.addColor(materialLeftPaddle, 'leftPaddleColor')
-        .onChange((value) => gameData.leftPaddle.material.color.set(value));
-    gui.addColor(materialRightPaddle, 'rightPaddleColor')
-        .onChange((value) => gameData.rightPaddle.material.color.set(value));
-    
-    // Ball Color Change
-    const materialBall = { ballColor: gameData.ball.material.color.getHex() };
-    gui.addColor(materialBall, 'ballColor')
-        .onChange((value) => gameData.ball.material.color.set(value));
-    
-    // Board color
-    const materialBoard = { boardColor: gameData.board.material.color.getHex() };
-    gui.addColor(materialBoard, 'boardColor')
-        .onChange((value) => gameData.board.material.color.set(value));
-    
-    gameData.gui = gui;
 }
 
 // #region keyboard and mouse events

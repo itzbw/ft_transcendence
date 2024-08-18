@@ -7,11 +7,11 @@ import {
 	cleanHTMLElements, showHTMLElements,
 	createPaddle, groupPaddles,
 	createBall,
-	setupGUI,
 	setupMouseListeners,
 	setupKeyboardListeners,
 } from '../game_utils.js';
 import { animate_tournament } from './animate_tournament.js';
+import { setupGUI } from '../setup_gui.js';
 
 // will create needed variables, store them and return an object
 async function initGameData(player1, player2) {
