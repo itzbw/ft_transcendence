@@ -6,9 +6,9 @@ import {
 	paddleSpeed, boardLength, boardWidth,
 	sphereData,
 	paddleWidth, paddleDepth,
-	leftScoreElement, rightScoreElement
+	leftScoreElement, rightScoreElement,
+	aiUpdateInterval
 } from './game_config.js';
-
 
 // main game loop for VS Bot game
 export function animate_vs_bot(gameData) {
@@ -18,6 +18,7 @@ export function animate_vs_bot(gameData) {
 	function animateLoop() {
 		animFrameId = requestAnimationFrame(animateLoop);
 		const delta = clock.getDelta();
+		const elapsedTime = clock.getElapsedTime();
 
 		// Paddle movement based on key states
 		if (gameData.keys.ArrowUp) {
@@ -33,17 +34,23 @@ export function animate_vs_bot(gameData) {
 			gameData.leftPaddle.position.z += paddleSpeed * delta;
 		}
 
-		if (gameData.ball.position.z > gameData.rightPaddle.position.z) {
-			gameData.rightPaddle.position.z += paddleSpeed * delta;
-		} else if (gameData.ball.position.z < gameData.rightPaddle.position.z) {
-			gameData.rightPaddle.position.z -= paddleSpeed * delta;
-		}
-
 		// Clamp paddle position within board boundaries
 		const boardHeight = 5;
 		const paddleLength = 1; // Half of the paddle's height for boundary calculation
 		const paddleHalfDepth = paddleDepth / 2;
-		gameData.rightPaddle.position.z = THREE.MathUtils.clamp(gameData.rightPaddle.position.z, -boardHeight + (boardHeight / 2 + paddleLength / 2), boardHeight - (boardHeight / 2 + paddleLength / 2));
+		
+		// IA DELAY
+		if (elapsedTime - gameData.lastAIUpdateTime > aiUpdateInterval) {
+			gameData.lastAIUpdateTime = elapsedTime;
+
+			if (gameData.ball.position.z > gameData.rightPaddle.position.z) {
+				gameData.rightPaddle.position.z += paddleSpeed * delta;
+			} else if (gameData.ball.position.z < gameData.rightPaddle.position.z) {
+				gameData.rightPaddle.position.z -= paddleSpeed * delta;
+			}
+
+			gameData.rightPaddle.position.z = THREE.MathUtils.clamp(gameData.rightPaddle.position.z, -boardHeight + (boardHeight / 2 + paddleLength / 2), boardHeight - (boardHeight / 2 + paddleLength / 2));
+		}
 		gameData.leftPaddle.position.z = THREE.MathUtils.clamp(gameData.leftPaddle.position.z, -boardHeight + (boardHeight / 2 + paddleLength / 2), boardHeight - (boardHeight / 2 + paddleLength / 2));
 
 		const ballSpeed = 20;
@@ -220,3 +227,4 @@ export function animate_vs_human(gameData) {
 
 	animateLoop();
 }
+

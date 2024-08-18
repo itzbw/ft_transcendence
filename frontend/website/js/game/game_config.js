@@ -23,3 +23,6 @@ export const boardLength = 5;
 export const leftScoreElement = document.createElement('div');
 export const rightScoreElement = document.createElement('div');
 export const instructionElement = document.createElement('div');
+
+// AI
+export const aiUpdateInterval = 0.1;

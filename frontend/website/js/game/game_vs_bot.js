@@ -85,6 +85,9 @@ async function initGameData() {
 	const controls = new OrbitControls(camera, renderer.domElement);
 	controls.update();
 
+	// ia
+	let lastAIUpdateTime = 0;
+
 	// full structure
 	const gameData = {
 		player: player,
@@ -102,7 +105,8 @@ async function initGameData() {
 		ballDirZ: ballDirZ,
 		ballRotationSpd: ballRotationSpd,
 		keys: keys,
-		controls: controls
+		controls: controls,
+		lastAIUpdateTime: lastAIUpdateTime
 	}
 
 	return (gameData);
