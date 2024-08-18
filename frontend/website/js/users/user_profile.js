@@ -73,40 +73,44 @@ function setOverallStats(data) {
 		winRate.textContent = ((data.totalWon / (data.totalWon + data.totalLost)) * 100).toFixed(2) + '%';
 	}
 
-	// const winRate = document.getElementById('profileWinRate');
-	// if ((total_won + total_lost) == 0){
-	// 	winRate.textContent = '0%';
-	// } else {
-	// 	winRate.textContent = ((total_won / (total_won + total_lost)) * 100).toFixed(2) + '%';
-	// }
+	if (data.totalPlayed == 0)
+	{
+		const div_w_l = document.getElementById('winRateParent');
+		div_w_l.innerHTML = "<div data-translate=\"nomatchplayed\"></div>";
+	}
+	else
+	{
+		const canvas = document.getElementById('my_pie_charts');
+		const ctx = canvas.getContext('2d');
 
-	const canvas = document.getElementById('my_pie_charts');
-	const ctx = canvas.getContext('2d');
+		const data_w_l = [
+			{ label: 'Win', value: data.totalWon, color: '#808291' },
+			{ label: 'Lost', value: data.totalLost, color: '#e74c3c' }
+		]; //Data for the pie charts
 
-	const data_w_l = [
-		{ label: 'Win', value: data.totalWon, color: '#808291' },
-		{ label: 'Lost', value: data.totalLost, color: '#e74c3c' }
-	]; //Data for the pie charts
-
-	const totalValue = data_w_l.reduce((sum, item) => sum + item.value, 0);
-	let startAngle = 0;
-	data_w_l.forEach((item) => {
-		const sliceAngle = (item.value / totalValue) * 2 * Math.PI;
-		// Draw slice
-		ctx.beginPath(); //start new drawing
-		ctx.moveTo(canvas.width / 2, canvas.height / 2); //Set the drawing cursor to the middle
-		ctx.arc(canvas.width / 2, canvas.height / 2, canvas.height / 2, startAngle, startAngle + sliceAngle); //draw external arc of circle
-		ctx.closePath(); //draw last lines
-		ctx.fillStyle = item.color; //Set the color of the slice
-		ctx.fill(); // color the slice
-		//calculate the position of the text in the middle of the slice
-		const textX = canvas.width / 2 + (canvas.height / 4) * Math.cos(startAngle + sliceAngle / 2);
-		const textY = canvas.height / 2 + (canvas.height / 4) * Math.sin(startAngle + sliceAngle / 2);
-		ctx.fillStyle = '#000'; //Set the color of the text
-		ctx.font = '16px Orbitron'; //Set the font
-		ctx.fillText(item.label, textX, textY); //Write text
-		startAngle += sliceAngle; //Set new position  for the next slice
-	})
+		const totalValue = data_w_l.reduce((sum, item) => sum + item.value, 0);
+		let startAngle = 0;
+		data_w_l.forEach((item) => {
+			if (item.value != 0)
+			{
+				const sliceAngle = (item.value / totalValue) * 2 * Math.PI;
+				// Draw slice
+				ctx.beginPath(); //start new drawing
+				ctx.moveTo(canvas.width / 2, canvas.height / 2); //Set the drawing cursor to the middle
+				ctx.arc(canvas.width / 2, canvas.height / 2, canvas.height / 2, startAngle, startAngle + sliceAngle); //draw external arc of circle
+				ctx.closePath(); //draw last lines
+				ctx.fillStyle = item.color; //Set the color of the slice
+				ctx.fill(); // color the slice
+				//calculate the position of the text in the middle of the slice
+				const textX = canvas.width / 2 + (canvas.height / 4) * Math.cos(startAngle + sliceAngle / 2);
+				const textY = canvas.height / 2 + (canvas.height / 4) * Math.sin(startAngle + sliceAngle / 2);
+				ctx.fillStyle = '#000'; //Set the color of the text
+				ctx.font = '16px Orbitron'; //Set the font
+				ctx.fillText(item.label, textX, textY); //Write text
+				startAngle += sliceAngle; //Set new position  for the next slice
+			}
+		})
+	}
 }
 
 async function updateUsername(oldUsername, newUsername) {
