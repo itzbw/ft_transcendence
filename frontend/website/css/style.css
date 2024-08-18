@@ -42,6 +42,6 @@ canvas.background-canvas {
 /* game GUI  */
 #gui_container {
 	position: absolute;
-	top: 65%;
-	left: 70%;
+	top: 10%;
+	left: 10%;
 }
