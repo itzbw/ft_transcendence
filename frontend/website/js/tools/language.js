@@ -51,7 +51,10 @@ const translations =
 		challengername: 'Challenger Name',
 		firstmatch: 'First Match',
 		secondmatch: 'Second Match',
-		finalmatch: 'Final Match'
+		finalmatch: 'Final Match',
+		otp_verify_title: 'Setup Two Factor Authentication',
+		otp_verify_cta: 'Verify',
+		otp: 'OTP',
 	},
 	fr: {
 		profile: 'Profil',
@@ -104,7 +107,10 @@ const translations =
 		challengername: 'Nom du challenger',
 		firstmatch: 'Premier match',
 		secondmatch: 'Deuxième match',
-		finalmatch: 'Match final'
+		finalmatch: 'Match final',
+		otp_verify_title: 'Configurer l\'authentification à deux facteurs',
+		otp_verify_cta: 'Vérifier',
+		otp: 'OTP'
 	},
 	ch: {
 		profile: '个人资料',
@@ -157,7 +163,10 @@ const translations =
 		challengername: '挑战者名称',
 		firstmatch: '第一场比赛',
 		secondmatch: '第二场比赛',
-		finalmatch: '决赛'
+		finalmatch: '决赛',
+		otp_verify_title: '设置双因素认证',
+		otp_verify_cta: '验证',
+		otp: 'OTP'
 	},
 	jp: {
 		profile: 'プロフィール',
@@ -210,7 +219,10 @@ const translations =
 		challengername: '挑戦者の名前',
 		firstmatch: '第一試合',
 		secondmatch: '第二試合',
-		finalmatch: '決勝戦'
+		finalmatch: '決勝戦',
+		otp_verify_title: '二段階認証を設定する',
+		otp_verify_cta: '確認する',
+		otp: 'OTP'
 	}
 };
 
