@@ -1,6 +1,8 @@
 import { loadContent, getCookie } from "../tools/tools.js";
 import { applyLanguage } from "../tools/language.js";
 import { setupRegister } from "./register.js";
+import { applyRoute, router } from "../tools/router.js";
+import { checkLoginStatus } from "./status.js";
 
 
 async function doLogin() {
@@ -13,31 +15,21 @@ async function doLogin() {
 			form.addEventListener('submit', async (event) => {
 				console.log("Form submitted");
 				event.preventDefault();
-				
+
 				const username = document.getElementById('username').value;
 				const password = document.getElementById('password').value;
-				
+				const otp = document.getElementById('otp').value;
+
 				try {
-					const response = await fetch('/api/authentication/login/', {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-							'X-CSRFToken': getCookie('csrftoken'),
-						},
-						body: JSON.stringify({ username, password }),
-					});
-					
-					const result = await response.json();
-					if (response.ok) {
-						messageElem.textContent = result.message;
+					const result = await login({ username, password, otp });
 
-						// Store JWT tokens in localStorage
-						localStorage.setItem('access_token', result.access);
-						localStorage.setItem('refresh_token', result.refresh);
-
-						location.reload();
+					if (result.error) {
+						messageElem.innerHTML = `<span style="color:red;">${result.error}</span>`;
 					} else {
-						messageElem.textContent = result.error;
+						messageElem.textContent = result.message;
+						location.hash = '';
+						await checkLoginStatus();
+						await applyRoute();
 					}
 				} catch (error) {
 					messageElem.textContent = 'An error occurred during fecth';
@@ -49,14 +41,32 @@ async function doLogin() {
 	}
 }
 
+export async function login({ username, password, otp }) {
+	const response = await fetch('/api/authentication/login/', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'X-CSRFToken': getCookie('csrftoken'),
+		},
+		body: JSON.stringify({ username, password, otp }),
+	});
 
-export function setupLogin(type)
-{
+	const result = await response.json();
+	if (response.ok) {
+		// Store JWT tokens in localStorage
+		localStorage.setItem('access_token', result.access);
+		localStorage.setItem('refresh_token', result.refresh);
+	}
+
+	return result
+}
+
+
+export function setupLogin(type) {
 	// If not defined, no button "login to click", so no doLogin()
 	if (type === "init")
 		doLogin()
-	else
-	{
+	else {
 		const loginButton = document.getElementById('loginButton');
 		if (loginButton) {
 			loginButton.addEventListener('click', doLogin);

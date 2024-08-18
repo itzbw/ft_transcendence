@@ -2,7 +2,7 @@
 
 <div id="login-box" class="container d-flex flex-column justify-content-center align-items-center h-100 ">
 	<p id="login-message"></p>
-	<form id="login-form" class="d-flex flex-column align-items-center" >
+	<form id="login-form" class="d-flex flex-column align-items-center">
 		<div class="mb-3">
 			<label for="username" class="form-label w-100 text-center" data-translate="username"></label>
 			<input type="text" class="form-control" id="username" name="username" required>
@@ -11,9 +11,13 @@
 			<label for="password" class="form-label w-100 text-center" data-translate="password"></label>
 			<input type="password" class="form-control" id="password" name="password" required>
 		</div>
+		<div class="mb-3">
+			<label for="otp" class="form-label w-100 text-center" data-translate="otp"></label>
+			<input type="text" class="form-control" id="otp" name="otp">
+		</div>
 		<button id="registerSubmitButton" type="submit" class="btn btn-secondary" data-translate="log_in"></button>
 	</form>
-	
+
 	<!-- Button to registration page -->
 	<div class="d-flex flex-column align-items-center">
 		<p class="mt-5" data-translate="noaccountyet"></p>

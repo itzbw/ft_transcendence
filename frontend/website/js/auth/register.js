@@ -1,28 +1,29 @@
 import { loadContent, getCookie } from "../tools/tools.js";
 import { applyLanguage } from "../tools/language.js";
-import { setupLogin } from "./login.js"; 
+import { login, setupLogin } from "./login.js";
+import '../libs/qrcode.min.js';
 
 // Check if fields are correctly filled
 function validateForm(username, email, password) {
-    let errors = [];
+	let errors = [];
 
-    // username min size / max size
-    if (username.length < 3 || username.length >30)  {
-        errors.push('Username must be between 3 and 30 characters long.');
-    }
+	// username min size / max size
+	if (username.length < 3 || username.length > 30) {
+		errors.push('Username must be between 3 and 30 characters long.');
+	}
 
-    // Check email format
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(email)) {
-        errors.push('Please enter a valid email address.');
-    }
+	// Check email format
+	const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	if (!emailPattern.test(email)) {
+		errors.push('Please enter a valid email address.');
+	}
 
-    // password min size
-    if (password.length < 4) {
-        errors.push('Password must be at least 4 characters long.');
-    }
+	// password min size
+	if (password.length < 4) {
+		errors.push('Password must be at least 4 characters long.');
+	}
 
-    return errors;
+	return errors;
 }
 
 
@@ -36,13 +37,13 @@ async function doRegister() {
 		const submitButton = document.getElementById('registerSubmitButton');
 
 
-		
+
 		// If form is submited
 		submitButton.addEventListener('click', async () => {
 			const username = document.getElementById('username').value;
 			const email = document.getElementById('email').value;
 			const password = document.getElementById('password').value;
-			
+
 			// Check if form entries are correct
 			const validationErrors = validateForm(username, email, password);
 			if (validationErrors.length > 0) {
@@ -67,13 +68,12 @@ async function doRegister() {
 				if (!response.ok) {
 					message.textContent = result.error;
 				} else {
-					window.location.href='/';
-					
-					location.reload();
+					await login({ username, password })
+					showOtpVerify();
 				}
 			} catch (error) {
-					console.error('Error during registration:', error);
-					document.getElementById('registermessage').textContent = 'Error during registration';
+				console.error('Error during registration:', error);
+				document.getElementById('registermessage').textContent = 'Error during registration';
 			}
 		});
 
@@ -83,8 +83,45 @@ async function doRegister() {
 	}
 }
 
+export async function showOtpVerify() {
+	console.log('dfdfjkdnf')
+	await loadContent('static/auth/otp.html', 'main-box', applyLanguage);
+	const provisioning = await fetch('/api/authentication/otp/provisioning', {
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('access_token')}`
+		}
+	}).then(response => response.json());
+	const qrelem = document.getElementById('otp_qr_code');
+	const qr = new QRCode({
+		msg: provisioning.uri,
+		pal: ["#000000", "#f2f4f8"],
+	});
+	qrelem.innerHTML = '';
+	qrelem.appendChild(qr);
 
-export function setupRegister(){
+	const verify = document.getElementById('otp_verify_btn');
+	verify.addEventListener('click', async () => {
+		const otp = document.getElementById('otp_input').value;
+		const response = await fetch('/api/authentication/otp/verify/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('access_token')}`
+			},
+			body: JSON.stringify({ otp })
+		});
+		if (response.ok) {
+			window.location.hash = '';
+		} else {
+			const result = await response.json();
+			document.getElementById('otp_message').innerHTML = `<span style="color: red;">${result.error}</span>`;
+		}
+	});
+}
+
+
+export function setupRegister() {
 	const registerButton = document.getElementById('registerButton');
 	if (registerButton) {
 		registerButton.addEventListener('click', doRegister);

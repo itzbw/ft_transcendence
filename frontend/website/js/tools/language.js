@@ -39,7 +39,10 @@ const translations =
 		versushuman: 'Versus Human',
 		tournament: 'Tournament',
 		playagain: 'Play again',
-		wins: ' wins this game !'
+		wins: ' wins this game !',
+		otp_verify_title: 'Setup Two Factor Authentication',
+		otp_verify_cta: 'Verify',
+		otp: 'OTP',
 	},
 	fr: {
 		profile: 'Profil',

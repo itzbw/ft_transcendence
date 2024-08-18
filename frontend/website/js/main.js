@@ -13,13 +13,10 @@ import { setupLogin } from './auth/login.js';
 
 
 // MAIN FUNCTION
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', async function () {
 
 	// check if user is authenticated
 	const status = await checkLoginStatus();
-
-	// load the header
-	await setHeader(status);
 
 	// launch the routing
 	router();
@@ -28,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 	if (!status.isAuthenticated) {
 		setupLogin('init');
 
-	// if authenticated, ping server frequently
+		// if authenticated, ping server frequently
 	} else {
 		PingServer();  // immediate ping after login
 		setInterval(PingServer, 60000);  // ping every 60 sec

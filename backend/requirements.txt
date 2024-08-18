@@ -5,5 +5,10 @@ psycopg[c] #In order to use Postgresql
 gunicorn 	# wsgi server
 
 djangorestframework
+
+# JWT
 djangorestframework-simplejwt
 pyjwt
+
+# OTP
+pyotp

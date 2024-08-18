@@ -9,6 +9,7 @@ export function doLogout() {
 		return;
 	} else {
 		localStorage.clear();
+		location.hash = '';
 		location.reload();
 	}
 

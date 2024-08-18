@@ -7,6 +7,8 @@ class SiteUser(AbstractUser):
 	username = models.CharField(max_length=30, unique=True)
 	email = models.EmailField(unique=True)
 	avatar = models.CharField(max_length=100, null=True, blank=True)
+	otp_secret = models.CharField(max_length=32, null=True, blank=True)
+	otp_verified = models.BooleanField(default=False)
 	dateCreated = models.DateField(null=True, blank=True)
 
 	# Overall stats

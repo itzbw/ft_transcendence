@@ -1,4 +1,6 @@
-export async function checkLoginStatus() {
+import { setHeader } from "../header/header.js";
+
+async function getLoginStatus() {
 	try {
 		const jwt = localStorage.getItem("access_token");
 		const response = await fetch('/api/authentication/status/', {
@@ -19,4 +21,15 @@ export async function checkLoginStatus() {
 		console.error('Error checking login status:', error);
 		return false;
 	}
+}
+
+export async function checkLoginStatus() {
+	const status = await getLoginStatus();
+	await setHeader(status);
+
+	if (status.isAuthenticated && !status.otp_verified) {
+		window.location.hash = '#otp';
+	}
+
+	return status;
 }
