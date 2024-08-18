@@ -3,6 +3,7 @@ import { leaderboard } from "../users/leaderboard.js";
 import { setGameModeSelection } from "../game/select_game_mode.js";
 import { loadVsBotGame } from "../game/game_vs_bot.js";
 import { loadVsHumanGame } from "../game/game_vs_human.js";
+import { initTournament } from "../game/tournament/init_tournament.js";
 
 // when hash is changed, will launch the concerned page
 export function router() {
@@ -42,6 +43,7 @@ export function router() {
 
 			// tournament
 			case hash === "#tournament":
+				initTournament();
 				break;
 
 			// default
