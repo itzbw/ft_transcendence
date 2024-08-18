@@ -5,6 +5,7 @@ import { loadVsBotGame } from "../game/game_vs_bot.js";
 import { loadVsHumanGame } from "../game/game_vs_human.js";
 import { initTournament } from "../game/tournament/init_tournament.js";
 
+// Check hash an perform the correct action
 function checkHash(hash)
 {
 	switch (true) {
@@ -38,6 +39,7 @@ function checkHash(hash)
 
 		// tournament
 		case hash === "#tournament":
+			initTournament();
 			break;
 
 		// default
