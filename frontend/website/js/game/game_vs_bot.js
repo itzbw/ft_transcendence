@@ -106,7 +106,9 @@ async function initGameData() {
 		ballRotationSpd: ballRotationSpd,
 		keys: keys,
 		controls: controls,
-		lastAIUpdateTime: lastAIUpdateTime
+		lastAIUpdateTime: lastAIUpdateTime,
+		ballPositionAtLastUpdate: { x: 0, z: 0 },
+		ballDirAtLastUpdate: { x: 0, z: 0 }
 	}
 
 	return (gameData);

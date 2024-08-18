@@ -38,43 +38,72 @@ export function animate_vs_bot(gameData) {
 		const boardHeight = 5;
 		const paddleLength = 1; // Half of the paddle's height for boundary calculation
 		const paddleHalfDepth = paddleDepth / 2;
-		
-		// IA DELAY
+
+		// IA Observation every 1sec
 		if (elapsedTime - gameData.lastAIUpdateTime > aiUpdateInterval) {
 			gameData.lastAIUpdateTime = elapsedTime;
-
-			if (gameData.ball.position.z > gameData.rightPaddle.position.z) {
-				gameData.rightPaddle.position.z += paddleSpeed * delta;
-			} else if (gameData.ball.position.z < gameData.rightPaddle.position.z) {
-				gameData.rightPaddle.position.z -= paddleSpeed * delta;
-			}
-
-			gameData.rightPaddle.position.z = THREE.MathUtils.clamp(gameData.rightPaddle.position.z, -boardHeight + (boardHeight / 2 + paddleLength / 2), boardHeight - (boardHeight / 2 + paddleLength / 2));
+			
+			// stock position and direction of the ball
+			gameData.ballPositionAtLastUpdate = { 
+				x: gameData.ball.position.x, 
+				z: gameData.ball.position.z 
+			};
+			gameData.ballDirAtLastUpdate = { 
+				x: gameData.ballDirX, 
+				z: gameData.ballDirZ 
+			};
 		}
-		gameData.leftPaddle.position.z = THREE.MathUtils.clamp(gameData.leftPaddle.position.z, -boardHeight + (boardHeight / 2 + paddleLength / 2), boardHeight - (boardHeight / 2 + paddleLength / 2));
+
+		// move right paddle using informations
+		const ballPosition = gameData.ballPositionAtLastUpdate;
+		const ballDir = gameData.ballDirAtLastUpdate;
+
+		// Estimate future ball position
+		const futureBallPosition = {
+			x: ballPosition.x + ballDir.x * paddleSpeed,
+			z: ballPosition.z + ballDir.z * paddleSpeed
+		};
+
+		if (futureBallPosition.z > gameData.rightPaddle.position.z) {
+			gameData.rightPaddle.position.z += paddleSpeed * delta;
+		} else if (futureBallPosition.z < gameData.rightPaddle.position.z) {
+			gameData.rightPaddle.position.z -= paddleSpeed * delta;
+		}
+
+			gameData.rightPaddle.position.z = THREE.MathUtils.clamp(
+			gameData.rightPaddle.position.z,
+			-boardHeight + (boardHeight / 2 + paddleLength / 2),
+			boardHeight - (boardHeight / 2 + paddleLength / 2)
+		);
+
+		gameData.leftPaddle.position.z = THREE.MathUtils.clamp(
+			gameData.leftPaddle.position.z,
+			-boardHeight + (boardHeight / 2 + paddleLength / 2),
+			boardHeight - (boardHeight / 2 + paddleLength / 2)
+		);
 
 		const ballSpeed = 20;
 		gameData.ball.position.x += gameData.ballDirX * ballSpeed * delta;
 		gameData.ball.position.z += gameData.ballDirZ * ballSpeed * delta;
 
-		// ball collision with top and bottom all
+		// Ball collision with top and bottom wall
 		if (gameData.ball.position.z > boardLength / 2 || gameData.ball.position.z < -boardLength / 2) {
 			gameData.ballDirZ = -gameData.ballDirZ;
 		}
 
-		// ball collision with the paddle
+		// Ball collision with the paddle
 		const onCollide = () => {
 			if (gameData.ballRotationSpd.x) {
 				gameData.ballRotationSpd.y = gameData.ballRotationSpd.x;
 				gameData.ballRotationSpd.x = 0;
-				gameData.ballDirX *= 1.5; // increase speed when collide with paddle
+				gameData.ballDirX *= 1.5; // Increase speed when colliding with paddle
 			} else if (gameData.ballRotationSpd.y) {
 				gameData.ballRotationSpd.z = gameData.ballRotationSpd.y;
 				gameData.ballRotationSpd.y = 0;
 			} else if (gameData.ballRotationSpd.z) {
 				gameData.ballRotationSpd.x = gameData.ballRotationSpd.z;
 				gameData.ballRotationSpd.z = 0;
-				gameData.ballDirZ *= 1.5; //increase speed when collide with paddle
+				gameData.ballDirZ *= 1.5; // Increase speed when colliding with paddle
 			}
 		};
 

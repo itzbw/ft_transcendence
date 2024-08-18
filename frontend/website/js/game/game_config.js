@@ -25,4 +25,4 @@ export const rightScoreElement = document.createElement('div');
 export const instructionElement = document.createElement('div');
 
 // AI
-export const aiUpdateInterval = 0.1;
+export const aiUpdateInterval = 1.0;
