@@ -76,8 +76,7 @@ function isNameValid(input, players) {
 		return (false);
 	}
 	// name must have a correct length
-	if (input.length < 3 
-|| input.length > 29) {
+	if (input.length < 3 || input.length > 29) {
 		return (false);
 	}
 	// verify that the name has not already been given

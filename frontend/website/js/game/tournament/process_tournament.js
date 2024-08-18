@@ -57,6 +57,7 @@ async function showNext(tournamentData) {
 	if (tournamentData.match3.winner) {
 		messageTitle.setAttribute('data-translate', 'tournamentwinner');
 		messageContent.innerText = tournamentData.match3.winner;
+		messageContent.classList.add('fw-bold');
 		button.setAttribute('data-translate', 'restarttournament');
 		button.addEventListener('click', async () => {
 			await shufflePlayers(tournamentData.players);

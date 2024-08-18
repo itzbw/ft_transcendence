@@ -76,7 +76,7 @@ function setOverallStats(data) {
 	if (data.totalPlayed == 0)
 	{
 		const div_w_l = document.getElementById('winRateParent');
-		div_w_l.innerHTML = "<div data-translate=\"nomatchplayed\"></div>";
+		div_w_l.setAttribute('data-translate', 'nomatchplayed');
 	}
 	else
 	{
