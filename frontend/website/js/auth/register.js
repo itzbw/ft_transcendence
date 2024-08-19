@@ -70,9 +70,12 @@ async function showOtpVerify() {
 		});
 		if (response.ok) {
 			window.location.hash = '';
+			window.location.reload();
 		} else {
 			const result = await response.json();
-			document.getElementById('otp_message').innerHTML = `<span style="color: red;">${result.error}</span>`;
+			console.log(result.error);
+			document.getElementById('otp_message').setAttribute('data-translate', 'invalidotp');
+			applyLanguage();
 		}
 	});
 }

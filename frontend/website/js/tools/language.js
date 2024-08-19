@@ -55,6 +55,8 @@ const translations =
 		otp_verify_title: 'Setup Two Factor Authentication',
 		otp_verify_cta: 'Verify',
 		otp: 'OTP',
+		invalidotp: 'Invalid OTP',
+		otpnotmandatory: 'You can choose not to use double authentication by leaving this page.'
 	},
 	fr: {
 		profile: 'Profil',
@@ -110,7 +112,9 @@ const translations =
 		finalmatch: 'Match final',
 		otp_verify_title: 'Configurer l\'authentification à deux facteurs',
 		otp_verify_cta: 'Vérifier',
-		otp: 'OTP'
+		otp: 'OTP',
+		invalidotp: 'OTP invalide',
+		otpnotmandatory: 'Vous pouvez choisir de ne pas utiliser l\'authentification à deux facteurs en quittant cette page.'
 	},
 	ch: {
 		profile: '个人资料',
@@ -166,7 +170,9 @@ const translations =
 		finalmatch: '决赛',
 		otp_verify_title: '设置双因素认证',
 		otp_verify_cta: '验证',
-		otp: 'OTP'
+		otp: 'OTP',
+		invalidotp: '无效的OTP',
+		otpnotmandatory: '您可以选择离开此页面而不使用双因素认证。'
 	},
 	jp: {
 		profile: 'プロフィール',
@@ -222,7 +228,9 @@ const translations =
 		finalmatch: '決勝戦',
 		otp_verify_title: '二段階認証を設定する',
 		otp_verify_cta: '確認する',
-		otp: 'OTP'
+		otp: 'OTP',
+		invalidotp: '無効なOTP',
+		otpnotmandatory: 'このページを離れることで二段階認証を使用しないことを選択できます。'
 	}
 };
 
