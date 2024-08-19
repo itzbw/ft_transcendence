@@ -42,6 +42,13 @@ def login_status(request):
         return JsonResponse({'error': str(e)}, status=400)
 
 
+def check_users_existence(request):
+	user_exists = SiteUser.objects.exists()
+	return JsonResponse({
+		'users_exist': user_exists
+	})
+
+
 def logout_view(request):
 	logout(request)
 	return JsonResponse({'message': 'Successfully logged out'})

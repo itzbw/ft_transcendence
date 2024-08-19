@@ -11,6 +11,7 @@ from .views import (
 
 urlpatterns = [
 	path('status/', login_status, name='login-status'),
+	path('check_database/', check_users_existence, name='check-database'),
 	path('register/', RegisterView.as_view(), name='register'),
 	path('logout/', logout_view, name='logout'),
 	path('login/', LoginView.as_view(), name='token_obtain_pair'),
