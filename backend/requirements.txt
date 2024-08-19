@@ -1,9 +1,17 @@
+# Django + CORS
 Django
 django-cors-headers
 
-psycopg[c] #In order to use Postgresql
-gunicorn 	# wsgi server
+# POSTGRESQL
+psycopg[c]
 
+# GUNiCORN
+gunicorn
+
+# JWT
 djangorestframework
 djangorestframework-simplejwt
 pyjwt
+
+# OTP
+pyotp

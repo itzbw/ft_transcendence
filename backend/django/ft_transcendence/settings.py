@@ -52,7 +52,10 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+
+	# disabling CSRF as we are using JWT
+    # 'django.middleware.csrf.CsrfViewMiddleware',
+
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -60,6 +63,7 @@ MIDDLEWARE = [
 
 	# custom made middleware to handle JWT parsing as
     # djangorestframework-simplejwt is not working
+
 	'authentication.middleware.JwtAuthMiddleware',
 ]
 

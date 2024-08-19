@@ -1,5 +1,7 @@
 import { loadContent, getCookie } from "../tools/tools.js";
 import { applyLanguage } from "../tools/language.js";
+import { processLogin } from "./login.js";
+import './qrcode.min.js';
 
 
 function setLoginButtonEvent() {
@@ -35,6 +37,47 @@ function validateForm(username, email, password) {
 }
 
 
+async function showOtpVerify() {
+
+	await loadContent('static/auth/otp.html', 'main-box', applyLanguage);
+
+	const provisioning = await fetch('/api/authentication/otp/provisioning', {
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('access_token')}`
+		}
+	}).then(response => response.json());
+
+	// QR html elements
+	const qrelem = document.getElementById('otp_qr_code');
+	const qr = new QRCode({
+		msg: provisioning.uri,
+		pal: ["#000000", "#f2f4f8"],
+	});
+	qrelem.innerHTML = '';
+	qrelem.appendChild(qr);
+
+	const verify = document.getElementById('otp_verify_btn');
+	verify.addEventListener('click', async () => {
+		const otp = document.getElementById('otp_input').value;
+		const response = await fetch('/api/authentication/otp/verify/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('access_token')}`
+			},
+			body: JSON.stringify({ otp })
+		});
+		if (response.ok) {
+			window.location.hash = '';
+		} else {
+			const result = await response.json();
+			document.getElementById('otp_message').innerHTML = `<span style="color: red;">${result.error}</span>`;
+		}
+	});
+}
+
+
 export async function register() {
 	try {
 		await loadContent('static/auth/register.html', 'main-box', applyLanguage);
@@ -43,8 +86,6 @@ export async function register() {
 		const message = document.getElementById('registermessage');
 		const submitButton = document.getElementById('registerSubmitButton');
 
-
-		
 		// If form is submited
 		submitButton.addEventListener('click', async () => {
 			const username = document.getElementById('username').value;
@@ -54,8 +95,7 @@ export async function register() {
 			// Check if form entries are correct
 			const validationErrors = validateForm(username, email, password);
 			if (validationErrors.length > 0) {
-				message.textCont
-				// Chent = validationErrors.join(' ');
+				message.textContent = validationErrors.join(' ');
 				return;
 			}
 
@@ -76,8 +116,8 @@ export async function register() {
 				if (!response.ok) {
 					message.textContent = result.error;
 				} else {
-					window.location.href='#login';
-					location.reload();
+					await processLogin({ username, password });
+					showOtpVerify();
 				}
 			} catch (error) {
 					console.error('Error during registration:', error);

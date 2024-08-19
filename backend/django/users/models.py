@@ -9,6 +9,10 @@ class SiteUser(AbstractUser):
 	avatar = models.CharField(max_length=100, null=True, blank=True)
 	dateCreated = models.DateField(null=True, blank=True)
 
+	# OTP
+	otp_secret = models.CharField(max_length=32, null=True, blank=True)
+	otp_verified = models.BooleanField(default=False)	
+
 	# Overall stats
 	totalPlayed = models.IntegerField(default=0)
 	totalWon = models.IntegerField(default=0)

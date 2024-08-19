@@ -12,6 +12,27 @@ function setRegisterButtonEvent() {
 }
 
 
+export async function processLogin({username, password, otp}) {
+	const response = await fetch('/api/authentication/login/', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'X-CSRFToken': getCookie('csrftoken'),
+		},
+		body: JSON.stringify({ username, password, otp }),
+	});
+
+	const result = await response.json();
+	if (response.ok) {
+		// Store JWT tokens in localStorage
+		localStorage.setItem('access_token', result.access);
+		localStorage.setItem('refresh_token', result.refresh);
+	}
+
+	return result
+}
+
+
 export async function login() {
 	try {
 		await loadContent('static/auth/login.html', 'main-box', applyLanguage);
@@ -25,29 +46,19 @@ export async function login() {
 				
 				const username = document.getElementById('username').value;
 				const password = document.getElementById('password').value;
+				const otp = document.getElementById('otp').value;
 				
 				try {
-					const response = await fetch('/api/authentication/login/', {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-							'X-CSRFToken': getCookie('csrftoken'),
-						},
-						body: JSON.stringify({ username, password }),
-					});
-					
-					const result = await response.json();
-					if (response.ok) {
+					const result = await processLogin({ username, password, otp });
+
+					if (result.error) {
+						messageElem.textContent = result.error;
+					} else {
 						messageElem.textContent = result.message;
 
-						// Store JWT tokens in localStorage
-						localStorage.setItem('access_token', result.access);
-						localStorage.setItem('refresh_token', result.refresh);
-
+						// sets has and reload page
 						window.location.href='#home';
 						location.reload();
-					} else {
-						messageElem.textContent = result.error;
 					}
 				} catch (error) {
 					messageElem.textContent = 'An error occurred during fecth';

@@ -13,6 +13,8 @@ import { checkLoginStatus } from './auth/status.js';
 
 // MAIN FUNCTION
 document.addEventListener('DOMContentLoaded', async function() {
+	
+	console.log("HERE");
 
 	// check if user is authenticated
 	const status = await checkLoginStatus();
