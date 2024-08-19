@@ -1,4 +1,4 @@
-import { getCookie } from "../tools/tools.js";
+import { getCookie, getAccessToken } from "../tools/tools.js";
 
 export function doLogout() {
 
@@ -19,10 +19,14 @@ export function doLogout() {
 		headers: {
 			'Content-Type': 'application/json',
 			'X-CSRFToken': getCookie('csrftoken'),
+			'Access-Control-Allow-Methods': 'POST, GET, DELETE',
+			'Access-Control-Allow-Origin': '*',
+			'Access-Control-Allow-Headers': Content-Type,
 		},
 	})
 		.then(response => {
 			if (!response.ok) {
+				console.log(response);
 				throw new Error('Network response for logout was not ok');
 			}
 			return (response.json());
