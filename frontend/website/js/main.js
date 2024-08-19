@@ -21,15 +21,16 @@ document.addEventListener('DOMContentLoaded', async function() {
 	// load the header
 	await setHeader(status);
 
-	// launch the routing
-	router();
-
+	
 	// if not authenticated, load the login page
 	if (!status.isAuthenticated) {
 		setupLogin('init');
-
-	// if authenticated, ping server frequently
+		
 	} else {
+		// launch the routing
+		router();
+		
+		// if authenticated, ping server frequently
 		PingServer();  // immediate ping after login
 		setInterval(PingServer, 60000);  // ping every 60 sec
 	}
