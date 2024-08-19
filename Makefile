@@ -10,8 +10,8 @@ vol :
 re : stop all
 
 fclean : vol
-	$(DOC) image prune -f
-	$(DOC) image prune -a -f
-	$(DOC) network prune -f
-	$(DOC) volume prune -f
-	$(DOC) system prune -a -f --volumes
+	docker image prune -f
+	docker image prune -a -f
+	docker network prune -f
+	docker volume prune -f
+	docker system prune -a -f --volumes
