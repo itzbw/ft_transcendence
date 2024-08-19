@@ -82,7 +82,7 @@ function addFriendItem(username) {
 	div.textContent = username;
 
 	div.addEventListener('click', async function() {
-		showUserProfile(username);
+		window.location.hash = `#profile/${username}`;
 	});
 	return div;
 }
