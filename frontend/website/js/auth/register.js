@@ -121,6 +121,11 @@ export async function register() {
 				} else {
 					await processLogin({ username, password });
 					showOtpVerify();
+
+					// handle the back button if user don't want 2fa
+					window.addEventListener('hashchange', function () {
+						window.location.reload()}
+					);
 				}
 			} catch (error) {
 					console.error('Error during registration:', error);
