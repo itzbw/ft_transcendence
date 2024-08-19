@@ -101,7 +101,7 @@ def upload_avatar(request, profile_username):
 			user.save()
 
 			# Delete the old avatar file if it exists and is different from the new one
-			if old_avatar_name and old_file_path != file_path and default_storage.exists(old_file_path):
+			if old_avatar_name and old_file_path != file_path and old_file_path != '/img/default_avatar.jpg' and default_storage.exists(old_file_path):
 				default_storage.delete(old_file_path)
 			
 			return JsonResponse({'message': 'Avatar uploaded successfully!'})
