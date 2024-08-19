@@ -10,8 +10,7 @@ import {
 	setupMouseListeners,
 	setupKeyboardListeners,
 } from '../game_utils.js';
-import { animate_tournament } from './animate_tournament.js';
-import { setupGUI } from '../setup_gui.js';
+import { setupGUI } from './setup_gui_tournament.js';
 
 // will create needed variables, store them and return an object
 async function initGameData(player1, player2) {
@@ -84,6 +83,14 @@ async function initGameData(player1, player2) {
 	const controls = new OrbitControls(camera, renderer.domElement);
 	controls.update();
 
+	// start/pause
+	let isAnimating = false;
+	let pausedTime = 0;
+
+	// animate
+	const clock = new THREE.Clock();
+	let animFrameId = null;
+
 	// full structure
 	const gameData = {
 		player: player,
@@ -102,7 +109,11 @@ async function initGameData(player1, player2) {
 		ballDirZ: ballDirZ,
 		ballRotationSpd: ballRotationSpd,
 		keys: keys,
-		controls: controls
+		controls: controls,
+		isAnimating: isAnimating,
+		pausedTime: pausedTime,
+		animFrameId: animFrameId,
+		clock: clock
 	}
 
 	return (gameData);
@@ -127,7 +138,7 @@ async function tournamentGame(gameData, tournamentData) {
 		showHTMLElements(gameContainer, gameData.player, gameData.challenger);
 	
 		// setup GUI control panel
-		setupGUI(gameData);
+		setupGUI(gameData, tournamentData);
 	  
 		const resizeRenderer = () => {
 			gameData.camera.aspect = window.innerWidth / window.innerHeight;
@@ -141,9 +152,6 @@ async function tournamentGame(gameData, tournamentData) {
 		// Add mouse and keyboard interactions
 		setupMouseListeners(gameData);
 		setupKeyboardListeners(gameData);
-
-		// launch the game animation loop
-		animate_tournament(gameData, tournamentData);
 }
 
 export async function startTournamentMatch(tournamentData, match) {

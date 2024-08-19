@@ -86,6 +86,12 @@ async function initGameData(challengerName) {
 	const controls = new OrbitControls(camera, renderer.domElement);
 	controls.update();
 
+	// animate
+	const clock = new THREE.Clock();
+	let animFrameId = null;
+	let isAnimating = false;
+	let pausedTime = 0;
+
 	// full structure
 	const gameData = {
 		player: player,
@@ -104,7 +110,11 @@ async function initGameData(challengerName) {
 		ballDirZ: ballDirZ,
 		ballRotationSpd: ballRotationSpd,
 		keys: keys,
-		controls: controls
+		controls: controls,
+		isAnimating: isAnimating,
+		pausedTime: pausedTime,
+		animFrameId: animFrameId,
+		clock: clock
 	}
 
 	return (gameData);
@@ -132,7 +142,7 @@ export async function vsHumanGame(challengerName) {
 		showHTMLElements(gameContainer, gameData.player, gameData.challenger);
 	
 		// setup GUI control panel
-		setupGUI(gameData);
+		setupGUI(gameData, animate_vs_human);
 	  
 		const resizeRenderer = () => {
 			gameData.camera.aspect = window.innerWidth / window.innerHeight;
@@ -148,7 +158,7 @@ export async function vsHumanGame(challengerName) {
 		setupKeyboardListeners(gameData);
 
 		// launch the game animation loop
-		animate_vs_human(gameData);
+		// animate_vs_human(gameData);
 }
 
 export async function loadVsHumanGame() {

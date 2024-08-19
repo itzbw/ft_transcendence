@@ -86,6 +86,12 @@ async function initGameData() {
 
 	// ia
 	let lastAIUpdateTime = 0;
+	
+	// animate
+	const clock = new THREE.Clock();
+	let animFrameId = null;
+	let isAnimating = false;
+	let pausedTime = 0;
 
 	// full structure
 	const gameData = {
@@ -105,6 +111,10 @@ async function initGameData() {
 		ballRotationSpd: ballRotationSpd,
 		keys: keys,
 		controls: controls,
+		isAnimating: isAnimating,
+		pausedTime: pausedTime,
+		animFrameId: animFrameId,
+		clock: clock,
 		lastAIUpdateTime: lastAIUpdateTime,
 		ballPositionAtLastUpdate: { x: 0, z: 0 },
 		ballDirAtLastUpdate: { x: 0, z: 0 }
@@ -135,7 +145,7 @@ export async function loadVsBotGame() {
 	showHTMLElements(gameContainer, gameData.player, 'Marvin');
 
 	// setup GUI control panel
-	setupGUI(gameData);
+	setupGUI(gameData, animate_vs_bot);
 
 	const resizeRenderer = () => {
 		gameData.camera.aspect = window.innerWidth / window.innerHeight;

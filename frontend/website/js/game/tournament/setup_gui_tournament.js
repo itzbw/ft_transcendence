@@ -1,6 +1,7 @@
-import { redraw } from "./game_utils.js";
-import { sphereData } from "./game_config.js";
-import dat from "./dat.gui.js";
+import { redraw } from "../game_utils.js";
+import { sphereData } from "../game_config.js";
+import dat from "../dat.gui.js";
+import { animate_tournament } from './animate_tournament.js';
 
 // Helper function to add color controllers
 function addColorController(gui, obj, colorProp, onChangeCallback) {
@@ -13,7 +14,7 @@ function addColorController(gui, obj, colorProp, onChangeCallback) {
 }
 
 // GUI Setup
-export function setupGUI(gameData, animate) {
+export function setupGUI(gameData, TournamentData) {
 	// Create GUI Panel
 
 
@@ -26,7 +27,7 @@ export function setupGUI(gameData, animate) {
 				gameData.clock.elapsedTime = gameData.pausedTime;
 				gameData.isAnimating = true;
 				console.log('Animation started or resumed');
-				animate(gameData);  // Start the animation loop
+				animate_tournament(gameData, TournamentData);  // Start the animation loop
 			}
 		},
 		Pause: function () {
