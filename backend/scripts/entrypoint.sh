@@ -20,9 +20,6 @@ python manage.py makemigrations users
 echo "\e[33mApplying database migrations\e[0m"
 python manage.py migrate
 
-# Need to delete that later :
-python manage.py create_superuser
-
 # gunicorn is a WSGI server for Django
 echo "\e[32mLaunching server...\e[0m"
 gunicorn --bind 0.0.0.0:$BACK_PORT \
