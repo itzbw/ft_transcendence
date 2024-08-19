@@ -1,4 +1,3 @@
-# using 3.12 instead of 3.13 to avoid "gcc" and "libffi-dev" as requirements to install daphnee
 FROM python:3.12-slim
 
 # Set environment variables
@@ -13,10 +12,16 @@ RUN apt-get update && \
 	apt-get install -y --no-install-recommends netcat-openbsd \
 	build-essential \
 	libpq-dev \
+	openssl \
 	&& apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# DEV MODE ONLY
-# RUN apt install -y iputils-ping curl
+
+# ssl key
+RUN mkdir -p /ssl
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+	-keyout /ssl/backend_selfsigned.key \
+	-out /ssl/backend_selfsigned.crt \
+	-subj "/C=FR/L=Paris/O=42/CN=ft_transcendence/UID=ft_transcendence"
 
 #Install Python dependencies
 RUN pip install --upgrade pip

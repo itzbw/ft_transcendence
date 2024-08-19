@@ -15,20 +15,14 @@ services:
     depends_on:
       - backend
     volumes:
-      - ./frontend/website:/etc/website # WHEN PROJECT FINISHED, DELETE THIS LINE  ** TO_REMOVE **
-      - ./tools/logs/nginx_logs:/var/log/nginx
-      - ./tools/ssl/certificates/frontend:/etc/nginx/ssl
       - shared_media:/shared_media:rw # volume used for sharing media like users avatars
 
   backend:
     container_name: trans_back
     build: 
       context: ./backend
-    # DEV MODE ONLY, REPLACE ports WITH expose when finished  ** TO_REMOVE **
-    # expose:
-    #   - ${BACK_PORT}
-    ports:
-      - "${BACK_PORT}:${BACK_PORT}"
+    expose:
+      - ${BACK_PORT}
     networks:
       - trans_net
     env_file:
@@ -37,8 +31,6 @@ services:
       - database
     volumes:
       - ./backend/django:/app
-      - ./tools/logs/django_logs:/logs
-      - ./tools/ssl/certificates/backend:/ssl
       - shared_media:/shared_media:rw
 
   database:

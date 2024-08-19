@@ -1,5 +1,3 @@
 .local
-tools/logs
 __pycache__
 backend/django/*/migrations
-# tools/ssl/certificates
