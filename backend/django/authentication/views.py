@@ -4,9 +4,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
-
+from django.core.exceptions import ValidationError  #check email format
+from django.core.validators import validate_email  #check email format
 from django.http import JsonResponse
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, logout
 from django.views.decorators.csrf import csrf_exempt
 from users.models import SiteUser   # used for RegisterView
 
@@ -56,7 +57,18 @@ class RegisterView(APIView):
 
 		if not username or not password or not email:
 			return Response({"error": "Please provide all required fields"}, status=status.HTTP_400_BAD_REQUEST)
-	
+
+		# check username length
+		if len(username) > 30 or len(username) < 3:
+			return Response({"error": "Username must be between 3 and 30 characters"}, status=status.HTTP_400_BAD_REQUEST)
+
+		# check email format
+		try:
+			validate_email(email)
+		except ValidationError:
+			return Response({"error": "Invalid email format"}, status=status.HTTP_400_BAD_REQUEST)
+
+		# check if username or email already exists
 		if SiteUser.objects.filter(username=username).exists():
 			return Response({"error": "Username already exists"}, status=status.HTTP_400_BAD_REQUEST)
 
