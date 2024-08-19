@@ -1,14 +1,23 @@
 import { loadContent, getCookie } from "../tools/tools.js";
 import { applyLanguage } from "../tools/language.js";
-import { setupRegister } from "./register.js";
 
 
-async function doLogin() {
+function setRegisterButtonEvent() {
+	const button = document.getElementById("registerButton");
+	if (button) {
+		button.addEventListener('click',function(){
+			window.location.href = '#register';
+		});
+	}
+}
+
+
+export async function login() {
 	try {
 		await loadContent('static/auth/login.html', 'main-box', applyLanguage);
 		const form = document.getElementById('login-form');
 		const messageElem = document.getElementById('login-message');
-		setupRegister();
+		setRegisterButtonEvent();
 		if (form) {
 			form.addEventListener('submit', async (event) => {
 				console.log("Form submitted");
@@ -35,6 +44,7 @@ async function doLogin() {
 						localStorage.setItem('access_token', result.access);
 						localStorage.setItem('refresh_token', result.refresh);
 
+						window.location.href='#home';
 						location.reload();
 					} else {
 						messageElem.textContent = result.error;
@@ -49,17 +59,3 @@ async function doLogin() {
 	}
 }
 
-
-export function setupLogin(type)
-{
-	// If not defined, no button "login to click", so no doLogin()
-	if (type === "init")
-		doLogin()
-	else
-	{
-		const loginButton = document.getElementById('loginButton');
-		if (loginButton) {
-			loginButton.addEventListener('click', doLogin);
-		}
-	}
-}

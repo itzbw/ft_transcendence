@@ -9,7 +9,6 @@ import { setHeader } from './header/header.js';
 
 // authentification
 import { checkLoginStatus } from './auth/status.js';
-import { setupLogin } from './auth/login.js';
 
 
 // MAIN FUNCTION
@@ -21,16 +20,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 	// load the header
 	await setHeader(status);
 
+	// launch the routing
+	router(status.isAuthenticated);
 	
-	// if not authenticated, load the login page
-	if (!status.isAuthenticated) {
-		setupLogin('init');
-		
-	} else {
-		// launch the routing
-		router();
-		
-		// if authenticated, ping server frequently
+	// if authenticated, ping server frequently
+	if (status.isAuthenticated) {
 		PingServer();  // immediate ping after login
 		setInterval(PingServer, 60000);  // ping every 60 sec
 	}

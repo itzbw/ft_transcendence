@@ -5,9 +5,26 @@ import { loadVsBotGame } from "../game/game_vs_bot.js";
 import { loadVsHumanGame } from "../game/game_vs_human.js";
 import { initTournament } from "../game/tournament/init_tournament.js";
 
+import { register } from "../auth/register.js";
+import { login } from  "../auth/login.js";
+
+// Check hash in case user is not logged in
+function checkHashMini(hash) {
+
+	switch (true) {
+
+		case hash === '#register':
+			register();
+			break;
+
+		default:
+			login();
+	}
+
+}
+
 // Check hash an perform the correct action
-function checkHash(hash)
-{
+function checkHash(hash) {
 	switch (true) {
 
 		// profile
@@ -49,15 +66,16 @@ function checkHash(hash)
 }
 
 // when hash is changed, will launch the concerned page
-export function router() {
+export function router(isAuthenticated) {
 	
+	const hashHandler = isAuthenticated ? checkHash : checkHashMini;
+
 	const hash = window.location.hash;
-	checkHash(hash);
+	hashHandler(hash);
 
 	// listen for hashchange event
 	window.addEventListener('hashchange', () => {
 		const newHash = window.location.hash;
-			checkHash(newHash);
+		hashHandler(newHash);
 	});
 }
-

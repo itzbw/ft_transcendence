@@ -1,6 +1,15 @@
 import { loadContent, getCookie } from "../tools/tools.js";
 import { applyLanguage } from "../tools/language.js";
-import { setupLogin } from "./login.js"; 
+
+
+function setLoginButtonEvent() {
+	const button = document.getElementById("loginButton");
+	if (button) {
+		button.addEventListener('click',function(){
+			window.location.href = '#login';
+		});
+	}
+}
 
 // Check if fields are correctly filled
 function validateForm(username, email, password) {
@@ -26,11 +35,10 @@ function validateForm(username, email, password) {
 }
 
 
-async function doRegister() {
+export async function register() {
 	try {
 		await loadContent('static/auth/register.html', 'main-box', applyLanguage);
-		setupLogin();
-		console.log("registration page loaded");
+		setLoginButtonEvent();
 
 		const message = document.getElementById('registermessage');
 		const submitButton = document.getElementById('registerSubmitButton');
@@ -46,7 +54,8 @@ async function doRegister() {
 			// Check if form entries are correct
 			const validationErrors = validateForm(username, email, password);
 			if (validationErrors.length > 0) {
-				message.textContent = validationErrors.join(' ');
+				message.textCont
+				// Chent = validationErrors.join(' ');
 				return;
 			}
 
@@ -67,8 +76,7 @@ async function doRegister() {
 				if (!response.ok) {
 					message.textContent = result.error;
 				} else {
-					window.location.href='/';
-					
+					window.location.href='#login';
 					location.reload();
 				}
 			} catch (error) {
@@ -82,12 +90,3 @@ async function doRegister() {
 		console.error('Error setting up registration:', error);
 	}
 }
-
-
-export function setupRegister(){
-	const registerButton = document.getElementById('registerButton');
-	if (registerButton) {
-		registerButton.addEventListener('click', doRegister);
-	}
-}
-
