@@ -48,6 +48,14 @@ async function showOtpVerify() {
 		}
 	}).then(response => response.json());
 
+	// add a button to allow not using 2fa
+	const ignoreButton = document.getElementById('otp_not_mandatory_button');
+	if (ignoreButton) {
+		ignoreButton.addEventListener('click', function() {
+			window.location.href = '';
+		});
+	}
+
 	// QR html elements
 	const qrelem = document.getElementById('otp_qr_code');
 	const qr = new QRCode({

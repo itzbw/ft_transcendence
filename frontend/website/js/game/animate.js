@@ -133,12 +133,12 @@ export function animate_vs_bot(gameData) {
 		// Score update and reset ball
 		if (gameData.ball.position.x >= boardWidth / 2 + paddleWidth) {
 			gameData.leftScore++;
-			leftScoreElement.innerHTML = gameData.leftScore;
+			leftScoreElement.innerHTML = gameData.player + ": " + gameData.leftScore;
 			resetBall(gameData);
 			onGoal();
 		} else if (gameData.ball.position.x <= -(boardWidth / 2 + paddleWidth)) {
 			gameData.rightScore++;
-			rightScoreElement.innerHTML = gameData.rightScore;
+			rightScoreElement.innerHTML = "Marvin: " + gameData.rightScore;
 			resetBall(gameData);
 			onGoal();
 		}
@@ -236,12 +236,12 @@ export function animate_vs_human(gameData) {
 		// Score update and reset ball
 		if (gameData.ball.position.x >= boardWidth / 2 + paddleWidth) {
 			gameData.leftScore++;
-			leftScoreElement.innerHTML = gameData.leftScore;
+			leftScoreElement.innerHTML = gameData.player + ": " + gameData.leftScore;
 			resetBall(gameData);
 			onGoal();
 		} else if (gameData.ball.position.x <= -(boardWidth / 2 + paddleWidth)) {
 			gameData.rightScore++;
-			rightScoreElement.innerHTML = gameData.rightScore;
+			rightScoreElement.innerHTML = gameData.challenger + ": " + gameData.rightScore;
 			resetBall(gameData);
 			onGoal();
 		}
