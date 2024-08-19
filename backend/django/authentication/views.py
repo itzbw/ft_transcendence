@@ -26,20 +26,20 @@ class LoginView(TokenObtainPairView):
 
 @csrf_exempt
 def login_status(request):
-    try:
-        if request.user.is_authenticated:
-            return JsonResponse({
-                'isAuthenticated': True,
-                'username': request.user.username,
-                'otp_verified': request.user.otp_verified
-            })
-        else:
-            return JsonResponse({
-                'isAuthenticated': False,
-                'username': None
-            })
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=400)
+	try:
+		if request.user.is_authenticated:
+			return JsonResponse({
+				'isAuthenticated': True,
+				'username': request.user.username,
+				'otp_verified': request.user.otp_verified
+			})
+		else:
+			return JsonResponse({
+				'isAuthenticated': False,
+				'username': None
+			})
+	except Exception as e:
+		return JsonResponse({'error': str(e)}, status=400)
 
 
 def logout_view(request):

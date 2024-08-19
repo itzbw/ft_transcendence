@@ -252,6 +252,7 @@ async function deleteAccount(username) {
 		if (response.ok) {
 			alert('Account deleted successfully.');
 			window.location.href = '/'; // Redirect to home page or login page after account deletion
+			localStorage.clear();
 		} else {
 			const data = await response.json();
 			alert('Failed to delete account: ' + data.error);
