@@ -62,7 +62,7 @@ async function initGameData(challengerName) {
 	const ball = createBall();
 
 	// Add the sphere to the scene
-	ball.position.set(0, 0.1, 0); // Position it at the center of the board
+	ball.position.set(0, 0.3, 0); // Position it at the center of the board
 	scene.add(ball);
 
 	// variable for ball movement speed
@@ -112,43 +112,43 @@ async function initGameData(challengerName) {
 
 export async function vsHumanGame(challengerName) {
 
-		// load template
-		await loadContent('static/game/game.html', 'main-box');
+	// load template
+	await loadContent('static/game/game.html', 'main-box');
 
-		// clean score and instructions in HTML elements
-		cleanHTMLElements();
-	
-		// initialize game data
-		const gameData = await initGameData(challengerName);
+	// clean score and instructions in HTML elements
+	cleanHTMLElements();
 
-		// insert renderer in the gameContainer
-		const gameContainer = document.getElementById('gameContainer');
-		if (gameContainer) {
-			gameContainer.innerHTML = ''; // Clear any existing content
-			gameContainer.appendChild(gameData.renderer.domElement);
-		}
+	// initialize game data
+	const gameData = await initGameData(challengerName);
 
-		// display the name/score and the control info panel
-		showHTMLElements(gameContainer, gameData.player, gameData.challenger);
-	
-		// setup GUI control panel
-		setupGUI(gameData);
-	  
-		const resizeRenderer = () => {
-			gameData.camera.aspect = window.innerWidth / window.innerHeight;
-			gameData.camera.updateProjectionMatrix();
-			gameData.renderer.setSize(window.innerWidth, window.innerHeight);
-		};
-		resizeRenderer();
-	  
-		window.addEventListener('resize', resizeRenderer);
-	  
-		// Add mouse and keyboard interactions
-		setupMouseListeners(gameData);
-		setupKeyboardListeners(gameData);
+	// insert renderer in the gameContainer
+	const gameContainer = document.getElementById('gameContainer');
+	if (gameContainer) {
+		gameContainer.innerHTML = ''; // Clear any existing content
+		gameContainer.appendChild(gameData.renderer.domElement);
+	}
 
-		// launch the game animation loop
-		animate_vs_human(gameData);
+	// display the name/score and the control info panel
+	showHTMLElements(gameContainer, gameData.player, gameData.challenger);
+
+	// setup GUI control panel
+	setupGUI(gameData);
+
+	const resizeRenderer = () => {
+		gameData.camera.aspect = window.innerWidth / window.innerHeight;
+		gameData.camera.updateProjectionMatrix();
+		gameData.renderer.setSize(window.innerWidth, window.innerHeight);
+	};
+	resizeRenderer();
+
+	window.addEventListener('resize', resizeRenderer);
+
+	// Add mouse and keyboard interactions
+	setupMouseListeners(gameData);
+	setupKeyboardListeners(gameData);
+
+	// launch the game animation loop
+	animate_vs_human(gameData);
 }
 
 export async function loadVsHumanGame() {

@@ -1,5 +1,5 @@
 // max score
-export const scoreLimit = 1;
+export const scoreLimit = 3;
 
 // paddles
 export const paddleWidth = 0.2;

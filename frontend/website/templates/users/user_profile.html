@@ -1,48 +1,48 @@
 <!-- User Profile Template -->
 
 <div class="container h-100 w-100 justify-content-center">
-	
+
 	<!-- Main informations -->
 	<div class="row">
 		<div class="row d-flex justify-content-center">
-	
+
 			<!-- Avatar -->
 			<div class="col-12 col-md-3 ">
 				<div class="d-flex flex-column align-items-center avatar-container">
 					<div id="profileAvatar"></div>
 				</div>
 				<!-- Avatar box must be adjusted  -->
-				
+
 			</div>
-	
+
 			<!-- User is online/offline status -->
 			<div id="profileOnlineStatus" class="col-12 col-md-1"></div>
-	
+
 			<!-- Username & account creation date -->
 			<div class="col-12 col-md-5">
-	
+
 				<!-- Username -->
 				<div id="profileUsernameContainer" class="d-flex align-items-center">
 					<div id="profileUsername" class="fw-bold fs-3"></div>
 				</div>
-	
+
 				<!-- member creation date -->
 				<div class="mb-1 mb-md-4">
 					<span data-translate="member_since"></span>
 					<span id="profileMemberSince"></span>
 				</div>
-	
+
 				<!-- email (only for profile owner) -->
 				<div id="profileEmailContainer" class="d-flex align-items-center">
 					<div id="profileEmail"></div>
 				</div>
-				
+
 				<!-- delete button -->
 				<div id="profileDeleteContainer" class="d-flex align-items-center"></div>
 			</div>
 
 			<!-- Friends and Match History -->
-			<div class = "col-12 col-md-2 ">
+			<div class="col-12 col-md-2 ">
 				<!-- Add as a friend / Friend List (depends if self profile or other's) -->
 				<div class="d-flex align-items-center p-2">
 					<div id="profileFriendsContainer"></div>
@@ -53,7 +53,7 @@
 		</div>
 	</div>
 	<!-- Overall scores (Wins, Losses, leaderboard rank,...) -->
-	 <div class="container row mt-3 border border-white rounded">
+	<div class="container mt-3 border border-white rounded">
 		<div class="row justify-content-center">
 			<div class="col-12 text-center border border-white rounded">
 				<div id="profileMatchOverview" data-translate="overallstats"></div>

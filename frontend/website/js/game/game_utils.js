@@ -1,4 +1,4 @@
-import * as THREE from 'three'; 
+import * as THREE from 'three';
 import { getCookie, getAccessToken } from "../tools/tools.js";
 import { applyLanguage } from "../tools/language.js";
 import { checkLoginStatus } from "../auth/status.js";
@@ -19,7 +19,7 @@ function showWinner(winnerName, playerTwoName) {
 	const container = document.getElementById('main-box');
 	if (!container) {
 		console.log("main-box not found");
-		return ;
+		return;
 	}
 
 	// empty the box
@@ -36,7 +36,7 @@ function showWinner(winnerName, playerTwoName) {
 	span.setAttribute('data-translate', 'wins');
 	p.appendChild(span);
 
-	
+
 	// create button
 	const retryButton = document.createElement('button');
 	retryButton.setAttribute('data-translate', 'playagain');
@@ -97,7 +97,7 @@ export async function handleEndGame(playerOneName, playerOneScore, playerTwoName
 // returns the username of the connected user
 export async function getPlayerName() {
 	const data = await checkLoginStatus();
-	return (data.username); 
+	return (data.username);
 }
 
 // clean score/instructions HTML elements
@@ -118,16 +118,16 @@ export function showHTMLElements(gameContainer, leftPlayerName, rightPlayerName)
 	leftScoreElement.style.fontSize = '24px';
 	leftScoreElement.innerHTML = leftPlayerName + ': 0';
 	gameContainer.appendChild(leftScoreElement);
-	
+
 	// right part
 	rightScoreElement.style.position = 'absolute';
 	rightScoreElement.style.top = '50%';
 	rightScoreElement.style.right = '10px';
 	rightScoreElement.style.color = 'white';
 	rightScoreElement.style.fontSize = '24px';
-	rightScoreElement.innerHTML =  rightPlayerName + ': 0';
+	rightScoreElement.innerHTML = rightPlayerName + ': 0';
 	gameContainer.appendChild(rightScoreElement);
-	
+
 	// control part
 	instructionElement.style.position = "absolute";
 	instructionElement.style.top = "80%";
@@ -193,7 +193,7 @@ export function createBoard() {
 // Redraw
 export function redraw(ball) {
 	let newGeometry = new THREE.SphereGeometry(
-	sphereData.radius,
+		sphereData.radius,
 	)
 	ball.geometry.dispose()
 	ball.geometry = newGeometry
@@ -244,7 +244,7 @@ export function setupKeyboardListeners(gameData) {
 
 // reset the ball
 export function resetBall(gameData) {
-	gameData.ball.position.set(0, 0.1, 0);
+	gameData.ball.position.set(0, 0.3, 0);
 	gameData.ballDirX = (Math.random() > 0.5 ? 0.1 : -0.1); // random direction
 	gameData.ballDirZ = (Math.random() - 0.5) * 0.2; // random direction
 }

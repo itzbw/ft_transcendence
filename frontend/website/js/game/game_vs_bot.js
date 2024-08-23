@@ -60,7 +60,7 @@ async function initGameData() {
 	const ball = createBall();
 
 	// Add the sphere to the scene
-	ball.position.set(0, 0.1, 0); // Position it at the center of the board
+	ball.position.set(0, 0.3, 0); // Position it at the center of the board
 	scene.add(ball);
 
 	// variable for ball movement speed
@@ -130,7 +130,7 @@ export async function loadVsBotGame() {
 		gameContainer.innerHTML = ''; // Clear any existing content
 		gameContainer.appendChild(gameData.renderer.domElement);
 	}
-	
+
 	// display the name/score and the control info panel
 	showHTMLElements(gameContainer, gameData.player, 'Marvin');
 

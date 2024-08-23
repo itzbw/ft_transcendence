@@ -11,9 +11,11 @@ import { setHeader } from './header/header.js';
 import { checkLoginStatus } from './auth/status.js';
 
 
+
+
 // MAIN FUNCTION
-document.addEventListener('DOMContentLoaded', async function() {
-	
+document.addEventListener('DOMContentLoaded', async function () {
+
 	console.log("HERE");
 
 	// check if user is authenticated
@@ -24,11 +26,12 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 	// launch the routing
 	router(status.isAuthenticated);
-	
+
 	// if authenticated, ping server frequently
 	if (status.isAuthenticated) {
 		PingServer();  // immediate ping after login
 		setInterval(PingServer, 60000);  // ping every 60 sec
 	}
 });
+
 

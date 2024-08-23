@@ -6,7 +6,8 @@ import { loadVsHumanGame } from "../game/game_vs_human.js";
 import { initTournament } from "../game/tournament/init_tournament.js";
 
 import { register } from "../auth/register.js";
-import { login } from  "../auth/login.js";
+import { login } from "../auth/login.js";
+import { loadFP } from "../moon.js";
 
 // Check hash in case user is not logged in
 function checkHashMini(hash) {
@@ -59,15 +60,19 @@ function checkHash(hash) {
 			initTournament();
 			break;
 
+		case hash === "/":
+			loadFP();
+			break;
+
 		// default
-		default:
-			document.getElementById('main-box').innerHTML = ''; // Default to main menu
+		// default:
+		// 	document.getElementById('main-box').innerHTML = ''; // Default to main menu
 	}
 }
 
 // when hash is changed, will launch the concerned page
 export function router(isAuthenticated) {
-	
+
 	const hashHandler = isAuthenticated ? checkHash : checkHashMini;
 
 	const hash = window.location.hash;
