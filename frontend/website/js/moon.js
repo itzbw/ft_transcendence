@@ -65,6 +65,7 @@ export function loadFP() {
 
     loadFrontPage();
 
+
 }
 
 loadFP();
