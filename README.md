@@ -1,72 +1,35 @@
+# 42-ft_transcendence
 
-# ft_transcendence
+This project is centered around the design, development, and organization of a full-stack web application
 
-  
+## Requirement
 
-## To do :
+• This project must be created in group of 3 - 5 people\
+ Groupmate :
+[krozis](https://github.com/krozis)
+[alessiobenincasa](https://github.com/alessiobenincasa)
+[42-lbastian](https://github.com/42-lbastian)
 
-### Mandatory global
+• Modules 
 
-[ ] Tournament
+1.  Use a Framework as backend (Django) 
+2.  Use a front-end framework or toolkit (bootstrap) 
+3.  Use a database for the backend (PostgreSQL) 
+4.  Standard user management, authentication, users across tournaments 
+5.  Game Customization Options 
+6.  Introduce an AI Opponent 
+7.  User and Game Stats Dashboards
+8.  Implement Two-Factor Authentication (2FA) and JWT 
+9.  Use of advanced 3D techniques (Three.js) 
+10. Expanding Browser Compatibility 
+11. Multiple language supports
 
-[ ] back & forward buttons in browser must work (??)
+## Preview
 
-  
+![alt text](ft_02.gif)
+![alt text](ft_01.gif)
 
-### User Management
+## Final Marks
 
-  
+![alt text](ft_transcendence.png)
 
-[ ] Passwords mut be encrypted
-
-[ ] Users can update their info
-
-[ ] Users can upload an avatar (bu hey have a default one if none is provided)
-
-[ ] Add a friend and see user status (online or offline) is a mandatory part of the module.
-
-[ ] User profile must display stats (wins, losses,...)
-
-[ ] Users have a match history, including dates and other relevant details
-
- [x] User's avatar display size must be set + can be changed + default avatar must be set by JS if backend->none
-
- [ ] User must be able to delete its account
-
-  
-  
-
-### Miscellaneous
-
-[ ] settings.py -> SECRET_KEY must be replaced by SECRET_KEY = os.environ["SECRET_KEY"]
-
-(to create a new key : ```echo "export SECRET_KEY='$(openssl rand -hex 40)'" > .DJANGO_SECRET_KEY```
-
-then copy it in .env file)
-
-  
-[ ] auth/admin.py -> remove once project is done
-[ ] Remove admin/ when finished ?
-[ ] When project finished, remove dir /backend/django/authentication/management
-
-  
-  
-  
-
-## Dictionary
-
-  
-
-CORS = Cross-Origin Resource Sharing
-
-  
-
-CSRF = Cross-Site Request Forgery
-
-  
-
-REST = Representational State Transfer
-
-  
-
-URI = Uniform Resource Identifier
