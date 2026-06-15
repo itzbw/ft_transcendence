@@ -28,96 +28,72 @@ This project is centered around the design, development, and organization of a f
 
 The app is a single-page vanilla-JS frontend (with Three.js for the Pong game) served by Nginx, talking to a Django REST backend over HTTPS, with PostgreSQL for storage. Everything runs in Docker on a single network. Authentication is JWT-based (token kept in the browser's `localStorage`) with optional TOTP two-factor.
 
-### Request routing
+### The pieces
+
+Four containers on one Docker network. The browser only ever talks to Nginx; Nginx serves the website and forwards anything under `/api` to Django.
 
 ```mermaid
 flowchart LR
-    Browser["Browser<br/>(JWT in localStorage)"]
-    subgraph net["trans_net (Docker)"]
-        Nginx["Nginx · trans_front<br/>TLS :443→5555"]
-        Django["Gunicorn + Django · trans_back :8000"]
-        DB[("PostgreSQL · trans_db :5432")]
-    end
-    Browser -- "https://localhost:5555" --> Nginx
-    Nginx -- "/ , /static" --> SPA["Static SPA<br/>index.html + ES modules"]
-    Nginx -- "/shared_media" --> Media["avatar files<br/>(shared_media volume)"]
-    Nginx -- "/api , /admin (proxy_pass)" --> Django
-    Django --> DB
-```
+    User([User]) --> Browser["Browser<br/>runs the website<br/>keeps login token"]
+    Browser <-->|HTTPS| Nginx
 
-### Page load / boot
-
-```mermaid
-sequenceDiagram
-    participant B as Browser (main.js)
-    participant D as Django
-    Note over B: DOMContentLoaded
-    B->>D: GET /api/authentication/status/ (Bearer access_token)
-    D->>D: JwtAuthMiddleware decodes token → request.user
-    D-->>B: { isAuthenticated, username, otp_verified }
-    B->>B: setHeader(status)
-    B->>B: router(isAuthenticated)
-    alt authenticated
-        B->>B: checkHash() → #profile / #leaderboard / #game-menu / #pongvsbot / #pongvsman / #tournament
-        loop every 60s
-            B->>D: POST /api/users/update_status/ → last_active = now()
-        end
-    else not authenticated
-        B->>B: checkHashMini() → #register, else login
+    subgraph Docker
+        Nginx["Nginx<br/>(serves website +<br/>forwards /api)"]
+        Django["Django<br/>(the API + game logic)"]
+        DB[("PostgreSQL<br/>(users, games)")]
+        Nginx -->|website files| Browser
+        Nginx -->|/api| Django
+        Django <--> DB
     end
 ```
 
-### Auth flows (register / login / 2FA)
+### How a user moves through the app
+
+One picture, top to bottom: arrive → get in → use the app → play → see your stats.
 
 ```mermaid
 flowchart TD
-    R["POST /api/authentication/register/"] --> RV["RegisterView:<br/>unique checks → create_user(otp_secret)<br/>avatar = DEFAULT_AVATAR_URL"]
+    Start([User opens the site]) --> Check{Logged in?<br/>i.e. valid token?}
 
-    L["POST /api/authentication/login/<br/>{username, password, otp?}"] --> AU{"authenticate()<br/>valid?"}
-    AU -- no --> E401["401 Invalid credentials"]
-    AU -- yes --> OTPq{"otp_secret AND<br/>otp_verified?"}
-    OTPq -- no --> MINT["super().post() → {access, refresh}"]
-    OTPq -- yes --> V{"verify(otp)?"}
-    V -- no --> E2["401 Invalid OTP"]
-    V -- yes --> MINT
-    MINT --> LS["frontend stores access_token<br/>in localStorage"]
+    Check -->|No| Login[/"Login or Register page"/]
+    Login --> Auth["Send username + password<br/>(+ 2FA code if enabled)"]
+    Auth -->|wrong| Login
+    Auth -->|correct| Token["Server returns a login token<br/>browser saves it"]
+    Token --> Check
 
-    P["GET /otp/provisioning/"] --> QR["pyotp URI → qrcode.min.js renders QR"]
-    QR --> VER["POST /otp/verify/ {otp}<br/>→ otp_verified = True"]
+    Check -->|Yes| App["Full app unlocked<br/>(profile, friends, leaderboard, game)"]
+    App --> Heartbeat["Every 60s: ping server<br/>so you show as 'online'"]
+
+    App --> Play["Play Pong<br/>vs AI · vs human · tournament"]
+    Play --> Finish["Match ends → send the result"]
+    Finish --> Save{"Any real<br/>account playing?"}
+    Save -->|No, guests/AI only| Discard["Result discarded"]
+    Save -->|Yes| Record["Save the game,<br/>update wins / losses / played"]
+    Record --> Stats["Shows up in your profile<br/>and the leaderboard"]
 ```
 
-### Authenticated request (JWT middleware)
+> **The one rule that ties it together:** every request to `/api` carries the saved login token. A small piece of Django (`JwtAuthMiddleware`) reads that token on *every* request and decides who you are — that's what gates the whole app.
 
-```mermaid
-sequenceDiagram
-    participant B as Browser
-    participant M as JwtAuthMiddleware
-    participant V as View
-    participant DB as Postgres
-    B->>M: /api/... (Authorization: Bearer <access>)
-    alt token valid
-        M->>DB: SiteUser.objects.get(id=user_id)
-        M->>M: request.user = user
-    else expired / missing
-        M->>M: request.user stays Anonymous (no error)
-    end
-    M->>V: get_response(request)
-    V->>V: most views check request.user.is_authenticated
-    V->>DB: query / write
-    V-->>B: JsonResponse / DRF Response
-```
+### Logging in, in detail
 
-### Gameplay → persistence
+The only non-obvious part of auth: **two-factor is checked in the same step as the password** — there's no separate 2FA screen at login. And 2FA is opt-in, set up later from your profile.
 
 ```mermaid
 flowchart TD
-    G["Three.js match<br/>(#pongvsbot / #pongvsman / #tournament)<br/>runs client-side"] --> END["match ends"]
-    END --> SG["POST /api/users/save_game/<br/>{player1Name, score, player2Name, score}"]
-    SG --> LK{"look up each name<br/>as SiteUser"}
-    LK -- "both None (guest/AI)" --> SKIP["not saved, just echoed"]
-    LK -- "≥1 real user" --> CR["create Game row<br/>(real = FK, guest = name string)"]
-    CR --> ST["winner.totalWon++ / loser.totalLost++<br/>totalPlayed++"]
-    ST --> SURF["surfaces in:<br/>GET /api/users/&lt;username&gt;/ (profile + history)<br/>GET /api/users/leaderboard/ (top 20)"]
+    A["Submit login form"] --> B{Password correct?}
+    B -->|No| X["Rejected"]
+    B -->|Yes| C{2FA turned on<br/>for this account?}
+    C -->|No| OK["Issue login token ✔"]
+    C -->|Yes| D{6-digit code valid?}
+    D -->|No| X
+    D -->|Yes| OK
+
+    subgraph setup["Setting up 2FA later (optional)"]
+        S1["Profile → enable 2FA"] --> S2["Server shows a QR code"]
+        S2 --> S3["Scan in authenticator app"]
+        S3 --> S4["Enter code once to confirm"]
+        S4 --> S5["2FA now required at login"]
+    end
 ```
 
 ## Preview
